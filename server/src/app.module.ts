@@ -4,11 +4,18 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from './shared/shared.module';
+import { readFileSync } from 'fs';
+import { CheckUserAddressModule } from './modules/check-user-address/check-user-address.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [
+        () => ({
+          ETHERSCAN_API_KEY: readFileSync('.etherscan').toString().trim()
+        })
+      ]
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
@@ -28,6 +35,7 @@ import { SharedModule } from './shared/shared.module';
     }),
     UsersModule, 
     AuthModule, 
+    CheckUserAddressModule,
     SharedModule, 
   ],
   controllers: [],
