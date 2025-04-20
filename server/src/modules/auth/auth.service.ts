@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { SignUpUserDto } from './dto/sign-up-user.dto';
 import { SignInUserDto } from './dto/sign-in-user.dto';
 import { Model } from 'mongoose';
@@ -42,6 +42,10 @@ export class AuthService {
 
   async signIn(payload: SignInUserDto): Promise<UserWithTokenDto | null>  {
     const user = await this.userModel.findOne({email: payload.email});
+
+    if (user === null) {
+      throw new NotFoundException(`User with ${payload.email} email not found`);
+    }
 
     const isMatch = this.hashService.compare(payload.password, user.password);
 

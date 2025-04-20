@@ -4,8 +4,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from './shared/shared.module';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
