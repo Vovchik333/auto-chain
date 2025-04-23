@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from './shared/shared.module';
 import { readFileSync } from 'fs';
 import { CheckUserAddressModule } from './modules/check-user-address/check-user-address.module';
+import { FraudReportModule } from './modules/fraud-report/fraud-report.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CheckUserAddressModule } from './modules/check-user-address/check-user-
     UsersModule, 
     AuthModule, 
     CheckUserAddressModule,
+    FraudReportModule,
     SharedModule, 
   ],
   controllers: [],
