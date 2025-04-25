@@ -8,19 +8,25 @@ export class FraudReport {
   readonly _id: string;
 
   @Prop()
-  description: string;
+  reason: string;
 
   @Prop()
-  fromAddress: string;
+  reporterAddress: string;
 
   @Prop()
-  toAddress: string;
+  walletAddress: string;
 
   @Prop()
-  amount: string;
+  totalLossEstimatedUsd: number;
 
   @Prop()
-  transactionHash: string;
+  category: string;
+
+  @Prop({ default: [] })
+  evidenceLinks: string[];
+
+  @Prop({ default: false })
+  confirmed: boolean;
 }
 
 export const FraudReportSchema = SchemaFactory.createForClass(FraudReport);

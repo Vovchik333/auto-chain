@@ -9,6 +9,7 @@ const ApiPath = {
     USER: '/user',
     CHECK_USER_ADDRESS: '/check-user-address',
     FRAUD_REPORTS: '/fraud-reports',
+    AUTH_CODE: '/auth-code'
 } as const;
 
 export { ApiPath };
