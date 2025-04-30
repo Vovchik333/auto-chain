@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from './shared/shared.module';
 import { readFileSync } from 'fs';
-import { CheckUserAddressModule } from './modules/check-user-address/check-user-address.module';
+import { WalletModule } from './modules/check-user-address/wallet.module';
 import { FraudReportModule } from './modules/fraud-report/fraud-report.module';
 
 @Module({
@@ -36,7 +36,7 @@ import { FraudReportModule } from './modules/fraud-report/fraud-report.module';
     }),
     UsersModule, 
     AuthModule, 
-    CheckUserAddressModule,
+    WalletModule,
     FraudReportModule,
     SharedModule, 
   ],
