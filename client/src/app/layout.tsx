@@ -23,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.variable}`}>
         <Header/>
-        {children}
+        <main className="p-8">
+          {children}
+        </main>
       </body>
     </html>
   );
