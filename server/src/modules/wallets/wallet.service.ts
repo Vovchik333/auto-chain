@@ -9,6 +9,12 @@ import { mapTransaction } from './helpers/map-transaction.helper';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { TransactionDto } from '../common/dto/transaction.dto';
+import { parse } from 'csv-parse/sync';
+
+type CsvTx = {
+
+}
 
 @Injectable()
 export class WalletService {
@@ -23,7 +29,7 @@ export class WalletService {
     this.etherscanApiKey = this.configService.get<string>('ETHERSCAN_API_KEY');
   }
 
-  async importTransactionsFromEtherscan(address: string) {
+  async importTransactionsFromEtherscan(address: string): Promise<TransactionDto[]> {
     const response = await fetch(
       `${this.etherscanApiUrl}?chainid=1&module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=desc&apikey=${this.etherscanApiKey}`,
     );
@@ -35,9 +41,51 @@ export class WalletService {
     }
     
     const txsList = data.result as EtherscanNormalTransactionDto[];
-    await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, address)));
+    const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, address)));
 
-    return txsList.map(tx => mapTransaction(tx, address));
+    return savedTxs.map(tx => ({
+      id: tx._id,
+      hash: tx.hash,
+      from: tx.from,
+      to: tx.to,
+      value: tx.value,
+      date: tx.date,
+      status: tx.status,
+      gasUsed: tx.gasUsed,
+      block: tx.block,
+      method: tx.method,
+      confirmations: tx.confirmations,
+      txnFee: tx.txnFee,
+      category: tx.category,
+      ownerAddress: tx.ownerAddress,
+    }));
+  }
+
+  async importTransactionsFromCsv(files: Record<string, Storage.MultipartFile[]>, address: string): Promise<TransactionDto[]> {
+    const data = files['csv'][0].buffer.toString('utf-8');
+    const txsList = parse(data, {
+      columns: true,
+      skip_empty_lines: true,
+    }) as EtherscanNormalTransactionDto[];
+
+    const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, address)));
+
+    return savedTxs.map(tx => ({
+      id: tx._id,
+      hash: tx.hash,
+      from: tx.from,
+      to: tx.to,
+      value: tx.value,
+      date: tx.date,
+      status: tx.status,
+      gasUsed: tx.gasUsed,
+      block: tx.block,
+      method: tx.method,
+      confirmations: tx.confirmations,
+      txnFee: tx.txnFee,
+      category: tx.category,
+      ownerAddress: tx.ownerAddress,
+    }));
   }
 
   async checkUserAddress(address: string): Promise<ReportItemDto[]> {

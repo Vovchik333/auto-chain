@@ -1,12 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { FastifyAdapter } from '@nestjs/platform-fastify';
+import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify';
 import { ConfigService } from '@nestjs/config';
 import { ApiPath } from './common/enums/api/api-path.enum';
 import { ValidationPipe } from '@nestjs/common';
+import multipart from '@fastify/multipart';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new FastifyAdapter());
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule, 
+    new FastifyAdapter()
+  );
+  
+  await app.register(multipart);
+
   app.setGlobalPrefix(ApiPath.API);
   app.useGlobalPipes(
     new ValidationPipe({

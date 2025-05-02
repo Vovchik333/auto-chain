@@ -1,4 +1,5 @@
 export type TransactionDto = {
+  id: string;
   hash: string;
   from: string;
   to: string;
