@@ -2,7 +2,7 @@ import { BadRequestException, CallHandler, ExecutionContext, mixin, NestIntercep
 import { FastifyRequest } from "fastify";
 import { Observable } from "rxjs";
 import { MultipartOptions } from "src/common/types/multipart-options.type";
-import { validateFile } from "src/helpers/file/file.helper";
+import { validateFile } from "src/utils/file/validate-file.helper";
 import { getFileFromPart } from "src/utils/file/get-file-from-part.util";
 
 export function MultipartInterceptor(options: MultipartOptions = {}): Type<NestInterceptor> {

@@ -5,16 +5,13 @@ import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
 import { EtherscanResponseDto } from './dto/etherscan-response.dto';
 import { ReportItemDto } from './dto/report-item.dto';
 import { checkReliabilityByFirstTx } from './helpers/check-reliability-by-first-tx.helper';
-import { mapTransaction } from './helpers/map-transaction.helper';
+import { mapTransaction, mapTransactionFromDb } from './helpers/map-transaction.helper';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
-
-type CsvTx = {
-
-}
+import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
 
 @Injectable()
 export class WalletService {
@@ -31,7 +28,7 @@ export class WalletService {
 
   async importTransactionsFromEtherscan(address: string): Promise<TransactionDto[]> {
     const response = await fetch(
-      `${this.etherscanApiUrl}?chainid=1&module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=desc&apikey=${this.etherscanApiKey}`,
+      `${this.etherscanApiUrl}?chainid=1&module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${this.etherscanApiKey}`,
     );
 
     const data = await response.json() as EtherscanResponseDto;
@@ -43,22 +40,7 @@ export class WalletService {
     const txsList = data.result as EtherscanNormalTransactionDto[];
     const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, address)));
 
-    return savedTxs.map(tx => ({
-      id: tx._id,
-      hash: tx.hash,
-      from: tx.from,
-      to: tx.to,
-      value: tx.value,
-      date: tx.date,
-      status: tx.status,
-      gasUsed: tx.gasUsed,
-      block: tx.block,
-      method: tx.method,
-      confirmations: tx.confirmations,
-      txnFee: tx.txnFee,
-      category: tx.category,
-      ownerAddress: tx.ownerAddress,
-    }));
+    return savedTxs.map(mapTransactionFromDb);
   }
 
   async importTransactionsFromCsv(files: Record<string, Storage.MultipartFile[]>, address: string): Promise<TransactionDto[]> {
@@ -70,22 +52,17 @@ export class WalletService {
 
     const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, address)));
 
-    return savedTxs.map(tx => ({
-      id: tx._id,
-      hash: tx.hash,
-      from: tx.from,
-      to: tx.to,
-      value: tx.value,
-      date: tx.date,
-      status: tx.status,
-      gasUsed: tx.gasUsed,
-      block: tx.block,
-      method: tx.method,
-      confirmations: tx.confirmations,
-      txnFee: tx.txnFee,
-      category: tx.category,
-      ownerAddress: tx.ownerAddress,
-    }));
+    return savedTxs.map(mapTransactionFromDb);
+  }
+
+  async exportTransactionsToCsv(address: string): Promise<string> {
+    const txsList = await this.transactionModel
+      .find({ownerAddress: address})
+      .exec();
+
+    const csv = jsonToCsv(txsList.map(mapTransactionFromDb));
+  
+    return csv;
   }
 
   async checkUserAddress(address: string): Promise<ReportItemDto[]> {

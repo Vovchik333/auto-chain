@@ -8,6 +8,12 @@ declare namespace Storage {
   }
 }
 
+declare namespace App {
+  interface Response {
+    header: (name: string, value: string) => void;
+  }
+}
+
 declare module 'fastify' {
   interface FastifyRequest {
     storedFiles: Record<string, Storage.MultipartFile[]>;

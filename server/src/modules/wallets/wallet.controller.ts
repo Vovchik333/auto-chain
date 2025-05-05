@@ -1,14 +1,12 @@
-import { Body, Controller, Get, Param, Patch, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Res, UseInterceptors } from '@nestjs/common';
 import { ApiPath } from 'src/common/enums/api/api-path.enum';
 import { WalletService } from './wallet.service';
 import { ReportItemDto } from './dto/report-item.dto';
 import { EthAddressPipe } from 'src/pipes/eth-address.pipe';
 import { WalletAddressDto } from '../common/dto/wallet-address.dto';
 import { TransactionDto } from '../common/dto/transaction.dto';
-import { ObjectIdPipe } from 'src/pipes/object-id.pipe';
 import { Files } from 'src/decorators/files.decorator';
 import { MultipartInterceptor } from 'src/interceptors/files.interceptor';
-import { console } from 'inspector';
 
 @Controller(ApiPath.WALLETS)
 export class WalletController {
@@ -32,6 +30,19 @@ export class WalletController {
     const txs = await this.walletService.importTransactionsFromCsv(files, payload.address);
     
     return txs;
+  }
+
+  @Post('/export-to-csv')
+  async exportTransactionsToCsv(
+    @Body() payload: WalletAddressDto,
+    @Res({ passthrough: true }) res: App.Response
+  ) {
+    const csv = await this.walletService.exportTransactionsToCsv(payload.address);
+
+    res.header('Content-Type', 'text/csv');
+    res.header('Content-Disposition', `attachment; filename="${payload.address}.csv"`);
+
+    return csv;
   }
 
   @Get('/check/:address')

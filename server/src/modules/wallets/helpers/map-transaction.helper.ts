@@ -1,3 +1,4 @@
+import { Transaction } from "src/schemas/transaction.schema";
 import { EtherscanNormalTransactionDto } from "../dto/etherscan-normal-transaction.dto";
 
 const calculateFee = (gasUsed: string, gasPrice: string) => {
@@ -23,3 +24,20 @@ export const mapTransaction = (transaction: EtherscanNormalTransactionDto, owner
     ownerAddress
   };
 }
+
+export const mapTransactionFromDb = (tx: Transaction) => ({
+  id: tx._id,
+  hash: tx.hash,
+  from: tx.from,
+  to: tx.to,
+  value: tx.value,
+  date: tx.date,
+  status: tx.status,
+  gasUsed: tx.gasUsed,
+  block: tx.block,
+  method: tx.method,
+  confirmations: tx.confirmations,
+  txnFee: tx.txnFee,
+  category: tx.category,
+  ownerAddress: tx.ownerAddress,
+});
