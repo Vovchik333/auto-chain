@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import type { Metadata } from "next";
 import { Roboto } from 'next/font/google';
 import './globals.css'
+import { ClientProvider } from "@/components/ClientProviders";
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.variable}`}>
-        <Header/>
-        <main className="p-8">
-          {children}
-        </main>
+        <ClientProvider>
+          <Header/>
+          <main className="p-8">
+            {children}
+          </main>
+        </ClientProvider>
       </body>
     </html>
   );

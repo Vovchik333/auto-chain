@@ -1,4 +1,8 @@
-export default function Analytics() {
+'use client'
+
+import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
+
+function Analytics() {
   return (
     <>
       <h1>Analytics</h1>
@@ -8,3 +12,5 @@ export default function Analytics() {
     </>
   );
 }
+
+export default withPrivateRoute(Analytics);
