@@ -1,17 +1,19 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { EtherscanNormalTransactionDto } from './dto/etherscan-normal-transaction.dto';
+import { EtherscanNormalTransactionDto } from '../common/dto/etherscan-normal-transaction.dto';
 import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
-import { EtherscanResponseDto } from './dto/etherscan-response.dto';
-import { ReportItemDto } from './dto/report-item.dto';
-import { checkReliabilityByFirstTx } from './helpers/check-reliability-by-first-tx.helper';
-import { mapTransaction, mapTransactionFromDb } from './helpers/map-transaction.helper';
+import { EtherscanResponseDto } from '../common/dto/etherscan-response.dto';
+import { ReportItemDto } from '../common/dto/report-item.dto';
+import { checkReliabilityByFirstTx } from '../common/helpers/check-reliability-by-first-tx.helper';
+import { mapTransaction, mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
 import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
+import { WalletAnalytics } from 'src/schemas/wallet-analytics.schema';
+import { getAnalyticsFromTxs } from './wallet.helper';
 
 @Injectable()
 export class WalletService {
@@ -20,10 +22,36 @@ export class WalletService {
   
   constructor(
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
+    @InjectModel(WalletAnalytics.name) private readonly walletModel: Model<WalletAnalytics>,
     private readonly configService: ConfigService
   ) {
     this.etherscanApiUrl = this.configService.get<string>('ETHERSCAN_API_URL');
     this.etherscanApiKey = this.configService.get<string>('ETHERSCAN_API_KEY');
+  }
+
+  private async getAnalytics(txs: Transaction[], address: string) {
+    const { analytics, mappedTxsFromDb } = getAnalyticsFromTxs(txs, address);
+
+    analytics.largestAmountTransaction = (await this.transactionModel.find({ownerAddress: address}).sort({value: -1}).limit(1).exec())[0]?.hash;
+    analytics.totalFeeUsed = (await this.transactionModel.find({ownerAddress: address}).sort({timeStamp: 1}).limit(1).exec())[0]?.txnFee;
+
+    await this.walletModel.findOneAndUpdate(
+      { address },
+      {
+        $set: {
+          largestAmountTransaction: analytics.largestAmountTransaction,
+        },
+        $inc: {
+          totalReceived: analytics.totalReceived,
+          totalSent: analytics.totalSent,
+          totalTxCount: analytics.totalTxCount,
+          totalFeeUsed: analytics.totalFeeUsed,
+        },
+      },
+      {upsert: true}
+    );
+
+    return mappedTxsFromDb;
   }
 
   async importTransactionsFromEtherscan(address: string): Promise<TransactionDto[]> {
@@ -40,7 +68,7 @@ export class WalletService {
     const txsList = data.result as EtherscanNormalTransactionDto[];
     const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, address)));
 
-    return savedTxs.map(mapTransactionFromDb);
+    return await this.getAnalytics(savedTxs, address);
   }
 
   async importTransactionsFromCsv(files: Record<string, Storage.MultipartFile[]>, address: string): Promise<TransactionDto[]> {
@@ -52,7 +80,7 @@ export class WalletService {
 
     const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, address)));
 
-    return savedTxs.map(mapTransactionFromDb);
+    return await this.getAnalytics(savedTxs, address);
   }
 
   async exportTransactionsToCsv(address: string): Promise<string> {

@@ -64,4 +64,20 @@ export class AuthService {
         token: this.jwtService.signJwt({ id: user._id })
     };
   }
+
+  async getCurrentUser(id: string) {
+    const user = await this.userModel.findById(id).exec();
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return {
+      id: user._id,
+      email: user.email,
+      username: user.username,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
+  }
 }

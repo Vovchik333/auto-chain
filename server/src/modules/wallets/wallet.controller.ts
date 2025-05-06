@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Res, UseInterceptors } from '@nestjs/common';
 import { ApiPath } from 'src/common/enums/api/api-path.enum';
 import { WalletService } from './wallet.service';
-import { ReportItemDto } from './dto/report-item.dto';
+import { ReportItemDto } from '../common/dto/report-item.dto';
 import { EthAddressPipe } from 'src/pipes/eth-address.pipe';
 import { WalletAddressDto } from '../common/dto/wallet-address.dto';
 import { TransactionDto } from '../common/dto/transaction.dto';
