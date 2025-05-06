@@ -10,17 +10,20 @@ export class WalletAnalytics {
   @Prop({ required: true })
   address: string;
 
-  @Prop()
-  totalSent: string;
+  @Prop({ default: 0 })
+  totalSent: number;
 
-  @Prop()
-  totalReceived: string;
+  @Prop({ default: 0 })
+  totalReceived: number;
 
-  @Prop()
+  @Prop({ default: 0 })
   totalTxCount: number;
 
-  @Prop()
-  lastTxDate: string;
+  @Prop({ default: '' })
+  largestAmountTransaction: string;
+
+  @Prop({ default: 0 })
+  totalFeeUsed: number;
 }
 
 export const WalletAnalyticsSchema = SchemaFactory.createForClass(WalletAnalytics);

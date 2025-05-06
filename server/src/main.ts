@@ -11,9 +11,10 @@ async function bootstrap() {
     AppModule, 
     new FastifyAdapter()
   );
-  
+
   await app.register(multipart);
 
+  app.enableCors();
   app.setGlobalPrefix(ApiPath.API);
   app.useGlobalPipes(
     new ValidationPipe({

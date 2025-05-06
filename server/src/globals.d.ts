@@ -9,6 +9,12 @@ declare namespace Storage {
 }
 
 declare namespace App {
+  interface Request {
+    user: {
+      id: string;
+    };
+  }
+
   interface Response {
     header: (name: string, value: string) => void;
   }
