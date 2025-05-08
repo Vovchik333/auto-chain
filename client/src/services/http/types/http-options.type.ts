@@ -5,8 +5,9 @@ type HttpOptions = {
     method: ValueOf<typeof HttpMethod>;
     payload: BodyInit | null;
     hasAuth: boolean;
-    contentType: ValueOf<typeof ContentType>;
+    contentType: ValueOf<typeof ContentType> | null;
     query?: Record<string, unknown>;
+    expectsBlob?: boolean;
 }
 
 export { type HttpOptions };

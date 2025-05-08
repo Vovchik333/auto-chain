@@ -15,6 +15,7 @@ class HttpApi {
             payload = null,
             hasAuth = false,
             contentType = ContentType.JSON,
+            expectsBlob = false,
             query
         } = options;
         const headers = this.#getHeaders({
@@ -33,13 +34,20 @@ class HttpApi {
                 }
             );
 
-            const data = await res.json();
+            const data = expectsBlob ? await res.blob() : await res.json();
 
             if (!res.ok) {
                 throw new HttpError({
                     status: res.status as ValueOf<typeof HttpCode>,
                     message: (data as Record<'message', string>).message
                 });
+            }
+
+            if (expectsBlob) {
+                return {
+                    blob: data,
+                    contentDisposition: res.headers.get("Content-Disposition")
+                } as T
             }
 
             return data as T;

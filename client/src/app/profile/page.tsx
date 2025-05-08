@@ -1,13 +1,25 @@
 'use client'
 
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
 import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
+import { useState } from "react";
+import { User } from "@/common/types/user/user.type";
+import { useUserStore } from "@/stores/auth/auth.store";
+import ProfileData from "@/components/UserInfo";
 
-function Profile() {
+function ProfilePage() {
   return (
-    <h1 className="">
-      Profile
-    </h1>
+    <div className="max-w-2xl">
+      <h1>
+        Profile
+      </h1>
+      <ProfileData />
+    </div>
   );
 }
 
-export default withPrivateRoute(Profile);
+export default withPrivateRoute(ProfilePage);
