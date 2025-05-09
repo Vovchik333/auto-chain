@@ -8,7 +8,10 @@ export class Transaction {
   readonly _id: string;
 
   @Prop()
-  ownerAddress: string;
+  userId: string;
+
+  @Prop()
+  walletAddress: string;
 
   @Prop()
   hash: string;
@@ -29,16 +32,7 @@ export class Transaction {
   status: string;
 
   @Prop()
-  gasUsed: string;
-
-  @Prop()
-  block: string;
-
-  @Prop()
   method: string;
-
-  @Prop()
-  confirmations: string;
 
   @Prop()
   txnFee: number;

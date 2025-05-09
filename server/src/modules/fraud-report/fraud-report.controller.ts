@@ -4,7 +4,7 @@ import { FraudReportDto } from './dto/fraud-report.dto';
 import { CreateFraudReportDto } from './dto/create-fraud-report.dto';
 import { ApiPath } from 'src/common/enums/api/api-path.enum';
 import { AuthCodeDto } from './dto/auth-code.dto';
-import { WalletAddressDto } from '../common/dto/wallet-address.dto';
+import { UserWalletAddressDto } from '../common/dto/user-wallet-address.dto';
 
 @Controller(ApiPath.FRAUD_REPORTS)
 export class FraudReportController {
@@ -12,7 +12,7 @@ export class FraudReportController {
 
   @Post(ApiPath.AUTH_CODE)
   async generateAuthCode(
-    @Body() payload: WalletAddressDto
+    @Body() payload: UserWalletAddressDto
   ): Promise<AuthCodeDto> {
     const authCode = await this.fraudReportService.generateAuthCode(payload.address);
 

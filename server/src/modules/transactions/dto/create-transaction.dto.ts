@@ -24,5 +24,5 @@ export class CreateTransactionDto {
   category: string;
 
   @IsString()
-  ownerAddress: string;
+  walletAddress: string;
 }

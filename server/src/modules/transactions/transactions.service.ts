@@ -4,6 +4,12 @@ import { Model } from 'mongoose';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactiontDto } from './dto/update-transaction.dto';
+import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
+import { UserWalletAddressDto } from '../common/dto/user-wallet-address.dto';
+import { TransactionDto } from '../common/dto/transaction.dto';
+import { parse } from 'csv-parse/sync';
+import { mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
+import { TransactionFilterDto } from './dto/transaction-filter.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -11,10 +17,18 @@ export class TransactionsService {
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
   ) {}
 
+  async getByFilter(filter: TransactionFilterDto) {
+    const txs = await this.transactionModel
+      .find({ ...filter })
+      .exec();
+
+    return txs.map(mapTransactionFromDb);
+  }
+
   async create(payload: CreateTransactionDto) {
     const tx = await this.transactionModel.create(payload);
 
-    return tx;
+    return mapTransactionFromDb(tx);
   }
 
   async getById(id: string) {
@@ -26,10 +40,13 @@ export class TransactionsService {
       throw new NotFoundException('Transaction not found');
     }
 
-    return tx;
+    return mapTransactionFromDb(tx);
   }
 
-  async updateById(id: string, payload: UpdateTransactiontDto) {
+  async updateById(
+    id: string, 
+    payload: UpdateTransactiontDto
+  ) {
     const tx = await this.transactionModel.findByIdAndUpdate(
       id,
       payload,
@@ -40,6 +57,36 @@ export class TransactionsService {
       throw new NotFoundException('Transaction not found');
     }
 
-    return tx;
+    return mapTransactionFromDb(tx);
+  }
+
+  async importTransactionsFromCsv(
+    files: Record<string, Storage.MultipartFile[]>, 
+    payload: UserWalletAddressDto
+  ): Promise<TransactionDto[]> {
+    const data = files['files'][0].buffer.toString('utf-8');
+    const txsList = parse(data, {
+      columns: true,
+      skip_empty_lines: true,
+    }) as TransactionDto[];
+
+    const savedTxs = await this
+      .transactionModel
+      .insertMany(txsList.map(tx => ({ ...tx, ...payload })));
+
+    return savedTxs.map(mapTransactionFromDb);
+  }
+
+  async exportTransactionsToCsv(payload: UserWalletAddressDto): Promise<string> {
+    const { address, userId } = payload;
+    const filter = address ? { userId, walletAddress: address } : { userId };
+
+    const txsList = await this.transactionModel
+      .find(filter)
+      .exec();
+
+    const csv = jsonToCsv(txsList.map(mapTransactionFromDb));
+
+    return csv;
   }
 }

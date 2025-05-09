@@ -10,7 +10,7 @@ export const getAnalyticsFromTxs = (
     totalSent: 0,
     totalFeeUsed: 0,
     totalTxCount: 0,
-    largestAmountTransaction: '',
+    largestAmountTransactionHash: '',
   };
 
   const mappedTxsFromDb = txs.map(tx => {

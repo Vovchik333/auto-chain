@@ -3,14 +3,16 @@ import { WalletController } from './wallet.controller';
 import { WalletService } from './wallet.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Transaction, TransactionSchema } from 'src/schemas/transaction.schema';
-import { WalletAnalytics, WalletAnalyticsSchema } from 'src/schemas/wallet-analytics.schema';
+import { Wallet, WalletSchema } from 'src/schemas/wallet.schema';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Transaction.name, schema: TransactionSchema },
-      { name: WalletAnalytics.name, schema: WalletAnalyticsSchema }
+      { name: Wallet.name, schema: WalletSchema }
     ]),
+    SharedModule
   ],
   controllers: [WalletController],
   providers: [WalletService]

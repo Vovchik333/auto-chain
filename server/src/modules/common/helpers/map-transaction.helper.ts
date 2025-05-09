@@ -1,5 +1,7 @@
 import { Transaction } from "src/schemas/transaction.schema";
 import { EtherscanNormalTransactionDto } from "../dto/etherscan-normal-transaction.dto";
+import { UserWalletAddressDto } from "../dto/user-wallet-address.dto";
+import { TransactionDto } from "../dto/transaction.dto";
 
 const calculateFee = (gasUsed: string, gasPrice: string) => {
   const feeWei = BigInt(gasUsed) * BigInt(gasPrice);
@@ -7,7 +9,12 @@ const calculateFee = (gasUsed: string, gasPrice: string) => {
   return feeEth;
 };
 
-export const mapTransaction = (transaction: EtherscanNormalTransactionDto, ownerAddress: string) => {
+export const mapTransaction = (
+  transaction: EtherscanNormalTransactionDto, 
+  userWallet: UserWalletAddressDto
+): Omit<TransactionDto, 'id'> => {
+  const { userId, address: walletAddress } = userWallet;
+
   return {
     hash: transaction.hash,
     from: transaction.from,
@@ -15,17 +22,15 @@ export const mapTransaction = (transaction: EtherscanNormalTransactionDto, owner
     value: Number(transaction.value) / 1e18,
     date: new Date(Number(transaction.timeStamp) * 1000).toString(),
     status: transaction.isError === "0" ? "Success" : "Failed",
-    gasUsed: `${transaction.gasUsed} / ${transaction.gas}`,
-    block: transaction.blockNumber,
     method: transaction.functionName || "Transfer",
-    confirmations: transaction.confirmations,
     txnFee: calculateFee(transaction.gasUsed, transaction.gasPrice),
     category: 'imported',
-    ownerAddress
+    userId,
+    walletAddress
   };
 }
 
-export const mapTransactionFromDb = (tx: Transaction) => ({
+export const mapTransactionFromDb = (tx: Transaction): TransactionDto => ({
   id: tx._id,
   hash: tx.hash,
   from: tx.from,
@@ -33,11 +38,9 @@ export const mapTransactionFromDb = (tx: Transaction) => ({
   value: tx.value,
   date: tx.date,
   status: tx.status,
-  gasUsed: tx.gasUsed,
-  block: tx.block,
   method: tx.method,
-  confirmations: tx.confirmations,
   txnFee: tx.txnFee,
   category: tx.category,
-  ownerAddress: tx.ownerAddress,
+  walletAddress: tx.walletAddress,
+  userId: tx.userId
 });

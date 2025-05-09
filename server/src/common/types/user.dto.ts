@@ -2,8 +2,8 @@ type UserDto = {
   id: string;
   email: string;
   username: string;
-  createdAt: string;
-  updatedAt: string;
+  isSyncWithBlockchain: boolean;
+  statisticsId: string;
 }
 
 export { type UserDto };

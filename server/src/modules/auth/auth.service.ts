@@ -9,6 +9,7 @@ import { HashService } from 'src/shared/hash/hash.service';
 import { JwtService } from 'src/shared/jwt/jwt.service';
 import { ErrorMessage } from 'src/common/enums/error-message/error-mesage.enum';
 import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
+import { mapUserFromDb } from '../common/helpers/map-user.helper';
 
 @Injectable()
 export class AuthService {
@@ -29,13 +30,7 @@ export class AuthService {
     const user = await this.userModel.create(payload);
 
     return {
-        user: {
-          id: user._id,
-          email: user.email,
-          username: user.username,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt
-        },
+        user: mapUserFromDb(user),
         token: this.jwtService.signJwt({ id: user._id })
     };
   }
@@ -54,14 +49,8 @@ export class AuthService {
     }
 
     return {
-        user: {
-          id: user._id,
-          email: user.email,
-          username: user.username,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt
-        },
-        token: this.jwtService.signJwt({ id: user._id })
+      user: mapUserFromDb(user),
+      token: this.jwtService.signJwt({ id: user._id })
     };
   }
 
@@ -72,12 +61,6 @@ export class AuthService {
       throw new NotFoundException('User not found');
     }
 
-    return {
-      id: user._id,
-      email: user.email,
-      username: user.username,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt
-    };
+    return mapUserFromDb(user);
   }
 }

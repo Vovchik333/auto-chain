@@ -7,6 +7,7 @@ import { SharedModule } from './shared/shared.module';
 import { readFileSync } from 'fs';
 import { WalletModule } from './modules/wallets/wallet.module';
 import { FraudReportModule } from './modules/fraud-report/fraud-report.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { FraudReportModule } from './modules/fraud-report/fraud-report.module';
     }),
     UsersModule, 
     AuthModule, 
+    TransactionsModule,
     WalletModule,
     FraudReportModule,
     SharedModule, 
