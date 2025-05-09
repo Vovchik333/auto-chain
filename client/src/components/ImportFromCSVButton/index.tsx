@@ -5,9 +5,12 @@ import EthAddressAndFilesModalContent from "../EthAddressAndFilesModal";
 import { Dialog } from "@radix-ui/react-dialog";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { useState } from "react";
+import { useTransactionStore } from "@/stores/transaction/transaction.store";
+import { useUserStore } from "@/stores/user/user.store";
 
 export default function ImportFromCSVButton() {
-  const { importFromCsv } = useWalletStore();
+  const { user } = useUserStore(); 
+  const { importFromCsv } = useTransactionStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleImportClick = () => {
@@ -15,9 +18,14 @@ export default function ImportFromCSVButton() {
   };
 
   const handleAddressSubmit = (address: string, files: File[]) => {
+    if (user === null) {
+      return;
+    }
+
     const data = new FormData();
 
     data.append('address', address);
+    data.append('userId', user.id);
     files.forEach(file => {
       data.append('files', file)
     });

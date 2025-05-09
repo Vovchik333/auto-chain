@@ -1,8 +1,9 @@
 import { HttpApi, HttpMethod } from "../http";
 import { ApiPath } from "@/common/enums/api/api-path.enum";
-import { WalletAddressDto } from '@/common/types/wallet-address.dto';
+import { UserWalletAddressDto } from '@/common/types/user-wallet-address.dto';
 import { TransactionDto } from '@/common/types/transaction.dto';
-import { FileResponse } from '@/common/types/file-response.type';
+import { WalletDto } from "@/common/types/wallet.dto";
+import { WalletFilterDto } from "@/common/types/wallet-filter.dto";
 
 type Constructor = {
   apiPath: string;
@@ -18,46 +19,25 @@ class WalletService {
     this.#httpApi = httpApi;
   }
 
-  public async getTransactions(ownerAddress: string): Promise<TransactionDto[]> {
-    return this.#httpApi.load<TransactionDto[]>(
-      `${this.#apiPath}${ApiPath.WALLETS}/${ownerAddress}`,
+  public async getByFilter(filter: WalletFilterDto): Promise<WalletDto[]> {
+    return this.#httpApi.load<WalletDto[]>(
+      `${this.#apiPath}${ApiPath.WALLETS}`,
       {
-        hasAuth: true
-      }
-    );
-  }
-
-  public async importFromCsv(payload: FormData): Promise<TransactionDto[]> {
-    return this.#httpApi.load<TransactionDto[]>(
-      `${this.#apiPath}${ApiPath.WALLETS}${ApiPath.IMPORT_FROM_CSV}`,
-      {
-        method: HttpMethod.POST,
-        payload: payload,
         hasAuth: true,
-        contentType: null
+        query: {
+          ...filter
+        }
       }
     );
   }
 
-  public async importFromEtherscan(payload: WalletAddressDto): Promise<TransactionDto[]> {
-    return this.#httpApi.load<TransactionDto[]>(
+  public async importFromEtherscan(payload: UserWalletAddressDto): Promise<WalletDto[]> {
+    return this.#httpApi.load<WalletDto[]>(
       `${this.#apiPath}${ApiPath.WALLETS}${ApiPath.IMPORT_FROM_ETHERSCAN}`,
       {
         method: HttpMethod.POST,
         payload: JSON.stringify(payload),
         hasAuth: true
-      }
-    );
-  }
-
-  public async exportToCsv(payload: WalletAddressDto): Promise<FileResponse> {
-    return this.#httpApi.load<FileResponse>(
-      `${this.#apiPath}${ApiPath.WALLETS}${ApiPath.EXPORT_TO_CSV}`,
-      {
-        method: HttpMethod.POST,
-        payload: JSON.stringify(payload),
-        hasAuth: true,
-        expectsBlob: true
       }
     );
   }

@@ -2,7 +2,8 @@ type User = {
   id: string;
   email: string;
   username: string;
-  password: string;
+  isSyncWithBlockchain: boolean;
+  statisticsId: string;
 }
 
 export { type User };

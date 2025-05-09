@@ -6,11 +6,9 @@ export type TransactionDto = {
   value: number;
   date: string;
   status: string;
-  gasUsed: string;
-  block: string;
   method: string;
-  confirmations: string;
   txnFee: number;
   category: string;
-  ownerAddress: string;
+  walletAddress: string;
+  userId: string
 };

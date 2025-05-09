@@ -1,73 +1,37 @@
 import { create } from "zustand";
 import { WalletState, WalletStore } from "./types";
-import { WalletAddressDto } from "@/common/types/wallet-address.dto";
+import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
 import { walletService } from "@/services/wallet";
+import { WalletFilterDto } from "@/common/types/wallet-filter.dto";
 
 const initState: WalletState = {
-  transactions: [],
+  wallets: [],
   isLoading: false,
   error: null
 }
 
 export const useWalletStore = create<WalletStore>((set) => ({
   ...initState,
-  loadTransactions: async (ownerAddress: string) => {
+  loadWallets: async (query: WalletFilterDto) => {
     set({ isLoading: true, error: null });
 
     try {
-      const transactions = await walletService.getTransactions(ownerAddress);
+      const wallets = await walletService.getByFilter(query);
 
-      set({ transactions, isLoading: false })
+      set({ wallets, isLoading: false })
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }
   },
-  importFromCsv: async (payload: FormData) => {
+  importFromEtherscan: async (payload: UserWalletAddressDto) => {
     set({ isLoading: true, error: null });
 
     try {
-      const transactions = await walletService.importFromCsv(payload);
+      const wallets = await walletService.importFromEtherscan(payload);
 
-      set({ transactions, isLoading: false })
+      set({ wallets, isLoading: false })
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }
   },
-  importFromEtherscan: async (payload: WalletAddressDto) => {
-    set({ isLoading: true, error: null });
-
-    try {
-      const transactions = await walletService.importFromEtherscan(payload);
-
-      set({ transactions, isLoading: false })
-    } catch (err: any) {
-      set({ error: err.message ?? 'Unknown error', isLoading: false })
-    }
-  },
-  exportToCsv: async (payload: WalletAddressDto) => {
-    set({ isLoading: true, error: null });
-
-    try {
-      const { blob, contentDisposition } = await walletService.exportToCsv(payload);
-
-      let fileName: string = "transactions.csv";
-      if (contentDisposition !== null) {
-        const fileNameMatch = contentDisposition.match(/filename="(.+)"/);
-        fileName = fileNameMatch ? fileNameMatch[1] : "transactions.csv";
-      }
-
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement("a");
-      link.href = url;
-
-      link.setAttribute("download", fileName);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      set({ isLoading: false })
-    } catch (err: any) {
-      set({ error: err.message ?? 'Unknown error', isLoading: false })
-    }
-  }
 }))

@@ -2,17 +2,17 @@ import { RegisteredUserRequestBody } from "@/common/types/user/registered-user-r
 import { UnregisteredUserRequestBody } from "@/common/types/user/unregistered-user-request-body.type";
 import { User } from "@/common/types/user/user.type";
 
-export type AuthState = {
+export type UserState = {
   user: User | null;
   isLoading: boolean;
   error: string | null;
 }
 
-export type AuthActions = {
+export type UserActions = {
   loadCurrentUser: () => Promise<void>;
   signUp: (payload: UnregisteredUserRequestBody) => Promise<void>;
   signIn: (payload: RegisteredUserRequestBody) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
-export type AuthStore = AuthState & AuthActions;
+export type UserStore = UserState & UserActions;

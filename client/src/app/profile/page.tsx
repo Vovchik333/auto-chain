@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
 import { useState } from "react";
 import { User } from "@/common/types/user/user.type";
-import { useUserStore } from "@/stores/auth/auth.store";
+import { useUserStore } from "@/stores/user/user.store";
 import ProfileData from "@/components/UserInfo";
 
 function ProfilePage() {

@@ -3,15 +3,15 @@ import { RegisteredUserRequestBody } from "@/common/types/user/registered-user-r
 import { UnregisteredUserRequestBody } from "@/common/types/user/unregistered-user-request-body.type";
 import { authService } from "@/services/auth";
 import { create } from "zustand";
-import { AuthState, AuthStore } from "./types";
+import { UserState, UserStore } from "./types";
 
-const initState: AuthState = {
+const initState: UserState = {
   user: null,
   isLoading: false,
   error: null
 }
 
-export const useUserStore = create<AuthStore>((set) => ({
+export const useUserStore = create<UserStore>((set) => ({
   ...initState,
   loadCurrentUser: async () => {
     set({ isLoading: true, error: null });

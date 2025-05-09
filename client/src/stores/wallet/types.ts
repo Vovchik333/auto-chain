@@ -1,17 +1,16 @@
-import { TransactionDto } from "@/common/types/transaction.dto";
-import { WalletAddressDto } from "@/common/types/wallet-address.dto";
+import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
+import { WalletFilterDto } from "@/common/types/wallet-filter.dto";
+import { WalletDto } from "@/common/types/wallet.dto";
 
 export type WalletState = {
-  transactions: TransactionDto[];
+  wallets: WalletDto[];
   isLoading: boolean;
   error: string | null;
 }
 
 export type WalletActions = {
-  loadTransactions: (ownerAddress: string) => Promise<void>,
-  importFromCsv: (payload: FormData) => Promise<void>;
-  importFromEtherscan: (payload: WalletAddressDto) => Promise<void>;
-  exportToCsv: (payload: WalletAddressDto) => Promise<void>;
+  loadWallets: (filter: WalletFilterDto) => Promise<void>;
+  importFromEtherscan: (payload: UserWalletAddressDto) => Promise<void>;
 }
 
 export type WalletStore = WalletState & WalletActions;

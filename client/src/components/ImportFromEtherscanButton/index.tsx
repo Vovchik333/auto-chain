@@ -4,17 +4,26 @@ import { useState } from "react";
 import { Dialog } from "../ui/dialog";
 import EthAddressModalContent from "../EthAddressModal";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
+import { useUserStore } from "@/stores/user/user.store";
+import { useTransactionStore } from "@/stores/transaction/transaction.store";
 
-export default function ImportFromEtherscanButton({ onClick }: { onClick?: () => void }) {
+export default function ImportFromEtherscanButton() {
   const { importFromEtherscan } = useWalletStore();
+  const { loadTransactions } = useTransactionStore();
+  const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleImportClick = () => {
     setIsModalOpen(true);
   };
 
-  const handleAddressSubmit = (address: string) => {
-    importFromEtherscan({address});
+  const handleAddressSubmit = async (address: string) => {
+    if (user === null) {
+      return;
+    }
+
+    const { id: userId } = user;
+    importFromEtherscan({address, userId});
   };
 
   return (

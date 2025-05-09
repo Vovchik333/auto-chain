@@ -1,7 +1,7 @@
 'use client'
 
 import { JSX, useEffect } from 'react'
-import { useUserStore } from '@/stores/auth/auth.store'
+import { useUserStore } from '@/stores/user/user.store'
 import { redirect } from 'next/navigation'
 import { AppRoute } from '@/common/enums/app-route'
 

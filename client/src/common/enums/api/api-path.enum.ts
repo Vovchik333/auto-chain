@@ -13,6 +13,7 @@ const ApiPath = {
     IMPORT_FROM_ETHERSCAN: '/import-from-etherscan',
     IMPORT_FROM_CSV: '/import-from-csv',
     EXPORT_TO_CSV: '/export-to-csv',
+    TRANSACTIONS: '/transactions',
 } as const;
 
 export { ApiPath };
