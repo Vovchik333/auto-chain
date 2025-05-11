@@ -31,11 +31,15 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ wallets, onSelec
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Обрати гаманці ({wallets.length})</Button>
+        <Button 
+          className="bg-[#00FFC6] hover:bg-[#00e6b2] text-[#1A1F27] font-medium cursor-pointer transition-colors"
+        >
+          Select Wallets ({wallets.length})
+        </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-[#1A1F27] border-[#2A2F38] text-[#F0F0F0]">
         <DialogHeader>
-          <DialogTitle>Обери гаманці</DialogTitle>
+          <DialogTitle className="text-[#F0F0F0]">Select Wallets</DialogTitle>
         </DialogHeader>
         <div className="space-y-3 max-h-64 overflow-y-auto">
           {wallets.map((wallet) => (
@@ -43,13 +47,19 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ wallets, onSelec
               <Checkbox
                 checked={localSelection.includes(wallet.id)}
                 onCheckedChange={() => toggleWallet(wallet.id)}
+                className="data-[state=checked]:text-[#00FFC6] data-[state=checked]:border-[#00FFC6] border-[#A3A3A3]"
               />
-              <span className="text-sm">{wallet.address}</span>
+              <span className="text-sm text-[#F0F0F0]">{wallet.address}</span>
             </label>
           ))}
         </div>
         <div className="flex justify-end mt-4">
-          <Button onClick={applySelection}>Підтвердити</Button>
+          <Button 
+            onClick={applySelection}
+            className="bg-[#2A2F38] text-[#00FFC6] hover:bg-[#00FFC6] hover:text-[#1A1F27] cursor-pointer"
+          >
+            Confirm
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

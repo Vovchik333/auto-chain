@@ -8,25 +8,22 @@ import DateRangePicker from '../DataRangePicker';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Dashboard = () => {
-  // Стани для календаря
-  const [startDate, setStartDate] = useState<Date | null>(null); // Початкова дата
-  const [endDate, setEndDate] = useState<Date | null>(null); // Кінцева дата
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
-  // Дані для графіка
   const [chartData, setChartData] = useState<any>({
-    labels: [], // Місяці
+    labels: [],
     datasets: [
       {
         label: 'Total Value',
-        data: [], // Дані для кожного місяця
-        borderColor: 'rgba(75, 192, 192, 1)', // Колір лінії
-        backgroundColor: 'rgba(75, 192, 192, 0.2)', // Колір фону лінії
+        data: [],
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)', 
         fill: true,
       },
     ],
   });
 
-  // Останнє значення для позначки
   const [latestValue, setLatestValue] = useState<number | null>(null); // Останнє значення на графіку
 
   // Генерація даних для графіка
@@ -103,24 +100,25 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-[#1A1F27] text-[#F0F0F0]">
       {/* Заголовок */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold">Overview</h1>
-          {/* Календар */}
-          <DateRangePicker 
-            startDate={startDate} 
-            endDate={endDate} 
-            setStartDate={setStartDate} 
-            setEndDate={setEndDate} 
-            onConfirm={handleConfirm} // Підключаємо функцію для підтвердження
-          />
       </div>
 
+      {/* Календар */}
+      <DateRangePicker 
+        startDate={startDate} 
+        endDate={endDate} 
+        setStartDate={setStartDate} 
+        setEndDate={setEndDate} 
+        onConfirm={handleConfirm} // Підключаємо функцію для підтвердження
+      />
+
       {/* Графік */}
-      <div className="bg-white p-4 shadow-lg rounded-md mb-6">
+      <div className="bg-[#2A2F38] p-4 shadow-lg rounded-md mb-6">
         <h2 className="text-xl font-semibold">Total Value</h2>
-        <p className="text-lg text-green-600 mt-2">Latest value: $5</p>
+        <p className="text-lg text-[#00FFC6] mt-2">Latest value: $5</p>
         <Line data={chartData} options={options} />
       </div>
     </div>

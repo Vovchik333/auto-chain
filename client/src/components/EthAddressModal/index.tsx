@@ -22,29 +22,32 @@ export default function EthAddressModalContent({
       return;
     }
     onSubmit(address);
-    onClose(); // закриває модалку
+    onClose();
     setAddress("");
   };
 
   return (
-    <DialogContent className="sm:max-w-md">
+    <DialogContent className="sm:max-w-md bg-[#1A1F27] text-[#F0F0F0]">
       <DialogHeader>
-        <DialogTitle>Enter Ethereum Address</DialogTitle>
+        <DialogTitle className="text-[#F0F0F0]">Wallet</DialogTitle>
       </DialogHeader>
       <div className="grid gap-4 py-2">
         <div className="grid gap-2">
-          <Label htmlFor="eth-address">Address</Label>
+          <Label htmlFor="eth-address" className="text-[#F0F0F0]">Address</Label>
           <Input
             id="eth-address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
             placeholder="0x..."
+            className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
           />
           {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
       </div>
       <DialogFooter>
-        <Button onClick={handleSubmit}>Import</Button>
+        <Button className="bg-[#00FFC6] text-[#1A1F27] hover:bg-[#00e0b3]" onClick={handleSubmit}>
+          Import
+        </Button>
       </DialogFooter>
     </DialogContent>
   );

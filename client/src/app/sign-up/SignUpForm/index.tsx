@@ -46,36 +46,52 @@ export function SignUpForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+      <Card className="bg-[#2A2F38] text-[#F0F0F0]">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl text-[#F0F0F0]">Sign Up</CardTitle>
+          <CardDescription className="text-[#A3A3A3]">
             Enter your details to create an account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <div className="grid gap-2">
-              <Label htmlFor="name">Username</Label>
-              <Input id="name" {...register("username")} placeholder="John Doe" />
+              <Label htmlFor="name" className="text-[#F0F0F0]">Username</Label>
+              <Input
+                id="name"
+                {...register("username")}
+                placeholder="John Doe"
+                className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
+              />
               {errors.username && <p className="text-sm text-red-500">{errors.username.message}</p>}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" {...register("email")} placeholder="mail@example.com" />
+              <Label htmlFor="email" className="text-[#F0F0F0]">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                {...register("email")}
+                placeholder="mail@example.com"
+                className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
+              />
               {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" {...register("password")} />
+              <Label htmlFor="password" className="text-[#F0F0F0]">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                {...register("password")}
+                className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
+              />
               {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full bg-[#00FFC6] text-[#1A1F27] hover:bg-[#00e0b3] focus:ring-[#00FFC6]">
               Sign Up
             </Button>
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-4 text-center text-sm text-[#A3A3A3]">
               Already have an account?{" "}
-              <Link href={AppRoute.SIGN_IN} className="underline underline-offset-4">
+              <Link href={AppRoute.SIGN_IN} className="underline underline-offset-4 text-[#00FFC6]">
                 Sign in
               </Link>
             </div>

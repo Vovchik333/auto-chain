@@ -36,7 +36,7 @@ export default function ImportFromCSVButton() {
       <Button
         onClick={handleImportClick}
         type="button"
-        className="bg-blue-600 hover:bg-blue-700 text-white rounded-2xl cursor-pointer"
+        className="bg-[#00FFC6] hover:bg-[#00e0b3] text-[#1A1F27] rounded-2xl cursor-pointer flex items-center"
       >
         <Upload className="w-4 h-4 mr-2" />
         Import from CSV

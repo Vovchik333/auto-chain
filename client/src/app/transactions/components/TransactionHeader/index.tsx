@@ -1,77 +1,60 @@
+import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
   DropdownMenuItem,
   DropdownMenuTrigger, 
   DropdownMenuContent 
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import AddTransactionButton from "../AddTransaction";
+import ImportFromCSVButton from "../ImportFromCSVButton";
+
 
 const TransactionsHeader = () => {
   return (
-    <div className="flex flex-col space-y-4 bg-white pb-4 border-b">
-      {/* Заголовок */}
+    <div className="flex flex-col space-y-4 bg-[#1A1F27] pb-4 border-b border-[#2C2C2E]">
       <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Transactions</h1>
-        <button className="px-4 py-2 text-white bg-blue-500 rounded-full">Add transaction</button>
+        <h1 className="text-xl font-semibold text-white">Transactions</h1>
+        <AddTransactionButton />
       </div>
 
-      {/* Фільтри */}
-      <div className="flex space-x-4">
-        {/* All wallets dropdown */}
-        <div className="relative">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="text-sm text-gray-700">
-              All wallets
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-2 bg-white shadow-lg rounded-md">
-              <DropdownMenuItem className="text-sm">Wallet 1</DropdownMenuItem>
-              <DropdownMenuItem className="text-sm">Wallet 2</DropdownMenuItem>
-              {/* Додайте більше опцій */}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        {/* All currencies dropdown */}
-        <div className="relative">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="text-sm text-gray-700">
-              All currencies
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-2 bg-white shadow-lg rounded-md">
-              <DropdownMenuItem className="text-sm">USD</DropdownMenuItem>
-              <DropdownMenuItem className="text-sm">EUR</DropdownMenuItem>
-              {/* Додайте більше опцій */}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+      <div className="flex justify-between items-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="text-sm text-[#A3A3A3] border border-[#2C2C2C] px-3 py-1.5 rounded-md hover:bg-[#1A1A1A] transition-colors">
+            All wallets
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="p-2 bg-[#1A1A1A] shadow-lg rounded-md border border-[#2C2C2C]">
+            <DropdownMenuItem className="text-sm text-white hover:bg-[#00FFC6] hover:text-black">Wallet 1</DropdownMenuItem>
+            <DropdownMenuItem className="text-sm text-white hover:bg-[#00FFC6] hover:text-black">Wallet 2</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <ImportFromCSVButton />
       </div>
 
-      {/* Додаткові дії */}
       <div className="flex justify-between items-center">
-        {/* Кнопки фільтрів */}
-        <div className="space-x-2">
-          <button className="text-sm text-blue-500">Type</button>
-          <button className="text-sm text-blue-500">Tag</button>
-          <button className="text-sm text-blue-500">Manual</button>
-          <button className="text-sm text-blue-500">Warnings</button>
-          <button className="text-sm text-blue-500">Dates</button>
+        <div className="flex flex-wrap gap-2">
+          {["Type", "Tag", "Manual", "Warnings", "Dates"].map((filter) => (
+            <button
+              key={filter}
+              className="text-sm text-[#00FFC6] hover:underline"
+            >
+              {filter}
+            </button>
+          ))}
         </div>
 
-        {/* Сортування */}
-        <div className="relative">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="text-sm text-gray-700">
-              Sort by Most recent
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="p-2 bg-white shadow-lg rounded-md">
-              <DropdownMenuItem className="text-sm">Most recent</DropdownMenuItem>
-              <DropdownMenuItem className="text-sm">Oldest</DropdownMenuItem>
-              {/* Додайте інші варіанти сортування */}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="text-sm text-[#A3A3A3] border border-[#2C2C2C] px-3 py-1.5 rounded-md hover:bg-[#1A1A1A] transition-colors">
+            Sort by Most recent
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="p-2 bg-[#1A1A1A] shadow-lg rounded-md border border-[#2C2C2C]">
+            <DropdownMenuItem className="text-sm text-white hover:bg-[#00FFC6] hover:text-black">Most recent</DropdownMenuItem>
+            <DropdownMenuItem className="text-sm text-white hover:bg-[#00FFC6] hover:text-black">Oldest</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-      <div className="flex justify-between items-center">
-        <button className="text-sm text-blue-500">+ Add Filter</button>
+
+      <div>
+        <button className="text-sm text-[#00FFC6] hover:underline">+ Add Filter</button>
       </div>
     </div>
   );

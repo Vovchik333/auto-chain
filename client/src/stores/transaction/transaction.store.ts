@@ -6,6 +6,7 @@ import { TransactionFilterDto } from "@/common/types/transaction-filter.dto";
 
 const initState: TransactionState = {
   transactions: [],
+  selectedTransaction: null,
   isLoading: false,
   error: null
 }
@@ -19,6 +20,17 @@ export const useTransactionStore = create<TransactionStore>((set) => ({
       const transactions = await transactionService.getByFilter(filter);
 
       set({ transactions, isLoading: false })
+    } catch (err: any) {
+      set({ error: err.message ?? 'Unknown error', isLoading: false })
+    }
+  },
+  getTransactionById: async (id: string) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const selectedTransaction = await transactionService.getById(id);
+
+      set({ selectedTransaction, isLoading: false })
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }

@@ -5,13 +5,13 @@ import ProfileData from "@/app/profile/components/UserInfo";
 
 function ProfilePage() {
   return (
-    <div className="w-full">
-      <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white pb-4">
+    <div className="w-full bg-[#1A1F27] p-4 rounded-xl border border-[#2A2F38]">
+      <h2 className="text-2xl font-semibold text-[#F0F0F0] mb-4">
         Profile
-      </h1>
+      </h2>
       <ProfileData />
     </div>
-  );
+  )
 }
 
 export default withPrivateRoute(ProfilePage);

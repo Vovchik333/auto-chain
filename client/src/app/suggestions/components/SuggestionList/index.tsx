@@ -8,7 +8,7 @@ interface Props {
 
 export const SuggestionList: React.FC<Props> = ({ suggestions }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 flex flex-col gap-2">
       {suggestions.map((sug, idx) => (
         <SuggestionItem key={idx} {...sug} />
       ))}

@@ -31,6 +31,15 @@ class TransactionService {
     );
   }
 
+  public async getById(id: string): Promise<TransactionDto> {
+    return this.#httpApi.load<TransactionDto>(
+      `${this.#apiPath}${ApiPath.TRANSACTIONS}/${id}`,
+      {
+        hasAuth: true
+      }
+    );
+  }
+
   public async importFromCsv(payload: FormData): Promise<TransactionDto[]> {
     return this.#httpApi.load<TransactionDto[]>(
       `${this.#apiPath}${ApiPath.TRANSACTIONS}${ApiPath.IMPORT_FROM_CSV}`,

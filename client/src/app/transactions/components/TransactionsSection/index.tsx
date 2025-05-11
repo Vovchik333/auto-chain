@@ -15,8 +15,10 @@ export default function TransactionsSection({
 }: Props) {
   return (
     <section className="space-y-6 py-4">
-      <div className="flex justify-between gap-4 py-2">
-        <h2 className="text-xl font-semibold">{tableTitle}</h2>
+      <div className="flex justify-between gap-4 py-2 bg-[#1A1F27]">
+        <h2 className="text-xl font-semibold text-white">
+          {tableTitle}
+        </h2>
         <ExportToCSVButton address={walletAddress as string} />
       </div>
       <TransactionTable transactions={transactions} />

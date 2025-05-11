@@ -14,8 +14,8 @@ export const SuggestionsHeader: React.FC<SuggestionsHeaderProps> = ({
   onWalletSelect,
 }) => {
   return (
-    <div className="flex justify-between py-4 border-b bg-white">
-      <h2 className="text-2xl font-semibold">Рекомендації з ребалансу</h2>
+    <div className="flex justify-between py-4 border-b bg-[#1A1F27] mb-10">
+      <h2 className="text-2xl font-semibold text-[#F0F0F0]">Suggestions for diversification</h2>
 
       <WalletSelector 
         wallets={wallets}

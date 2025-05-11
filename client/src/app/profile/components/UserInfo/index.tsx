@@ -50,72 +50,94 @@ export default function ProfileData() {
   const username = watch("username");
 
   return (
-    <Card>
+    <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
       <CardHeader>
-        <CardTitle>Information About You</CardTitle>
+        <CardTitle className="text-[#F0F0F0]">Information About You</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         {!editing ? (
           <div className="space-y-4">
             <div>
-              <Label>Email:</Label>
-              <p className="text-sm text-muted-foreground">{email}</p>
+              <Label className="text-[#A3A3A3]">Email:</Label>
+              <p className="text-sm text-[#A3A3A3]">{email}</p>
             </div>
             <div>
-              <Label>Username:</Label>
-              <p className="text-sm text-muted-foreground">{username}</p>
+              <Label className="text-[#A3A3A3]">Username:</Label>
+              <p className="text-sm text-[#A3A3A3]">{username}</p>
             </div>
-            <Button onClick={() => setEditing(true)}>Edit Profile</Button>
+            <Button
+              onClick={() => setEditing(true)}
+              className="bg-[#2A2F38] text-[#00FFC6] hover:bg-[#00FFC6] hover:text-[#1A1F27] transition-colors"
+            >
+              Edit Profile
+            </Button>
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <Label htmlFor="email">Email:</Label>
+              <Label htmlFor="email" className="text-[#A3A3A3]">Email:</Label>
               <Input
                 id="email"
                 type="email"
+                className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
                 {...register("email", { required: "Email is required" })}
               />
-              {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="text-sm text-red-400">{errors.email.message}</p>
+              )}
             </div>
             <div>
-              <Label htmlFor="username">Username:</Label>
+              <Label htmlFor="username" className="text-[#A3A3A3]">Username:</Label>
               <Input
                 id="username"
+                className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
                 {...register("username", { required: "Username is required" })}
               />
-              {errors.username && <p className="text-sm text-red-600">{errors.username.message}</p>}
+              {errors.username && (
+                <p className="text-sm text-red-400">{errors.username.message}</p>
+              )}
             </div>
 
-            <div className="pt-2 border-t">
-              <Label>Change Password (optional)</Label>
+            <div className="pt-2 border-t border-[#2A2F38]">
+              <Label className="text-[#A3A3A3]">Change Password (optional)</Label>
               <div className="space-y-2 mt-2">
                 <Input
                   type="password"
                   placeholder="Current password"
+                  className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
                   {...register("currentPassword")}
                 />
                 <Input
                   type="password"
                   placeholder="New password"
+                  className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
                   {...register("newPassword")}
                 />
                 <Input
                   type="password"
                   placeholder="Confirm new password"
+                  className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
                   {...register("confirmPassword")}
                 />
-                {watch("newPassword") && watch("confirmPassword") && watch("newPassword") !== watch("confirmPassword") && (
-                  <p className="text-sm text-red-600">Passwords do not match</p>
-                )}
+                {watch("newPassword") &&
+                  watch("confirmPassword") &&
+                  watch("newPassword") !== watch("confirmPassword") && (
+                    <p className="text-sm text-red-400">Passwords do not match</p>
+                  )}
               </div>
             </div>
 
             <div className="flex gap-2 pt-4">
-              <Button type="submit">Save</Button>
+              <Button
+                type="submit"
+                className="bg-[#00FFC6] text-[#1A1F27] hover:bg-[#33FFD4] transition-colors font-medium"
+              >
+                Save
+              </Button>
               <Button
                 type="button"
                 variant="outline"
+                className="bg-[#2A2F38] text-[#F0F0F0] border-none hover:bg-[#3A3F48] hover:text-[#00FFC6] transition-colors"
                 onClick={() => {
                   reset();
                   setEditing(false);

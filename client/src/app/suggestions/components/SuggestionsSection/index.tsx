@@ -11,16 +11,19 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification }) => {
 
   return (
     <>
-      <div className="bg-muted p-4 rounded-2xl border text-sm sm:text-base">
-        <p>
-          <span className="font-medium text-muted-foreground">Загальна сума:</span>{' '}
-          {total} ETH 
+      <div className="bg-[#2A2F38] p-4 rounded-2xl border border-[#1A1F27] text-sm sm:text-base text-[#F0F0F0] mb-4">
+        <p className="mb-2">
+          <span className="font-medium text-[#A3A3A3]">Total amount:</span>{' '}
+          <span className="text-[#00FFC6]">{total} ETH</span>
         </p>
         <p>
-          <span className="font-medium text-muted-foreground">Цільова сума для кожного гаманця:</span>{' '}
-          {target} ETH
+          <span className="font-medium text-[#A3A3A3]">Target amount for each wallet:</span>{' '}
+          <span className="text-[#00FFC6]">{target} ETH</span>
         </p>
       </div>
+      <h2 className="text-xl font-semibold text-[#F0F0F0] mb-4">
+        Necessary transfers
+      </h2>
       <SuggestionList suggestions={transfers} />
     </>
   );

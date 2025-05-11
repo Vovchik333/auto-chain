@@ -4,28 +4,43 @@ import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import WalletsHeader from "./components/WalletsHeader";
 import { useUserStore } from "@/stores/user/user.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import WalletPreview from "./components/WalletPreview";
 
 function Wallets() {
   const { user } = useUserStore()
   const { wallets, loadWallets } = useWalletStore();
 
-  useEffect(() => {
-    if (user === null) {
-      return;
+  const [filteredWallets, setFilteredWallets] = useState(wallets);
+
+  const handleSearch = (query: string) => {
+    console.log('wewiejoidjewj')
+    if (query.trim() === "") {
+      setFilteredWallets(wallets);
+    } else {
+      setFilteredWallets(
+        wallets.filter((wallet) =>
+          wallet.address.toLowerCase().includes(query.toLowerCase())
+        )
+      );
     }
+  };
 
+  useEffect(() => {
+    if (user === null) return;
     const { id: userId } = user;
-
-    loadWallets({userId});
+    loadWallets({ userId });
   }, [user]);
+
+  useEffect(() => {
+    setFilteredWallets(wallets);
+  }, [wallets]);
 
   return (
     <>
-      <WalletsHeader />
+      <WalletsHeader onSearch={handleSearch} />
       <div className="flex flex-col space-y-4 mt-4">
-        {wallets.map((wallet, index) => (
+        {filteredWallets.map((wallet, index) => (
           <WalletPreview 
             id={wallet.id}
             name={wallet.address}
