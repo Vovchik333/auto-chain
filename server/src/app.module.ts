@@ -8,6 +8,8 @@ import { readFileSync } from 'fs';
 import { WalletModule } from './modules/wallets/wallet.module';
 import { FraudReportModule } from './modules/fraud-report/fraud-report.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
+import { StatsModule } from './modules/stats/stats.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
         })
       ]
     }),
+    EventEmitterModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -40,7 +43,8 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
     TransactionsModule,
     WalletModule,
     FraudReportModule,
-    SharedModule, 
+    SharedModule,
+    StatsModule, 
   ],
   controllers: [],
 })

@@ -13,7 +13,10 @@ export class Wallet {
   userId: string;
 
   @Prop({ required: true })
-  address: string;
+  name: string;
+
+  @Prop()
+  address?: string;
 
   @Prop({type: MongooseSchema.Types.ObjectId, ref: 'Statistics'})
   statistics: Statistics;

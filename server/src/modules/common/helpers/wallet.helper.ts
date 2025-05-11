@@ -1,5 +1,5 @@
 import { Transaction } from "src/schemas/transaction.schema";
-import { mapTransactionFromDb } from "../common/helpers/map-transaction.helper";
+import { mapTransactionFromDb } from "./map-transaction.helper";
 
 export const getAnalyticsFromTxs = (
   txs: Transaction[],

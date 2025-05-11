@@ -12,7 +12,7 @@ import { mapWalletFromDb } from '../common/helpers/map-wallet.helper';
 import { UserWalletAddressDto } from '../common/dto/user-wallet-address.dto';
 import { WalletFilterDto } from './dto/wallet-filter.dto';
 import { WalletDto } from '../common/dto/wallet.dto';
-import { getAnalyticsFromTxs } from './wallet.helper';
+import { getAnalyticsFromTxs } from '../common/helpers/wallet.helper';
 import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
 import { TransferInstruction } from './dto/transfer-instruction.dto';
 
