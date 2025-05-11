@@ -5,14 +5,16 @@ import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
 import { EtherscanResponseDto } from '../common/dto/etherscan-response.dto';
 import { mapTransaction, mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { TransactionDto } from '../common/dto/transaction.dto';
-import { Wallet } from 'src/schemas/wallet.schema';
+import { Wallet, WalletDocument } from 'src/schemas/wallet.schema';
 import { mapWalletFromDb } from '../common/helpers/map-wallet.helper';
 import { UserWalletAddressDto } from '../common/dto/user-wallet-address.dto';
 import { WalletFilterDto } from './dto/wallet-filter.dto';
 import { WalletDto } from '../common/dto/wallet.dto';
+import { getAnalyticsFromTxs } from './wallet.helper';
+import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
+import { TransferInstruction } from './dto/transfer-instruction.dto';
 
 @Injectable()
 export class WalletService {
@@ -21,59 +23,39 @@ export class WalletService {
   
   constructor(
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
-    @InjectModel(Wallet.name) private readonly walletModel: Model<Wallet>,
+    @InjectModel(Wallet.name) private readonly walletModel: Model<WalletDocument>,
+    @InjectModel(Statistics.name) private readonly statisticsModel: Model<StatisticsDocument>,
     private readonly configService: ConfigService
   ) {
     this.etherscanApiUrl = this.configService.get<string>('ETHERSCAN_API_URL');
     this.etherscanApiKey = this.configService.get<string>('ETHERSCAN_API_KEY');
   }
 
-  // private async getAnalytics(txs: Transaction[], payload: UserWalletAddressDto) {
-  //   const { address, userId } = payload; 
-  //   const { analytics, mappedTxsFromDb } = getAnalyticsFromTxs(txs, address);
+  private async setStatistics(txs: Transaction[], payload: UserWalletAddressDto) {
+    const { address, userId } = payload; 
+    const { analytics: walletAnalytics } = getAnalyticsFromTxs(txs, address);
+    const statistics = await this.statisticsModel.create(walletAnalytics);
+    // const allTxs = await this.transactionModel.find({userId}).exec();
+    // const { analytics: userAnalytics } = getAnalyticsFromTxs(allTxs, address);
+    
+    // await this.statisticsModel.updateOne(
+    //   {userId},
+    //   {$set: {...userAnalytics}}
+    // )
 
-  //   analytics.largestAmountTransactionHash = (await this.transactionModel.find({walletAddress: address}).sort({value: -1}).limit(1).exec())[0]?.hash;
-  //   analytics.totalFeeUsed = (await this.transactionModel.find({walletAddress: address}).sort({timeStamp: 1}).limit(1).exec())[0]?.txnFee;
-
-  //   await this.walletModel.findOneAndUpdate(
-  //     { address },
-  //     {
-  //       $set: {
-  //         walletAddress: address,
-  //         userId,
-  //         largestAmountTransactionHash: analytics.largestAmountTransactionHash,
-  //       },
-  //       $inc: {
-  //         totalReceived: analytics.totalReceived,
-  //         totalSent: analytics.totalSent,
-  //         totalTxCount: analytics.totalTxCount,
-  //         totalFeeUsed: analytics.totalFeeUsed,
-  //       },
-  //       $push: {
-  //         transactions: { $each: txs.map(tx => tx._id) }
-  //       }
-  //     },
-  //     {upsert: true}
-  //   );
-
-  //   return mappedTxsFromDb;
-  // }
+    return statistics;
+  }
 
   async findByFilter(query: WalletFilterDto) {
     const wallets = await this.walletModel
       .find({...query})
-      .populate('transactions')
+      .populate([
+        { path: 'transactions' },
+        { path: 'statistics', populate: { path: 'largestAmountTransaction' } },
+      ])
       .exec();
 
     return wallets.map(mapWalletFromDb);
-  }
-
-  async findTxsByHash(walletAddress: string): Promise<TransactionDto[]> {
-    const txsList = await this.transactionModel
-      .find({ walletAddress })
-      .exec();
-    
-    return txsList.map(mapTransactionFromDb);
   }
 
   async importTransactionsFromEtherscan(
@@ -92,16 +74,84 @@ export class WalletService {
     
     const txsList = data.result as EtherscanNormalTransactionDto[];
     const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, payload)));
+    const statistics = await this.setStatistics(savedTxs, payload);
     await this.walletModel.create({
       address,
       userId,
       transactions: savedTxs.map(tx => tx._id),
       isSyncWithBlockchain: false,
-      statisticsId: ''
+      statistics: statistics._id,
     });
-    const wallets = await this.walletModel.find({userId}).populate('transactions').exec();
+
+    const wallets = await this.walletModel
+      .find({userId})
+      .populate([
+        {path: 'transactions'},
+        {path: 'statistics', populate: { path: 'largestAmountTransaction' }},
+      ])
+      .exec();
 
     return wallets.map(mapWalletFromDb);
+  }
+
+  async getSuggestionsForDiversification(
+    walletIds: string[],
+  ) {
+    const objectIds = walletIds.map(id => new Types.ObjectId(id));
+
+    const wallets = await this.walletModel
+      .find({
+        _id: { $in: objectIds }
+      })
+      .populate('statistics')
+      .exec();
+    
+    const walletsWithBalances = wallets.map(wallet => {
+      return {
+        address: wallet.address,
+        balance: wallet.statistics.totalReceived - wallet.statistics.totalSent
+      }
+    })
+
+    const total = walletsWithBalances.reduce((sum, wallet) => sum + wallet.balance, 0);
+    const target = total / wallets.length;
+
+    const deltas = walletsWithBalances.map(wallet => {
+      return {
+        address: wallet.address,
+        balance: wallet.balance - target
+      }
+    });
+    const transfers: TransferInstruction[] = [];
+
+    for (let i = 0; i < deltas.length; i++) {
+      if (deltas[i].balance <= 0) {
+        continue;
+      }
+
+      for (let j = 0; j < deltas.length; j++) {
+        if (deltas[i].balance === 0) {
+          break;
+        }
+
+        if (deltas[j].balance < 0) {
+          const amount = Math.min(deltas[i].balance, -deltas[j].balance);
+          transfers.push({
+            from: deltas[i].address,
+            to: deltas[j].address,
+            amount: amount,
+          });
+          deltas[i].balance -= amount;
+          deltas[j].balance += amount;
+        }
+      }
+    }
+
+    return {
+      total,
+      target,
+      transfers
+    };
   }
 
   // async checkUserAddress(address: string): Promise<ReportItemDto[]> {

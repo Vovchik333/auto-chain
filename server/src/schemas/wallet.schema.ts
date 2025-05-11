@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Schema as MongooseSchema } from "mongoose";
 import { Transaction } from "./transaction.schema";
+import { Statistics } from "./statistics.schema";
 
 export type WalletDocument = HydratedDocument<Wallet>;
 
@@ -14,10 +15,10 @@ export class Wallet {
   @Prop({ required: true })
   address: string;
 
-  @Prop()
-  statisticsId: string;
+  @Prop({type: MongooseSchema.Types.ObjectId, ref: 'Statistics'})
+  statistics: Statistics;
 
-  @Prop()
+  @Prop({default: false})
   isSyncWithBlockchain: boolean;
 
   @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Transaction' })

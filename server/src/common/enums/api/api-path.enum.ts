@@ -9,7 +9,8 @@ const ApiPath = {
     USER: '/user',
     WALLETS: '/wallets',
     FRAUD_REPORTS: '/fraud-reports',
-    AUTH_CODE: '/auth-code'
+    AUTH_CODE: '/auth-code',
+    DIVERSIFICATION: '/diversification'
 } as const;
 
 export { ApiPath };

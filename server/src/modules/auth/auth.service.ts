@@ -10,11 +10,13 @@ import { JwtService } from 'src/shared/jwt/jwt.service';
 import { ErrorMessage } from 'src/common/enums/error-message/error-mesage.enum';
 import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
 import { mapUserFromDb } from '../common/helpers/map-user.helper';
+import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    @InjectModel(Statistics.name) private readonly statisticsModel: Model<StatisticsDocument>,
     private readonly hashService: HashService,
     private readonly jwtService: JwtService
   ) {}
@@ -27,7 +29,9 @@ export class AuthService {
     }
 
     payload.password = await this.hashService.hashData(payload.password);
-    const user = await this.userModel.create(payload);
+    const statistics = await this.statisticsModel.create({});
+    const user = await this.userModel.create({...payload, statistics});
+    console.log(user.toJSON());
 
     return {
         user: mapUserFromDb(user),

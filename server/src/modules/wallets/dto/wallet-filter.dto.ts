@@ -14,8 +14,4 @@ export class WalletFilterDto {
   @Type(() => Boolean)
   @IsBoolean()
   isSyncWithBlockchain?: string;
-
-  @IsOptional()
-  @IsString()
-  statisticsId?: string;
 }

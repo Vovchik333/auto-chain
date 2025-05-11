@@ -10,11 +10,13 @@ import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
 import { mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
+import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
+    @InjectModel(Statistics.name) private readonly statisticsModel: Model<StatisticsDocument>,
   ) {}
 
   async getByFilter(filter: TransactionFilterDto) {
@@ -27,6 +29,14 @@ export class TransactionsService {
 
   async create(payload: CreateTransactionDto) {
     const tx = await this.transactionModel.create(payload);
+    // await this.statisticsModel.updateOne(
+    //   {id: payload.statisticsId},
+      // {
+      //   $inc: {
+      //     totalReceived: payload.amount,
+      //   }
+      // }
+    // )
 
     return mapTransactionFromDb(tx);
   }

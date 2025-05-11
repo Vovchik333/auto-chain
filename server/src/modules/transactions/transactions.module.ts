@@ -5,12 +5,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from 'src/shared/shared.module';
 import { Transaction, TransactionSchema } from 'src/schemas/transaction.schema';
 import { Wallet, WalletSchema } from 'src/schemas/wallet.schema';
+import { Statistics, StatisticsSchema } from 'src/schemas/statistics.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Transaction.name, schema: TransactionSchema },
-      { name: Wallet.name, schema: WalletSchema }
+      { name: Wallet.name, schema: WalletSchema },
+      { name: Statistics.name, schema: StatisticsSchema }
     ]),
     SharedModule
   ],

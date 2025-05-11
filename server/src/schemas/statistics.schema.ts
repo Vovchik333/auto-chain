@@ -17,8 +17,8 @@ export class Statistics {
   @Prop({ default: 0 })
   totalTxCount: number;
 
-  @Prop({ default: '' })
-  largestAmountTransactionHash: string;
+  @Prop({ default: undefined, type: MongooseSchema.Types.ObjectId, ref: 'Transaction' })
+  largestAmountTransaction?: Transaction;
 
   @Prop({ default: 0 })
   totalFeeUsed: number;

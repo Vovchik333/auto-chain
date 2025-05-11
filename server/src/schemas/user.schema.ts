@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument, Schema as MongooseSchema } from "mongoose";
+import { Statistics } from "./statistics.schema";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -16,11 +17,8 @@ export class User {
   @Prop()
   password: string;
 
-  @Prop()
-  statisticsId: string;
-
-  @Prop({default: false})
-  isSyncWithBlockchain: boolean;
+  @Prop({type: MongooseSchema.Types.ObjectId, ref: 'Statistics'})
+  statistics?: Statistics;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

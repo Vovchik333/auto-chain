@@ -1,9 +1,10 @@
+import { StatisticsDto } from "./statistics.dto";
+
 type UserDto = {
   id: string;
   email: string;
   username: string;
-  isSyncWithBlockchain: boolean;
-  statisticsId: string;
+  // statistics: StatisticsDto;
 }
 
 export { type UserDto };

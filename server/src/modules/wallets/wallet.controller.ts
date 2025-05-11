@@ -5,6 +5,8 @@ import { UserWalletAddressDto } from '../common/dto/user-wallet-address.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { WalletDto } from '../common/dto/wallet.dto';
 import { WalletFilterDto } from './dto/wallet-filter.dto';
+import { TransferInstruction } from './dto/transfer-instruction.dto';
+import { DiversificationDto } from './dto/diversification.dto';
 
 @Controller(ApiPath.WALLETS)
 @UseGuards(AuthGuard)
@@ -18,6 +20,15 @@ export class WalletController {
     const wallets = await this.walletService.findByFilter(query);
 
     return wallets;
+  }
+
+  @Post(ApiPath.DIVERSIFICATION)
+  async getSuggestionsForDiversification(
+    @Body() payload: string[]
+  ): Promise<DiversificationDto> {
+    const suggestions = await this.walletService.getSuggestionsForDiversification(payload);
+
+    return suggestions;
   }
 
   @Post('/import-from-etherscan')

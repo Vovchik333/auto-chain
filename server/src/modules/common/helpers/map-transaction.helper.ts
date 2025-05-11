@@ -30,17 +30,23 @@ export const mapTransaction = (
   };
 }
 
-export const mapTransactionFromDb = (tx: Transaction): TransactionDto => ({
-  id: tx._id,
-  hash: tx.hash,
-  from: tx.from,
-  to: tx.to,
-  value: tx.value,
-  date: tx.date,
-  status: tx.status,
-  method: tx.method,
-  txnFee: tx.txnFee,
-  category: tx.category,
-  walletAddress: tx.walletAddress,
-  userId: tx.userId
-});
+export const mapTransactionFromDb = (tx: Transaction): TransactionDto => {
+  if (!tx) {
+    return undefined;
+  }
+
+  return {
+    id: tx._id,
+    hash: tx.hash,
+    from: tx.from,
+    to: tx.to,
+    value: tx.value,
+    date: tx.date,
+    status: tx.status,
+    method: tx.method,
+    txnFee: tx.txnFee,
+    category: tx.category,
+    walletAddress: tx.walletAddress,
+    userId: tx.userId
+  }
+};

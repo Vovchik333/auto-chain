@@ -10,9 +10,10 @@ export const getAnalyticsFromTxs = (
     totalSent: 0,
     totalFeeUsed: 0,
     totalTxCount: 0,
-    largestAmountTransactionHash: '',
+    largestAmountTransaction: txs.length === 0 ? '' : txs[0]._id,
   };
 
+  let maxAmount = 0;
   const mappedTxsFromDb = txs.map(tx => {
     const mappedTx = mapTransactionFromDb(tx);
 
@@ -21,6 +22,11 @@ export const getAnalyticsFromTxs = (
       analytics.totalSent += mappedTx.value;
     } else {
       analytics.totalReceived += mappedTx.value;
+    }
+
+    if (mappedTx.value > maxAmount) {
+      maxAmount = mappedTx.value;
+      analytics.largestAmountTransaction = mappedTx.id;
     }
 
     return mappedTx;

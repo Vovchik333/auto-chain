@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Model } from "mongoose";
+import { Statistics, StatisticsDocument } from "./statistics.schema";
+import { updateStatisticsForUser } from "src/modules/common/helpers/stats.helper";
 
 export type TransactionDocument = HydratedDocument<Transaction>;
 
