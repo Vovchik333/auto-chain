@@ -24,12 +24,12 @@ function Wallets() {
   return (
     <>
       <WalletsHeader />
-      <div className="space-y-4 mt-4">
+      <div className="flex flex-col space-y-4 mt-4">
         {wallets.map((wallet, index) => (
           <WalletPreview 
             id={wallet.id}
             name={wallet.address}
-            lastSynced={wallet.transactions[0].date}
+            lastSynced={new Date(wallet.transactions[0].date).toLocaleString()}
             totalValue={wallet.statistics.totalReceived - wallet.statistics.totalSent}
             transactions={wallet.transactions.length}
             key={index} 

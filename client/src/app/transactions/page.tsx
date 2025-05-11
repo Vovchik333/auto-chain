@@ -1,6 +1,6 @@
 'use client'
 
-import TransactionsSection from "@/components/TransactionsSection";
+import TransactionsSection from "@/app/transactions/components/TransactionsSection";
 import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
 import { useTransactionStore } from "@/stores/transaction/transaction.store";
 import { useUserStore } from "@/stores/user/user.store";

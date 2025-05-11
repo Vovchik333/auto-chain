@@ -1,6 +1,6 @@
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import EthAddressAndFilesModalContent from "../EthAddressAndFilesModal";
+import EthAddressAndFilesModalContent from "../../../../components/EthAddressAndFilesModal";
 import { Dialog } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { useTransactionStore } from "@/stores/transaction/transaction.store";

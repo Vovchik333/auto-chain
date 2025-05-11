@@ -1,7 +1,7 @@
 'use client'
 
 import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
-import ProfileData from "@/components/UserInfo";
+import ProfileData from "@/app/profile/components/UserInfo";
 
 function ProfilePage() {
   return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { SignInForm } from "@/components/SignInForm";
+import { SignInForm } from "@/app/sign-in/components/SignInForm";
 import { withPublicRoute } from "@/hoc/with-public-route.hoc";
 
 function SignIn() {

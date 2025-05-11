@@ -16,13 +16,15 @@ export const Menu: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="flex space-x-6">
+    <nav className="flex space-x-6 text-[#F0F0F0]">
       {navLinks.map((link) => (
         <Link
           key={link.href}
           href={link.href}
-          className={`hover:text-blue-600 transition ${
-            pathname === link.href ? "text-blue-600 font-semibold" : "text-gray-700"
+          className={`transition duration-200 ${
+            pathname === link.href
+              ? "text-[#00FFC6] font-semibold"
+              : "text-[#A3A3A3] hover:text-[#00FFC6]"
           }`}
         >
           {link.name}

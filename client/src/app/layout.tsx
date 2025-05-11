@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable}`}>
+      <body className={`${roboto.variable} bg-[#1A1F27]`}>
         <ClientProvider>
           <Header/>
           <main className="p-8">

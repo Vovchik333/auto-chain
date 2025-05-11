@@ -1,6 +1,6 @@
 import { TransactionDto } from "@/common/types/transaction.dto";
-import TransactionTable from "../TransactionTable";
-import ExportToCSVButton from "../ExportToCSVButton";
+import TransactionTable from "../../../../components/TransactionTable";
+import ExportToCSVButton from "../../../../components/ExportToCSVButton";
 
 type Props = {
   tableTitle: string;
