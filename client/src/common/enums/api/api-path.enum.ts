@@ -14,6 +14,7 @@ const ApiPath = {
     IMPORT_FROM_CSV: '/import-from-csv',
     EXPORT_TO_CSV: '/export-to-csv',
     TRANSACTIONS: '/transactions',
+    DIVERSIFICATION: '/diversification'
 } as const;
 
 export { ApiPath };

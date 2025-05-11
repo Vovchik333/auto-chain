@@ -1,3 +1,4 @@
+import { StatisticsDto } from "./statistics.dto";
 import { TransactionDto } from "./transaction.dto";
 
 export type WalletDto = {
@@ -5,6 +6,6 @@ export type WalletDto = {
   userId: string;
   address: string;
   isSyncWithBlockchain: boolean;
-  statisticsId: string;
+  statistics: StatisticsDto;
   transactions: TransactionDto[]
 }

@@ -6,15 +6,21 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
+import { useUserStore } from "@/stores/user/user.store";
 
-const userData = {
-  id: "12345",
-  email: "user@example.com",
-  username: "exampleuser",
+type ProfileFormData = {
+  email: string;
+  username: string;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
 };
 
 export default function ProfileData() {
   const [editing, setEditing] = useState(false);
+  const { user } = useUserStore();
+
+  if (!user) return <p>Loading...</p>;
 
   const {
     register,
@@ -22,11 +28,21 @@ export default function ProfileData() {
     reset,
     watch,
     formState: { errors },
-  } = useForm({
-    defaultValues: userData,
+  } = useForm<ProfileFormData>({
+    defaultValues: {
+      email: user.email,
+      username: user.username,
+    },
   });
 
-  const onSubmit = (data: typeof userData) => {
+  const onSubmit = (data: ProfileFormData) => {
+    if (data.newPassword && data.newPassword !== data.confirmPassword) {
+      alert("New passwords do not match");
+      return;
+    }
+
+    console.log("Updated data:", data);
+
     setEditing(false);
   };
 
@@ -42,11 +58,11 @@ export default function ProfileData() {
         {!editing ? (
           <div className="space-y-4">
             <div>
-              <Label className="mb-2">Email:</Label>
+              <Label>Email:</Label>
               <p className="text-sm text-muted-foreground">{email}</p>
             </div>
             <div>
-              <Label className="mb-2">Username:</Label>
+              <Label>Username:</Label>
               <p className="text-sm text-muted-foreground">{username}</p>
             </div>
             <Button onClick={() => setEditing(true)}>Edit Profile</Button>
@@ -54,27 +70,48 @@ export default function ProfileData() {
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <Label className="mb-2" htmlFor="email">Email:</Label>
+              <Label htmlFor="email">Email:</Label>
               <Input
                 id="email"
                 type="email"
                 {...register("email", { required: "Email is required" })}
               />
-              {errors.email && (
-                <p className="text-sm text-red-600 mt-1">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
             </div>
             <div>
-              <Label className="mb-2" htmlFor="username">Username:</Label>
+              <Label htmlFor="username">Username:</Label>
               <Input
                 id="username"
                 {...register("username", { required: "Username is required" })}
               />
-              {errors.username && (
-                <p className="text-sm text-red-600 mt-1">{errors.username.message}</p>
-              )}
+              {errors.username && <p className="text-sm text-red-600">{errors.username.message}</p>}
             </div>
-            <div className="flex gap-2">
+
+            <div className="pt-2 border-t">
+              <Label>Change Password (optional)</Label>
+              <div className="space-y-2 mt-2">
+                <Input
+                  type="password"
+                  placeholder="Current password"
+                  {...register("currentPassword")}
+                />
+                <Input
+                  type="password"
+                  placeholder="New password"
+                  {...register("newPassword")}
+                />
+                <Input
+                  type="password"
+                  placeholder="Confirm new password"
+                  {...register("confirmPassword")}
+                />
+                {watch("newPassword") && watch("confirmPassword") && watch("newPassword") !== watch("confirmPassword") && (
+                  <p className="text-sm text-red-600">Passwords do not match</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-4">
               <Button type="submit">Save</Button>
               <Button
                 type="button"

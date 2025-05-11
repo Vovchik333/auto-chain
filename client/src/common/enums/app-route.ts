@@ -3,10 +3,11 @@ const AppRoute = {
     SIGN_UP: '/sign-up',
     SIGN_IN: '/sign-in',
     SIGN_OUT: '/sign-out',
-    ANALYTICS: '/analytics',
-    SECURITY: '/security',
+    WALLETS: '/wallets',
+    TRANSACTIONS: '/transactions',
     PROFILE: '/profile',
-    ANY: '*'
+    ANY: '*',
+    SUGGESTIONS: '/suggestions'
 } as const;
 
 export { AppRoute };

@@ -5,10 +5,11 @@ import Link from "next/link";
 import { AppRoute } from "@/common/enums/app-route";
 
 const navLinks = [
-  { name: "Home", href: AppRoute.ROOT },
-  { name: "Analytics", href: AppRoute.ANALYTICS },
-  { name: "Security", href: AppRoute.SECURITY },
+  { name: "Overview", href: AppRoute.ROOT },
+  { name: "Wallets", href: AppRoute.WALLETS },
+  { name: "Transactions", href: AppRoute.TRANSACTIONS },
   { name: "Profile", href: AppRoute.PROFILE },
+  { name: "Suggestions", href: AppRoute.SUGGESTIONS}
 ];
 
 export const Menu: React.FC = () => {

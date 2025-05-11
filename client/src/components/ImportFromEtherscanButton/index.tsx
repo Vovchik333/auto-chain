@@ -9,7 +9,6 @@ import { useTransactionStore } from "@/stores/transaction/transaction.store";
 
 export default function ImportFromEtherscanButton() {
   const { importFromEtherscan } = useWalletStore();
-  const { loadTransactions } = useTransactionStore();
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -28,7 +27,7 @@ export default function ImportFromEtherscanButton() {
 
   return (
     <>
-      <Button onClick={handleImportClick} className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl cursor-pointer">
+      <Button onClick={handleImportClick} className="bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
         <UploadCloud className="w-4 h-4 mr-2" />
         Import from Etherscan
       </Button>

@@ -3,7 +3,7 @@ type User = {
   email: string;
   username: string;
   isSyncWithBlockchain: boolean;
-  statisticsId: string;
+  statistics: string;
 }
 
 export { type User };
