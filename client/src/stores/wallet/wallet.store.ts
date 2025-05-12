@@ -7,7 +7,8 @@ import { WalletFilterDto } from "@/common/types/wallet-filter.dto";
 const initState: WalletState = {
   wallets: [],
   isLoading: false,
-  error: null
+  error: null,
+  globalStats: null
 }
 
 export const useWalletStore = create<WalletStore>((set) => ({
@@ -30,6 +31,17 @@ export const useWalletStore = create<WalletStore>((set) => ({
       const wallets = await walletService.importFromEtherscan(payload);
 
       set({ wallets, isLoading: false })
+    } catch (err: any) {
+      set({ error: err.message ?? 'Unknown error', isLoading: false })
+    }
+  },
+  getGlobalStats: async (userId: string) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const globalStats = await walletService.getGlobalStats(userId);
+
+      set({ globalStats, isLoading: false })
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }

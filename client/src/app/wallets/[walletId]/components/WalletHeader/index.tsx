@@ -1,3 +1,4 @@
+import { PageContentTitle } from "@/components/PageContentTitle";
 import { MoreVertical, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -12,9 +13,7 @@ export default function WalletHeader({ name }: Props) {
         <Link href="/wallets">
           <ArrowLeft className="h-5 w-5 text-[#A3A3A3] hover:text-[#00FFC6] transition-colors" />
         </Link>
-        <div>
-          <div className="text-lg font-semibold text-[#F0F0F0]">{name}</div>
-        </div>
+        <PageContentTitle text={name} />
       </div>
       <MoreVertical className="h-5 w-5 text-[#A3A3A3] hover:text-[#00FFC6] cursor-pointer transition-colors" />
     </div>

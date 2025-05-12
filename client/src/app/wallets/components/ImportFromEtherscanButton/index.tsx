@@ -1,19 +1,14 @@
 import { UploadCloud } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Dialog } from "../../../../components/ui/dialog";
-import EthAddressModalContent from "../../../../components/EthAddressModal";
+import EthAddressModalContent from "@/components/EthAddressModal";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { useUserStore } from "@/stores/user/user.store";
+import { PrimaryButton } from "@/components/PrimaryButton";
 
 export default function ImportFromEtherscanButton() {
   const { importFromEtherscan } = useWalletStore();
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleImportClick = () => {
-    setIsModalOpen(true);
-  };
 
   const handleAddressSubmit = async (address: string) => {
     if (user === null) {
@@ -22,23 +17,20 @@ export default function ImportFromEtherscanButton() {
 
     const { id: userId } = user;
     importFromEtherscan({address, userId});
+    setIsModalOpen(false)
   };
 
   return (
     <>
-      <Button 
-        onClick={handleImportClick} 
-        className="bg-[#00FFC6] hover:bg-[#00e6b2] text-[#1A1F27] font-medium cursor-pointer transition-colors"
-      >
+      <PrimaryButton onClick={() => setIsModalOpen(true)}>
         <UploadCloud className="w-4 h-4 mr-2" />
         Import From Blockchain
-      </Button>
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <EthAddressModalContent
-          onSubmit={handleAddressSubmit}
-          onClose={() => setIsModalOpen(false)}
-        />
-      </Dialog>
+      </PrimaryButton>
+      <EthAddressModalContent
+        onOpenChange={setIsModalOpen}
+        isOpen={isModalOpen}
+        onSubmit={handleAddressSubmit}
+      />
     </>
   );
 }

@@ -5,6 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { WalletDto } from '@/common/types/wallet.dto';
+import { PrimaryButton } from '@/components/PrimaryButton';
+import { ModalWrapper } from '@/components/ModalWrapper';
 
 interface WalletSelectorProps {
   wallets: WalletDto[];
@@ -29,39 +31,36 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ wallets, onSelec
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button 
-          className="bg-[#00FFC6] hover:bg-[#00e6b2] text-[#1A1F27] font-medium cursor-pointer transition-colors"
-        >
-          Select Wallets ({wallets.length})
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="bg-[#1A1F27] border-[#2A2F38] text-[#F0F0F0]">
-        <DialogHeader>
-          <DialogTitle className="text-[#F0F0F0]">Select Wallets</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-3 max-h-64 overflow-y-auto">
-          {wallets.map((wallet) => (
-            <label key={wallet.id} className="flex items-center gap-2 cursor-pointer">
-              <Checkbox
-                checked={localSelection.includes(wallet.id)}
-                onCheckedChange={() => toggleWallet(wallet.id)}
-                className="data-[state=checked]:text-[#00FFC6] data-[state=checked]:border-[#00FFC6] border-[#A3A3A3]"
-              />
-              <span className="text-sm text-[#F0F0F0]">{wallet.address}</span>
-            </label>
-          ))}
-        </div>
-        <div className="flex justify-end mt-4">
-          <Button 
-            onClick={applySelection}
-            className="bg-[#2A2F38] text-[#00FFC6] hover:bg-[#00FFC6] hover:text-[#1A1F27] cursor-pointer"
-          >
+    <>
+      <PrimaryButton 
+        onClick={() => setOpen(true)}
+      >
+        Select Wallets ({wallets.length})
+      </PrimaryButton>
+      <ModalWrapper 
+        isOpen={open}
+        title="Select Wallets"
+        onOpenChange={setOpen}
+        modalContent={
+          <div className="space-y-3 max-h-64 overflow-y-auto">
+            {wallets.map((wallet) => (
+              <label key={wallet.id} className="flex items-center gap-2 cursor-pointer">
+                <Checkbox
+                  checked={localSelection.includes(wallet.id)}
+                  onCheckedChange={() => toggleWallet(wallet.id)}
+                  className="data-[state=checked]:text-[#00FFC6] data-[state=checked]:border-[#00FFC6] border-[#A3A3A3]"
+                />
+                <span className="text-sm text-[#F0F0F0]">{wallet.address}</span>
+              </label>
+            ))}
+          </div>
+        }
+        footerButtons={
+          <PrimaryButton onClick={applySelection}>
             Confirm
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+          </PrimaryButton>
+        }
+      />
+    </>
   );
 };

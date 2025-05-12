@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import WalletHeader from "./components/WalletHeader";
 import { useUserStore } from "@/stores/user/user.store";
 import { useEffect } from "react";
+import WalletSection from "./components/WalletSection";
 
 export default function WalletPage() {
   const params = useParams();
@@ -29,9 +30,9 @@ export default function WalletPage() {
   if (!wallet) return <div>Loading...</div>; 
 
   return (
-    <div className="p-6">
+    <>
       <WalletHeader name={wallet.address} />
-      <WalletStats wallet={wallet} />
-    </div>
+      <WalletSection wallet={wallet} />
+    </>
   );
 }

@@ -4,6 +4,7 @@ import { UserWalletAddressDto } from '@/common/types/user-wallet-address.dto';
 import { TransactionDto } from '@/common/types/transaction.dto';
 import { WalletDto } from "@/common/types/wallet.dto";
 import { WalletFilterDto } from "@/common/types/wallet-filter.dto";
+import { StatisticsDto } from "@/common/types/statistics.dto";
 
 type Constructor = {
   apiPath: string;
@@ -27,6 +28,15 @@ class WalletService {
         query: {
           ...filter
         }
+      }
+    );
+  }
+
+  public async getGlobalStats(userId: string): Promise<StatisticsDto> {
+    return this.#httpApi.load<StatisticsDto>(
+      `${this.#apiPath}${ApiPath.WALLETS}/user-stats/${userId}`,
+      {
+        hasAuth: true,
       }
     );
   }

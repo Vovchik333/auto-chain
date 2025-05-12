@@ -6,7 +6,6 @@ export type TransactionDto = {
   value: number;
   date: string;
   status: string;
-  method: string;
   txnFee: number;
   category: string;
   walletAddress: string;

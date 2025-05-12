@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2'; // Для графіка
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'; // Імпортуємо компонент DateRangePicker
 import { format } from 'date-fns'; // Для форматування дат
-import DateRangePicker from '../DataRangePicker';
+import DateRangePicker from '../../../../components/DataRangePicker';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 

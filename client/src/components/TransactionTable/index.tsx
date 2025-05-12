@@ -18,7 +18,6 @@ export default function TransactionTable({ transactions }: Props) {
             <th className="px-4 py-3">Value (ETH)</th>
             <th className="px-4 py-3">Fee</th>
             <th className="px-4 py-3">Status</th>
-            <th className="px-4 py-3">Method</th>
             <th className="px-4 py-3">Date</th>
             <th className="px-4 py-3">Category</th>
           </tr>
@@ -58,7 +57,6 @@ export default function TransactionTable({ transactions }: Props) {
                     {tx.status}
                   </Badge>
                 </td>
-                <td className="px-4 py-2 text-[#CFCFCF]">{tx.method}</td>
                 <td className="px-4 py-2 text-[#9CA3AF]">{new Date(tx.date).toLocaleString()}</td>
                 <td className="px-4 py-2">
                   <Badge

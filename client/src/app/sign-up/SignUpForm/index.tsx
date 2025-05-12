@@ -17,6 +17,7 @@ import { useUserStore } from "@/stores/user/user.store"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { PrimaryButton } from "@/components/PrimaryButton"
 
 const formSchema = z.object({
   username: z.string().min(2, "Name must be at least 2 characters"),
@@ -86,9 +87,9 @@ export function SignUpForm({
               />
               {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
             </div>
-            <Button type="submit" className="w-full bg-[#00FFC6] text-[#1A1F27] hover:bg-[#00e0b3] focus:ring-[#00FFC6]">
+            <PrimaryButton type="submit">
               Sign Up
-            </Button>
+            </PrimaryButton>
             <div className="mt-4 text-center text-sm text-[#A3A3A3]">
               Already have an account?{" "}
               <Link href={AppRoute.SIGN_IN} className="underline underline-offset-4 text-[#00FFC6]">

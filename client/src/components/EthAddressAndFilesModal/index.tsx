@@ -1,22 +1,21 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { useState, useRef } from "react";
+import { useState, useRef, Dispatch, SetStateAction } from "react";
 import { cn } from "@/lib/utils"; // або заміни на свій класнейм-хелпер
+import { ModalWrapper } from "../ModalWrapper";
+import { PrimaryButton } from "../PrimaryButton";
+
+type Props = {
+  isOpen: boolean;
+  onOpenChange: Dispatch<SetStateAction<boolean>>;
+  onSubmit: (address: string, files: File[]) => void;
+}
 
 export default function EthAddressAndFilesModalContent({
-  onSubmit,
-  onClose
-}: {
-  onSubmit: (address: string, files: File[]) => void;
-  onClose: () => void;
-}) {
+  isOpen,
+  onOpenChange,
+  onSubmit
+}: Props) {
   const [address, setAddress] = useState("");
   const [files, setFiles] = useState<File[]>([])
   const [error, setError] = useState("");
@@ -32,7 +31,6 @@ export default function EthAddressAndFilesModalContent({
     }
     onSubmit(address, files);
     setAddress("");
-    onClose();
   };
 
   const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -53,59 +51,57 @@ export default function EthAddressAndFilesModalContent({
   };
 
   return (
-    <DialogContent className="sm:max-w-md bg-[#1A1F27] text-[#F0F0F0]">
-      <DialogHeader>
-        <DialogTitle className="text-[#F0F0F0]">Import Ethereum Address</DialogTitle>
-      </DialogHeader>
-
-      <div className="grid gap-4 py-2">
-        <div className="grid gap-2">
-          <Label htmlFor="eth-address" className="text-[#F0F0F0]">Enter Address</Label>
-          <Input
-            id="eth-address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="0x..."
-            className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
-          />
+    <ModalWrapper 
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      title="Import Ethereum Address"
+      modalContent={
+        <div className="grid gap-4 py-2">
+          <div className="grid gap-2">
+            <Label htmlFor="eth-address" className="text-[#F0F0F0]">Enter Address</Label>
+            <Input
+              id="eth-address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="0x..."
+              className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
+            />
+          </div>
+          <ul className="text-[#F0F0F0]">
+            {files.map((file, idx) => <li key={file.name + idx}>{file.name}</li>)}
+          </ul>
+          <div
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragOver(true);
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleFileDrop}
+            className={cn(
+              "border-2 border-dashed p-4 text-center rounded-md cursor-pointer transition",
+              dragOver ? "border-[#00FFC6] bg-[#00FFC650]" : "border-[#A3A3A3] bg-[#2A2F38]"
+            )}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <p className="text-sm text-[#A3A3A3]">
+              Drag & drop CSV file here or click to browse
+            </p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".csv"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+          </div>
+          {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
-        <ul className="text-[#F0F0F0]">
-          {files.map((file, idx) => <li key={file.name + idx}>{file.name}</li>)}
-        </ul>
-
-        <div
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragOver(true);
-          }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={handleFileDrop}
-          className={cn(
-            "border-2 border-dashed p-4 text-center rounded-md cursor-pointer transition",
-            dragOver ? "border-[#00FFC6] bg-[#00FFC650]" : "border-[#A3A3A3] bg-[#2A2F38]"
-          )}
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <p className="text-sm text-[#A3A3A3]">
-            Drag & drop CSV file here or click to browse
-          </p>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".csv"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
-
-        {error && <p className="text-sm text-red-600">{error}</p>}
-      </div>
-
-      <DialogFooter>
-        <Button className="bg-[#00FFC6] text-[#1A1F27] hover:bg-[#00e0b3] focus:ring-[#00FFC6]" onClick={handleSubmit}>
-          Import Address
-        </Button>
-      </DialogFooter>
-    </DialogContent>
+      }
+      footerButtons={
+        <PrimaryButton onClick={handleSubmit}>
+          Import
+        </PrimaryButton>
+      }
+    />
   );
 }

@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { useUserStore } from "@/stores/user/user.store";
+import { SecondaryButton } from "@/components/SecondaryButton";
+import { PrimaryButton } from "@/components/PrimaryButton";
 
 type ProfileFormData = {
   email: string;
@@ -65,12 +67,11 @@ export default function ProfileData() {
               <Label className="text-[#A3A3A3]">Username:</Label>
               <p className="text-sm text-[#A3A3A3]">{username}</p>
             </div>
-            <Button
+            <PrimaryButton
               onClick={() => setEditing(true)}
-              className="bg-[#2A2F38] text-[#00FFC6] hover:bg-[#00FFC6] hover:text-[#1A1F27] transition-colors"
             >
               Edit Profile
-            </Button>
+            </PrimaryButton>
           </div>
         ) : (
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -128,23 +129,19 @@ export default function ProfileData() {
             </div>
 
             <div className="flex gap-2 pt-4">
-              <Button
+              <PrimaryButton
                 type="submit"
-                className="bg-[#00FFC6] text-[#1A1F27] hover:bg-[#33FFD4] transition-colors font-medium"
               >
                 Save
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="bg-[#2A2F38] text-[#F0F0F0] border-none hover:bg-[#3A3F48] hover:text-[#00FFC6] transition-colors"
+              </PrimaryButton>
+              <SecondaryButton
                 onClick={() => {
                   reset();
                   setEditing(false);
                 }}
               >
                 Cancel
-              </Button>
+              </SecondaryButton>
             </div>
           </form>
         )}
