@@ -6,9 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from './shared/shared.module';
 import { readFileSync } from 'fs';
 import { WalletModule } from './modules/wallets/wallet.module';
-import { FraudReportModule } from './modules/fraud-report/fraud-report.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
-import { StatsModule } from './modules/stats/stats.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
@@ -42,9 +40,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     AuthModule, 
     TransactionsModule,
     WalletModule,
-    FraudReportModule,
     SharedModule,
-    StatsModule, 
   ],
   controllers: [],
 })

@@ -3,12 +3,11 @@ export type TransactionDto = {
   hash: string;
   from: string;
   to: string;
-  value: number;
+  value: string;
   date: string;
   status: string;
-  method: string;
-  txnFee: number;
+  txnFee: string;
   category: string;
-  walletAddress: string;
-  userId: string
+  userId: string;
+  walletId: string;
 };

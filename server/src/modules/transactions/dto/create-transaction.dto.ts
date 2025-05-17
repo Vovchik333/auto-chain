@@ -1,31 +1,13 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsString } from "class-validator";
 import { IsEthAddress } from "src/decorators/is-eth-address.decorator";
 
 export class CreateTransactionDto {
-  @IsEthAddress()
-  from: string;
-
-  @IsEthAddress()
-  to: string;
-
-  @IsNumber()
-  value: number;
+  @IsString()
+  hash: string;
 
   @IsString()
-  date: string;
+  walletId: string;
 
   @IsString()
-  method: string;
-
-  @IsNumber()
-  txnFee: number;
-
-  @IsString()
-  category: string;
-
-  @IsString()
-  walletAddress: string;
-
-  @IsString()
-  statisticsId: string;
+  userId: string;
 }

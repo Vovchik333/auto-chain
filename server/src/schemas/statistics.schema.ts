@@ -8,11 +8,14 @@ export type StatisticsDocument = HydratedDocument<Statistics>;
 export class Statistics {
   readonly _id: string;
 
-  @Prop({ default: 0 })
-  totalSent: number;
+  @Prop({ default: '0' })
+  balance: string;
 
-  @Prop({ default: 0 })
-  totalReceived: number;
+  @Prop({ default: '0' })
+  totalSent: string;
+
+  @Prop({ default: '0' })
+  totalReceived: string;
 
   @Prop({ default: 0 })
   totalTxCount: number;
@@ -20,8 +23,8 @@ export class Statistics {
   @Prop({ default: undefined, type: MongooseSchema.Types.ObjectId, ref: 'Transaction' })
   largestAmountTransaction?: Transaction;
 
-  @Prop({ default: 0 })
-  totalFeeUsed: number;
+  @Prop({ default: '0' })
+  totalFeeUsed: string;
 }
 
 export const StatisticsSchema = SchemaFactory.createForClass(Statistics);

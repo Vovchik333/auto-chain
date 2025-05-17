@@ -2,9 +2,10 @@ import { TransactionDto } from "src/modules/common/dto/transaction.dto";
 
 export type StatisticsDto = {
   id: string;
-  totalSent: number;
-  totalReceived: number;
+  balance: string;
+  totalSent: string;
+  totalReceived: string;
   totalTxCount: number;
-  largestAmountTransaction: TransactionDto;
-  totalFeeUsed: number;
+  largestAmountTransaction?: TransactionDto;
+  totalFeeUsed: string;
 };

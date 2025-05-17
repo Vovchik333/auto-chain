@@ -1,7 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Model } from "mongoose";
-import { Statistics, StatisticsDocument } from "./statistics.schema";
-import { updateStatisticsForUser } from "src/modules/common/helpers/stats.helper";
+import { HydratedDocument } from "mongoose";
 
 export type TransactionDocument = HydratedDocument<Transaction>;
 
@@ -13,7 +11,7 @@ export class Transaction {
   userId: string;
 
   @Prop()
-  walletAddress: string;
+  walletId: string;
 
   @Prop()
   hash: string;
@@ -25,7 +23,7 @@ export class Transaction {
   to: string;
 
   @Prop()
-  value: number;
+  value: string;
 
   @Prop()
   date: string;
@@ -34,10 +32,7 @@ export class Transaction {
   status: string;
 
   @Prop()
-  method: string;
-
-  @Prop()
-  txnFee: number;
+  txnFee: string;
 
   @Prop()
   category: string;

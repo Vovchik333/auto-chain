@@ -4,6 +4,7 @@ import { mapTransactionFromDb } from "./map-transaction.helper";
 
 export const mapStatisticsFromDb = (statistics: Statistics): StatisticsDto => ({
   id: statistics._id,
+  balance: statistics.balance,
   totalReceived: statistics.totalReceived,
   totalSent: statistics.totalSent,
   totalFeeUsed: statistics.totalFeeUsed,

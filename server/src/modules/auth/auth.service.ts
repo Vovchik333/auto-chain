@@ -16,7 +16,6 @@ import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
 export class AuthService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @InjectModel(Statistics.name) private readonly statisticsModel: Model<StatisticsDocument>,
     private readonly hashService: HashService,
     private readonly jwtService: JwtService
   ) {}
@@ -29,9 +28,7 @@ export class AuthService {
     }
 
     payload.password = await this.hashService.hashData(payload.password);
-    const statistics = await this.statisticsModel.create({});
-    const user = await this.userModel.create({...payload, statistics});
-    console.log(user.toJSON());
+    const user = await this.userModel.create(payload);
 
     return {
         user: mapUserFromDb(user),

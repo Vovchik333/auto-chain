@@ -3,18 +3,21 @@ import { ConfigService } from '@nestjs/config';
 import { EtherscanNormalTransactionDto } from '../common/dto/etherscan-normal-transaction.dto';
 import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
 import { EtherscanResponseDto } from '../common/dto/etherscan-response.dto';
-import { mapTransaction, mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
+import { mapTransactionFromList } from '../common/helpers/map-transaction.helper';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
-import { Model, Types } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Wallet, WalletDocument } from 'src/schemas/wallet.schema';
 import { mapWalletFromDb } from '../common/helpers/map-wallet.helper';
-import { UserWalletAddressDto } from '../common/dto/user-wallet-address.dto';
 import { WalletFilterDto } from './dto/wallet-filter.dto';
 import { WalletDto } from '../common/dto/wallet.dto';
-import { getAnalyticsFromTxs } from '../common/helpers/wallet.helper';
+import { getAnalyticsFromTxs, toBigint } from '../common/helpers/wallet.helper';
 import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
 import { TransferInstruction } from './dto/transfer-instruction.dto';
+import { UserIdAndWalletAddressDto } from '../common/dto/user-id-and-wallet-address.dto';
+import { CreateWalletDto } from './dto/create-wallet.dto';
+import { CreateWalletFromBlockchainDto } from './dto/create-wallet-from-blockchain.dto';
+import { ethers } from 'ethers';
 
 @Injectable()
 export class WalletService {
@@ -31,17 +34,17 @@ export class WalletService {
     this.etherscanApiKey = this.configService.get<string>('ETHERSCAN_API_KEY');
   }
 
-  private async setStatistics(txs: Transaction[], payload: UserWalletAddressDto) {
-    const { address, userId } = payload; 
+  async create(payload: CreateWalletDto) {
+    const statistics = await this.statisticsModel.create({});
+    const wallet = await this.walletModel.create({...payload, statistics});
+
+    return mapWalletFromDb(wallet);
+  }
+
+  private async setStatistics(txs: Transaction[], payload: UserIdAndWalletAddressDto) {
+    const { address } = payload; 
     const { analytics: walletAnalytics } = getAnalyticsFromTxs(txs, address);
     const statistics = await this.statisticsModel.create(walletAnalytics);
-    // const allTxs = await this.transactionModel.find({userId}).exec();
-    // const { analytics: userAnalytics } = getAnalyticsFromTxs(allTxs, address);
-    
-    // await this.statisticsModel.updateOne(
-    //   {userId},
-    //   {$set: {...userAnalytics}}
-    // )
 
     return statistics;
   }
@@ -59,11 +62,12 @@ export class WalletService {
   }
 
   async importTransactionsFromEtherscan(
-    payload: UserWalletAddressDto
+    payload: CreateWalletFromBlockchainDto
   ): Promise<WalletDto[]> {
-    const { address, userId } = payload; 
+
+    const { address, userId, name } = payload; 
     const response = await fetch(
-      `${this.etherscanApiUrl}?chainid=1&module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${this.etherscanApiKey}`,
+      `${this.etherscanApiUrl}?chainid=1&module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=desc&apikey=${this.etherscanApiKey}`,
     );
 
     const data = await response.json() as EtherscanResponseDto;
@@ -72,16 +76,21 @@ export class WalletService {
       throw new HttpException(data.result, HttpStatusCode.BAD_REQUEST);
     }
     
+    const walletId = new mongoose.Types.ObjectId();
     const txsList = data.result as EtherscanNormalTransactionDto[];
-    const savedTxs = await this.transactionModel.insertMany(txsList.map(tx => mapTransaction(tx, payload)));
+    const savedTxs = await this.transactionModel
+      .insertMany(txsList.map(tx => mapTransactionFromList(tx, {...payload, walletId: walletId.toString()})));
     const statistics = await this.setStatistics(savedTxs, payload);
-    await this.walletModel.create({
-      address,
-      userId,
-      transactions: savedTxs.map(tx => tx._id),
-      isSyncWithBlockchain: false,
-      statistics: statistics._id,
-    });
+    await this.walletModel
+      .create({
+        _id: walletId,
+        name,
+        address,
+        userId,
+        transactions: savedTxs.map(tx => tx._id),
+        isSyncWithBlockchain: false,
+        statistics: statistics._id,
+      });
 
     const wallets = await this.walletModel
       .find({userId})
@@ -94,53 +103,48 @@ export class WalletService {
     return wallets.map(mapWalletFromDb);
   }
 
-  async getSuggestionsForDiversification(
-    walletIds: string[],
-  ) {
+  async getSuggestionsForDiversification(walletIds: string[]) {
     const objectIds = walletIds.map(id => new Types.ObjectId(id));
 
     const wallets = await this.walletModel
-      .find({
-        _id: { $in: objectIds }
-      })
-      .populate('statistics')
+      .find({ _id: { $in: objectIds } })
+      .populate("statistics")
       .exec();
-    
+
     const walletsWithBalances = wallets.map(wallet => {
       return {
         address: wallet.address,
-        balance: wallet.statistics.totalReceived - wallet.statistics.totalSent
-      }
-    })
+        balance: ethers.parseUnits(wallet.statistics.balance.toString(), "ether")
+      };
+    });
 
-    const total = walletsWithBalances.reduce((sum, wallet) => sum + wallet.balance, 0);
-    const target = total / wallets.length;
+    const total = walletsWithBalances.reduce((sum, wallet) => sum + wallet.balance, 0n);
+    const target = total / BigInt(wallets.length);
 
     const deltas = walletsWithBalances.map(wallet => {
       return {
         address: wallet.address,
         balance: wallet.balance - target
-      }
+      };
     });
+
     const transfers: TransferInstruction[] = [];
 
     for (let i = 0; i < deltas.length; i++) {
-      if (deltas[i].balance <= 0) {
-        continue;
-      }
+      if (deltas[i].balance <= 0n) continue;
 
       for (let j = 0; j < deltas.length; j++) {
-        if (deltas[i].balance === 0) {
-          break;
-        }
+        if (deltas[i].balance === 0n) break;
 
-        if (deltas[j].balance < 0) {
-          const amount = Math.min(deltas[i].balance, -deltas[j].balance);
+        if (deltas[j].balance < 0n) {
+          const amount = deltas[i].balance < -deltas[j].balance ? deltas[i].balance : -deltas[j].balance;
+
           transfers.push({
             from: deltas[i].address,
             to: deltas[j].address,
-            amount: amount,
+            amount: ethers.formatUnits(amount, "ether")
           });
+
           deltas[i].balance -= amount;
           deltas[j].balance += amount;
         }
@@ -148,28 +152,60 @@ export class WalletService {
     }
 
     return {
-      total,
-      target,
+      total: ethers.formatUnits(total, "ether"),
+      target: ethers.formatUnits(target, "ether"),
       transfers
     };
   }
 
-  // async checkUserAddress(address: string): Promise<ReportItemDto[]> {
-  //   const response = await fetch(
-  //     `${this.etherscanApiUrl}?chainid=1&module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc&apikey=${this.etherscanApiKey}`,
-  //   );
+  async getUserStats(userId: string) {
+    const wallets = await this.findByFilter({ userId });
 
-  //   const data = await response.json() as EtherscanResponseDto;
-
-  //   if (data.status === '0' && !Array.isArray(data.result)) {
-  //     throw new HttpException(data.result, HttpStatusCode.BAD_REQUEST);
-  //   }
-
-  //   const report: ReportItemDto[] = [];
-  //   const txsList = data.result as EtherscanNormalTransactionDto[];
-
-  //   checkReliabilityByFirstTx(report, txsList);
-
-  //   return report;
-  // }
+    if (wallets.length === 0) {
+      return {
+        id: new Types.ObjectId().toString(),
+        balance: '0',
+        totalReceived: '0',
+        totalSent: '0',
+        totalFeeUsed: '0',
+        totalTxCount: 0
+      };
+    }
+  
+    const stats = wallets.reduce(
+      (acc, cur) => {
+        const curStats = cur.statistics;
+  
+        return {
+          balance: acc.balance + toBigint(curStats.balance.toString()),
+          totalReceived: acc.totalReceived + toBigint(curStats.totalReceived.toString()),
+          totalSent: acc.totalSent + toBigint(curStats.totalSent.toString()),
+          totalFeeUsed: acc.totalFeeUsed + toBigint(curStats.totalFeeUsed.toString()),
+          totalTxCount: acc.totalTxCount + curStats.totalTxCount,
+          largestAmountTransaction:
+            toBigint(curStats.largestAmountTransaction?.value ?? '0') > toBigint(acc.largestAmountTransaction?.value ?? '0')
+              ? curStats.largestAmountTransaction
+              : acc.largestAmountTransaction
+        };
+      },
+      {
+        balance: 0n,
+        totalReceived: 0n,
+        totalSent: 0n,
+        totalFeeUsed: 0n,
+        totalTxCount: 0,
+        largestAmountTransaction: wallets[0].statistics.largestAmountTransaction
+      }
+    );
+  
+    return {
+      id: new Types.ObjectId().toString(),
+      balance: ethers.formatEther(stats.balance),
+      totalReceived: ethers.formatEther(stats.totalReceived),
+      totalSent: ethers.formatEther(stats.totalSent),
+      totalFeeUsed: ethers.formatEther(stats.totalFeeUsed),
+      totalTxCount: stats.totalTxCount,
+      largestAmountTransaction: stats.largestAmountTransaction
+    };
+  }
 }

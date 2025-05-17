@@ -7,7 +7,7 @@ export class TransactionFilterDto {
 
   @IsOptional()
   @IsString()
-  walletAddress?: string;
+  walletId?: string;
 
   @IsOptional()
   @IsString()
