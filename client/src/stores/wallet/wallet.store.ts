@@ -2,7 +2,9 @@ import { create } from "zustand";
 import { WalletState, WalletStore } from "./types";
 import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
 import { walletService } from "@/services/wallet";
-import { WalletFilterDto } from "@/common/types/wallet-filter.dto";
+import { WalletFilterDto } from "@/common/types/wallet/wallet-filter.dto";
+import { CreateWalletFromBlockchainDto } from "@/common/types/wallet/create-wallet-from-blockchain.dto";
+import { CreateWalletDto } from "@/common/types/wallet/create-wallet.dto";
 
 const initState: WalletState = {
   wallets: [],
@@ -11,7 +13,7 @@ const initState: WalletState = {
   globalStats: null
 }
 
-export const useWalletStore = create<WalletStore>((set) => ({
+export const useWalletStore = create<WalletStore>((set, get) => ({
   ...initState,
   loadWallets: async (query: WalletFilterDto) => {
     set({ isLoading: true, error: null });
@@ -24,7 +26,18 @@ export const useWalletStore = create<WalletStore>((set) => ({
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }
   },
-  importFromEtherscan: async (payload: UserWalletAddressDto) => {
+  createWallet: async (payload: CreateWalletDto) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const wallet = await walletService.create(payload);
+
+      set({ wallets: [...get().wallets, wallet], isLoading: false })
+    } catch (err: any) {
+      set({ error: err.message ?? 'Unknown error', isLoading: false })
+    }
+  },
+  importFromEtherscan: async (payload: CreateWalletFromBlockchainDto) => {
     set({ isLoading: true, error: null });
 
     try {

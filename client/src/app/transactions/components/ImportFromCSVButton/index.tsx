@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTransactionStore } from "@/stores/transaction/transaction.store";
 import { useUserStore } from "@/stores/user/user.store";
 import { PrimaryButton } from "@/components/PrimaryButton";
+import { CreateTxsDto } from "@/common/types/transaction/create-txs.dto";
 
 export default function ImportFromCSVButton() {
   const { user } = useUserStore(); 
@@ -14,14 +15,14 @@ export default function ImportFromCSVButton() {
     setIsModalOpen(true);
   };
 
-  const handleAddressSubmit = (address: string, files: File[]) => {
+  const handleAddressSubmit = ({walletId, files}: Omit<CreateTxsDto, 'userId'>) => {
     if (user === null) {
       return;
     }
 
     const data = new FormData();
 
-    data.append('address', address);
+    data.append('walletId', walletId);
     data.append('userId', user.id);
     files.forEach(file => {
       data.append('files', file)

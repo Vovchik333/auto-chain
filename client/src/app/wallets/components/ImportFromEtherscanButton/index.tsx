@@ -4,19 +4,20 @@ import EthAddressModalContent from "@/components/EthAddressModal";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { useUserStore } from "@/stores/user/user.store";
 import { PrimaryButton } from "@/components/PrimaryButton";
+import { CreateWalletFromBlockchainDto } from "@/common/types/wallet/create-wallet-from-blockchain.dto";
 
 export default function ImportFromEtherscanButton() {
   const { importFromEtherscan } = useWalletStore();
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleAddressSubmit = async (address: string) => {
+  const handleAddressSubmit = async (payload: Omit<CreateWalletFromBlockchainDto, 'userId'>) => {
     if (user === null) {
       return;
     }
 
     const { id: userId } = user;
-    importFromEtherscan({address, userId});
+    importFromEtherscan({...payload, userId});
     setIsModalOpen(false)
   };
 

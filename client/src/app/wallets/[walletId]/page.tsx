@@ -7,8 +7,9 @@ import WalletHeader from "./components/WalletHeader";
 import { useUserStore } from "@/stores/user/user.store";
 import { useEffect } from "react";
 import WalletSection from "./components/WalletSection";
+import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
 
-export default function WalletPage() {
+function WalletPage() {
   const params = useParams();
   const walletId = params.walletId;
 
@@ -31,8 +32,10 @@ export default function WalletPage() {
 
   return (
     <>
-      <WalletHeader name={wallet.address} />
+      <WalletHeader wallet={wallet} />
       <WalletSection wallet={wallet} />
     </>
   );
 }
+
+export default withPrivateRoute(WalletPage);

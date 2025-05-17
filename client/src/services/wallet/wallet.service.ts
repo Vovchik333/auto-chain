@@ -1,10 +1,11 @@
 import { HttpApi, HttpMethod } from "../http";
 import { ApiPath } from "@/common/enums/api/api-path.enum";
 import { UserWalletAddressDto } from '@/common/types/user-wallet-address.dto';
-import { TransactionDto } from '@/common/types/transaction.dto';
-import { WalletDto } from "@/common/types/wallet.dto";
-import { WalletFilterDto } from "@/common/types/wallet-filter.dto";
+import { TransactionDto } from '@/common/types/transaction/transaction.dto';
+import { WalletDto } from "@/common/types/wallet/wallet.dto";
+import { WalletFilterDto } from "@/common/types/wallet/wallet-filter.dto";
 import { StatisticsDto } from "@/common/types/statistics.dto";
+import { CreateWalletDto } from "@/common/types/wallet/create-wallet.dto";
 
 type Constructor = {
   apiPath: string;
@@ -37,6 +38,17 @@ class WalletService {
       `${this.#apiPath}${ApiPath.WALLETS}/user-stats/${userId}`,
       {
         hasAuth: true,
+      }
+    );
+  }
+
+  public async create(payload: CreateWalletDto): Promise<WalletDto> {
+    return this.#httpApi.load<WalletDto>(
+      `${this.#apiPath}${ApiPath.WALLETS}`,
+      {
+        method: HttpMethod.POST,
+        payload: JSON.stringify(payload),
+        hasAuth: true
       }
     );
   }

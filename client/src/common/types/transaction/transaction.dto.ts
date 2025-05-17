@@ -8,6 +8,6 @@ export type TransactionDto = {
   status: string;
   txnFee: number;
   category: string;
-  walletAddress: string;
+  walletId: string;
   userId: string
 };

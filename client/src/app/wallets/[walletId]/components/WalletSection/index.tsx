@@ -1,6 +1,6 @@
 'use client';
 
-import { WalletDto } from '@/common/types/wallet.dto';
+import { WalletDto } from '@/common/types/wallet/wallet.dto';
 import TransactionTable from '@/components/TransactionTable';
 import WalletStats from '@/components/WalletStats';
 

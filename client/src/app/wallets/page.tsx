@@ -42,11 +42,7 @@ function Wallets() {
       <div className="flex flex-col space-y-4 mt-4">
         {filteredWallets.map((wallet, index) => (
           <WalletPreview 
-            id={wallet.id}
-            name={wallet.address}
-            lastSynced={new Date(wallet.transactions[0].date).toLocaleString()}
-            totalValue={wallet.statistics.totalReceived - wallet.statistics.totalSent}
-            transactions={wallet.transactions.length}
+            wallet={wallet}
             key={index} 
           />
         ))}

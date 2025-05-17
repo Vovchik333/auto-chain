@@ -2,7 +2,8 @@ import { create } from "zustand";
 import { TransactionState, TransactionStore } from "./types";
 import { transactionService } from "@/services/transaction";
 import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
-import { TransactionFilterDto } from "@/common/types/transaction-filter.dto";
+import { TransactionFilterDto } from "@/common/types/transaction/transaction-filter.dto";
+import { CreateTxDto } from "@/common/types/transaction/create-tx.dto";
 
 const initState: TransactionState = {
   transactions: [],
@@ -11,7 +12,7 @@ const initState: TransactionState = {
   error: null
 }
 
-export const useTransactionStore = create<TransactionStore>((set) => ({
+export const useTransactionStore = create<TransactionStore>((set, get) => ({
   ...initState,
   loadTransactions: async (filter: TransactionFilterDto) => {
     set({ isLoading: true, error: null });
@@ -20,6 +21,17 @@ export const useTransactionStore = create<TransactionStore>((set) => ({
       const transactions = await transactionService.getByFilter(filter);
 
       set({ transactions, isLoading: false })
+    } catch (err: any) {
+      set({ error: err.message ?? 'Unknown error', isLoading: false })
+    }
+  },
+  createTx: async (payload: CreateTxDto) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const tx = await transactionService.create(payload);
+
+      set({ transactions: [...get().transactions, tx], isLoading: false })
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }

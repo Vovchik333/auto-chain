@@ -1,4 +1,4 @@
-import { TransactionDto } from "@/common/types/transaction.dto";
+import { TransactionDto } from "@/common/types/transaction/transaction.dto";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
@@ -30,13 +30,13 @@ export default function TransactionTable({ transactions }: Props) {
                     href={`/transactions/${tx.id}`}
                     className="text-[#00FFC6] hover:underline"
                   >
-                    {tx.hash.slice(0, 10)}...
+                    {tx.hash}
                   </Link>
                 </td>
-                <td className="px-4 py-2 text-[#E5E7EB]">{tx.from.slice(0, 10)}...</td>
-                <td className="px-4 py-2 text-[#E5E7EB]">{tx.to.slice(0, 10)}...</td>
-                <td className="px-4 py-2 text-white">{(tx.value / 1e18).toFixed(4)}</td>
-                <td className="px-4 py-2 text-white">{(tx.txnFee / 1e18).toFixed(6)}</td>
+                <td className="px-4 py-2 text-[#E5E7EB]">{tx.from}</td>
+                <td className="px-4 py-2 text-[#E5E7EB]">{tx.to}...</td>
+                <td className="px-4 py-2 text-white">{tx.value}</td>
+                <td className="px-4 py-2 text-white">{tx.txnFee}</td>
                 <td className="px-4 py-2">
                   <Badge
                     variant={

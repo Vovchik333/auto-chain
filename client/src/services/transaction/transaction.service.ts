@@ -1,9 +1,9 @@
 import { HttpApi, HttpMethod } from "../http";
 import { ApiPath } from "@/common/enums/api/api-path.enum";
-import { TransactionDto } from '@/common/types/transaction.dto';
+import { TransactionDto } from '@/common/types/transaction/transaction.dto';
 import { FileResponse } from '@/common/types/file-response.type';
 import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
-import { TransactionFilterDto } from "@/common/types/transaction-filter.dto";
+import { TransactionFilterDto } from "@/common/types/transaction/transaction-filter.dto";
 
 type Constructor = {
   apiPath: string;
@@ -17,6 +17,17 @@ class TransactionService {
   constructor({ apiPath, httpApi }: Constructor) {
     this.#apiPath = apiPath;
     this.#httpApi = httpApi;
+  }
+
+  public async create(payload: TransactionFilterDto): Promise<TransactionDto> {
+    return this.#httpApi.load<TransactionDto>(
+      `${this.#apiPath}${ApiPath.TRANSACTIONS}`,
+      {
+        method: HttpMethod.POST,
+        payload: JSON.stringify(payload),
+        hasAuth: true,
+      }
+    );
   }
 
   public async getByFilter(filter: TransactionFilterDto): Promise<TransactionDto[]> {

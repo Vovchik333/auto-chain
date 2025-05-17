@@ -1,4 +1,4 @@
-import { TransactionDto } from "@/common/types/transaction.dto";
+import { TransactionDto } from "@/common/types/transaction/transaction.dto";
 import TransactionTable from "../../../../components/TransactionTable";
 import ExportToCSVButton from "../../../../components/ExportToCSVButton";
 

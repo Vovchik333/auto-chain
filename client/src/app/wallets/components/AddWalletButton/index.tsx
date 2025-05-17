@@ -8,9 +8,11 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { ModalWrapper } from "@/components/ModalWrapper";
+import { useWalletStore } from "@/stores/wallet/wallet.store";
 
 export default function AddWalletButton() {
   const { user } = useUserStore();
+  const { createWallet } = useWalletStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -25,6 +27,7 @@ export default function AddWalletButton() {
     }
 
     const { id: userId } = user;
+    createWallet({name, userId});
     setName("");
     setIsModalOpen(false);
   };

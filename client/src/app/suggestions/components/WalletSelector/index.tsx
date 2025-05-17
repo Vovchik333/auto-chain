@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { WalletDto } from '@/common/types/wallet.dto';
+import { WalletDto } from '@/common/types/wallet/wallet.dto';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ModalWrapper } from '@/components/ModalWrapper';
 
@@ -43,7 +43,7 @@ export const WalletSelector: React.FC<WalletSelectorProps> = ({ wallets, onSelec
         onOpenChange={setOpen}
         modalContent={
           <div className="space-y-3 max-h-64 overflow-y-auto">
-            {wallets.map((wallet) => (
+            {wallets.filter(wallet => wallet.address).map((wallet) => (
               <label key={wallet.id} className="flex items-center gap-2 cursor-pointer">
                 <Checkbox
                   checked={localSelection.includes(wallet.id)}

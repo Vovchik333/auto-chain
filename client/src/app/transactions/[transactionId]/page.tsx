@@ -69,10 +69,10 @@ const TransactionPage: FC = () => {
             <h3 className="text-lg font-semibold">Category:</h3>
             <p>{selectedTransaction.category}</p>
           </div>
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold">Wallet Address:</h3>
             <p>{selectedTransaction.walletAddress}</p>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </div>

@@ -1,5 +1,6 @@
-import { TransactionFilterDto } from "@/common/types/transaction-filter.dto";
-import { TransactionDto } from "@/common/types/transaction.dto";
+import { CreateTxDto } from "@/common/types/transaction/create-tx.dto";
+import { TransactionFilterDto } from "@/common/types/transaction/transaction-filter.dto";
+import { TransactionDto } from "@/common/types/transaction/transaction.dto";
 import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
 
 export type TransactionState = {
@@ -11,6 +12,7 @@ export type TransactionState = {
 
 export type TransactionActions = {
   loadTransactions: (filter: TransactionFilterDto) => Promise<void>;
+  createTx: (payload: CreateTxDto) => Promise<void>
   getTransactionById: (id: string) => Promise<void>;
   importFromCsv: (payload: FormData) => Promise<void>;
   exportToCsv: (payload: UserWalletAddressDto) => Promise<void>;
