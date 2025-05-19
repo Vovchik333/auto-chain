@@ -1,9 +1,8 @@
 "use client";
 
-import { MoreVertical } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { WalletDto } from "@/common/types/wallet/wallet.dto";
+import { ActionsMenu } from "@/components/ActionsMenu";
 
 interface Props {
   wallet: WalletDto
@@ -33,13 +32,10 @@ const WalletPreview: React.FC<Props> = ({
             <div>Total:</div>
             <div>{wallet.statistics.balance} ETH</div>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hover:bg-[#2C3440] rounded-full p-2 transition-colors cursor-pointer"
-          >
-            <MoreVertical className="h-5 w-5 text-[#A3A3A3] hover:text-[#00FFC6] transition-colors" />
-          </Button>
+          <ActionsMenu 
+            onDelete={() => {}}
+            onEdit={()=> {}}
+          />
         </div>
       </div>
     </Link>

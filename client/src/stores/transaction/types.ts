@@ -11,6 +11,7 @@ export type TransactionState = {
 }
 
 export type TransactionActions = {
+  resetError: () => void;
   loadTransactions: (filter: TransactionFilterDto) => Promise<void>;
   createTx: (payload: CreateTxDto) => Promise<void>
   getTransactionById: (id: string) => Promise<void>;

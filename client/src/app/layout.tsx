@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Roboto } from 'next/font/google';
 import './globals.css'
 import { ClientProvider } from "@/components/ClientProviders";
+import { AppErrorBoundary } from "@/components/Erorr/AppErrorBoundary";
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -23,12 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.variable} bg-[#1A1F27]`}>
-        <ClientProvider>
-          <Header/>
-          <main className="p-8">
-            {children}
-          </main>
-        </ClientProvider>
+        <AppErrorBoundary>
+          <ClientProvider>
+            <Header/>
+            <main className="p-8">
+              {children}
+            </main>
+          </ClientProvider>
+        </AppErrorBoundary>
       </body>
     </html>
   );

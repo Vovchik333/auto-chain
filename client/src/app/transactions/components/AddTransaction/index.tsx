@@ -9,10 +9,11 @@ import { ModalWrapper } from "@/components/ModalWrapper";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { WalletList } from "../WalletList";
 import { useTransactionStore } from "@/stores/transaction/transaction.store";
+import { ErrorModal } from "@/components/Erorr/ErrorModal";
 
 export default function AddTransactionButton() {
   const { user } = useUserStore();
-  const { createTx } = useTransactionStore();
+  const { createTx, error: txError, resetError } = useTransactionStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [payload, setPayload] = useState({
     hash: '',
@@ -78,6 +79,7 @@ export default function AddTransactionButton() {
           </PrimaryButton>
         }
       />
+      {txError && <ErrorModal error={txError} onClose={() => resetError() }/>}
     </>
   );
 }

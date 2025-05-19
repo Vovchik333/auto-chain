@@ -14,6 +14,9 @@ const initState: TransactionState = {
 
 export const useTransactionStore = create<TransactionStore>((set, get) => ({
   ...initState,
+  resetError: async () => {
+    set({ error: null })
+  },
   loadTransactions: async (filter: TransactionFilterDto) => {
     set({ isLoading: true, error: null });
 
@@ -33,6 +36,7 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
 
       set({ transactions: [...get().transactions, tx], isLoading: false })
     } catch (err: any) {
+      console.log(err);
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }
   },

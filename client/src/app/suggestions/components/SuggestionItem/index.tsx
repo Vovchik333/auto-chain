@@ -20,7 +20,7 @@ export const SuggestionItem: React.FC<Props> = ({ from, to, amount }) => {
         </div>
       </div>
       <div className="mt-2 sm:mt-0 sm:text-right font-mono text-sm text-[#00FFC6]">
-        {amount.toFixed(8)} ETH
+        {amount} ETH
       </div>
     </div>
   );
