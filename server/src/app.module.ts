@@ -4,12 +4,22 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { SharedModule } from './shared/shared.module';
+import { readFileSync } from 'fs';
+import { WalletModule } from './modules/wallets/wallet.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [
+        () => ({
+          ETHERSCAN_API_KEY: readFileSync('.etherscan').toString().trim()
+        })
+      ]
     }),
+    EventEmitterModule.forRoot(),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -28,7 +38,9 @@ import { SharedModule } from './shared/shared.module';
     }),
     UsersModule, 
     AuthModule, 
-    SharedModule, 
+    TransactionsModule,
+    WalletModule,
+    SharedModule,
   ],
   controllers: [],
 })
