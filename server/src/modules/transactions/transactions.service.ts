@@ -8,7 +8,7 @@ import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
 import { UserIdAndWalletIdDto } from '../common/dto/user-id-and-wallet-id.dto';
 import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
-import { mapTransactionFromDb, mapTransactionFromList, mapTx } from '../common/helpers/map-transaction.helper';
+import { mapTransactionFromDb, mapTx } from '../common/helpers/map-transaction.helper';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
 import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
 import { ConfigService } from '@nestjs/config';
