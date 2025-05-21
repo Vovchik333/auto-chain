@@ -4,6 +4,7 @@ import { HttpApi, HttpMethod } from "../http";
 import { ApiPath } from "@/common/enums/api/api-path.enum";
 import { UnregisteredUserRequestBody } from '@/common/types/user/unregistered-user-request-body.type';
 import { RegisteredUserRequestBody } from '@/common/types/user/registered-user-request-body.type';
+import { UpdateProfileData } from '@/stores/user/types';
 
 type Constructor = {
   apiPath: string;
@@ -43,6 +44,17 @@ class AuthService {
     return this.#httpApi.load<User>(
       `${this.#apiPath}${ApiPath.AUTH}${ApiPath.USER}`,
       {
+        hasAuth: true
+      }
+    );
+  }
+
+  public async updateProfile(data: UpdateProfileData): Promise<User> {
+    return this.#httpApi.load<User>(
+      `${this.#apiPath}${ApiPath.AUTH}${ApiPath.USER}`,
+      {
+        method: HttpMethod.PUT,
+        payload: JSON.stringify(data),
         hasAuth: true
       }
     );

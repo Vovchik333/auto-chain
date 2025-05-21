@@ -8,12 +8,20 @@ export type UserState = {
   error: string | null;
 }
 
+export type UpdateProfileData = {
+  email: string;
+  username: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 export type UserActions = {
   resetError: () => void;
   loadCurrentUser: () => Promise<void>;
   signUp: (payload: UnregisteredUserRequestBody) => Promise<void>;
   signIn: (payload: RegisteredUserRequestBody) => Promise<void>;
   signOut: () => Promise<void>;
+  updateProfile: (data: UpdateProfileData) => Promise<void>;
 }
 
 export type UserStore = UserState & UserActions;

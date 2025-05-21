@@ -4,6 +4,7 @@ import { Roboto } from 'next/font/google';
 import './globals.css'
 import { ClientProvider } from "@/components/ClientProviders";
 import { AppErrorBoundary } from "@/components/Erorr/AppErrorBoundary";
+import { Toaster } from "sonner";
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -31,6 +32,17 @@ export default function RootLayout({
               {children}
             </main>
           </ClientProvider>
+          <Toaster 
+            theme="dark" 
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: '#1A1F27',
+                border: '1px solid #2A2F38',
+                color: '#F0F0F0',
+              }
+            }}
+          />
         </AppErrorBoundary>
       </body>
     </html>
