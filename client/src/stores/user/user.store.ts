@@ -69,7 +69,6 @@ export const useUserStore = create<UserStore>((set) => ({
       set({ user, isLoading: false });
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false });
-      throw err; // Re-throw to handle in the component
     }
   }
 }));
