@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Schema as MongooseSchema } from "mongoose";
-import { Statistics } from "./statistics.schema";
+import { HydratedDocument } from "mongoose";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -8,13 +7,26 @@ export type UserDocument = HydratedDocument<User>;
 export class User {
   readonly _id: string;
 
-  @Prop()
+  @Prop({ 
+    required: true, 
+    unique: true,
+    lowercase: true,
+    trim: true 
+  })
   email: string;
 
-  @Prop()
+  @Prop({ 
+    required: true,
+    trim: true,
+    minlength: 3,
+    maxlength: 50 
+  })
   username: string;
 
-  @Prop()
+  @Prop({ 
+    required: true,
+    minlength: 6,
+  })
   password: string;
 }
 

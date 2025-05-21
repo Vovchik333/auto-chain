@@ -12,19 +12,33 @@ export class Wallet {
   @Prop({ required: true })
   userId: string;
 
-  @Prop({ required: true })
+  @Prop({ 
+    required: true,
+    trim: true,
+    minlength: 1,
+    maxlength: 100 
+  })
   name: string;
 
-  @Prop()
+  @Prop({
+    trim: true,
+  })
   address?: string;
 
-  @Prop({type: MongooseSchema.Types.ObjectId, ref: 'Statistics'})
+  @Prop({
+    type: MongooseSchema.Types.ObjectId,
+    ref: 'Statistics',
+    required: true
+  })
   statistics: Statistics;
 
   @Prop({default: false})
   isSyncWithBlockchain: boolean;
 
-  @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Transaction' })
+  @Prop({ 
+    type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Transaction' }],
+    default: [] 
+  })
   transactions: Transaction[]
 }
 

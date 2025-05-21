@@ -13,6 +13,7 @@ const initState: UserState = {
 
 export const useUserStore = create<UserStore>((set) => ({
   ...initState,
+  resetError: () => set({ error: null }),
   loadCurrentUser: async () => {
     set({ isLoading: true, error: null });
 

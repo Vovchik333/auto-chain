@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { AppRoute } from "@/common/enums/app-route";
+import { useUserStore } from "@/stores/user/user.store";
 
 const navLinks = [
   { name: "Overview", href: AppRoute.ROOT },
@@ -14,6 +15,7 @@ const navLinks = [
 
 export const Menu: React.FC = () => {
   const pathname = usePathname();
+  const { signOut, user } = useUserStore();
 
   return (
     <nav className="flex space-x-6 text-[#F0F0F0]">
@@ -30,6 +32,17 @@ export const Menu: React.FC = () => {
           {link.name}
         </Link>
       ))}
+      {user !== null && (
+        <div 
+          className={`transition duration-200 text-[#A3A3A3] hover:text-[#00FFC6] cursor-pointer`}
+          onClick={() => {
+            signOut();
+            window.location.reload();
+          }}
+        >
+          Sign Out
+        </div>
+      )}
     </nav>
   );
 }

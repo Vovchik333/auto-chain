@@ -7,10 +7,14 @@ export type TransactionDocument = HydratedDocument<Transaction>;
 export class Transaction {
   readonly _id: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   userId: string;
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   walletId: string;
 
   @Prop()

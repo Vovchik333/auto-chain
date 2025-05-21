@@ -9,6 +9,7 @@ export type UserState = {
 }
 
 export type UserActions = {
+  resetError: () => void;
   loadCurrentUser: () => Promise<void>;
   signUp: (payload: UnregisteredUserRequestBody) => Promise<void>;
   signIn: (payload: RegisteredUserRequestBody) => Promise<void>;
