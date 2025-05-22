@@ -8,6 +8,7 @@ type Props = {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   className?: string;
+  isPreventDefault?: boolean;
 }
 
 export const SecondaryButton: React.FC<Props> = ({
@@ -15,11 +16,18 @@ export const SecondaryButton: React.FC<Props> = ({
   children,
   type = "button",
   disabled,
-  className
+  className,
+  isPreventDefault = false
 }) => {
   return (
     <Button 
-      onClick={onClick}
+      onClick={(e) => {
+        if (isPreventDefault) {
+          e.preventDefault();
+        }
+
+        onClick();
+      }}
       type={type}
       disabled={disabled}
       className={cn(

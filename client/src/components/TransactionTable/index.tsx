@@ -3,8 +3,8 @@
 import { TransactionDto } from "@/common/types/transaction/transaction.dto";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { ExternalLinkIcon, ArrowUpRight, ArrowDownLeft, Search, ChevronDown, ChevronUp, Filter } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { ExternalLinkIcon, ArrowUpRight, Search, ChevronDown, ChevronUp, Filter } from "lucide-react";
+import { format, formatDistanceToNow } from "date-fns";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,9 +14,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ExportToCSVButton from "./components/ExportToCSVButton";
 
 type Props = {
   transactions: TransactionDto[];
+  walletId: string;
 };
 
 type SortField = 'date' | 'value' | 'status';
@@ -28,15 +30,7 @@ const formatEth = (value: number) => {
     minimumFractionDigits: 4,
     maximumFractionDigits: 8
   }).format(value);
-};
-
-const formatUsd = (ethValue: number) => {
-  const ethPrice = 2000; // This should come from an API in production
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-  }).format(ethValue * ethPrice);
-};
+}
 
 const truncateAddress = (address: string) => {
   if (!address) return '';
@@ -45,7 +39,7 @@ const truncateAddress = (address: string) => {
 
 const ITEMS_PER_PAGE = 10;
 
-export default function TransactionTable({ transactions }: Props) {
+export default function TransactionTable({ transactions, walletId }: Props) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
@@ -155,7 +149,7 @@ export default function TransactionTable({ transactions }: Props) {
         </div>
 
         <div className="flex items-center gap-2 text-sm text-[#9CA3AF]">
-          <span>{filteredAndSortedTransactions.length} transactions</span>
+          <ExportToCSVButton walletId={walletId} />
           {searchTerm && (
             <Badge variant="outline" className="bg-[#2A2F38] text-[#F0F0F0]">
               Search results
@@ -164,7 +158,6 @@ export default function TransactionTable({ transactions }: Props) {
         </div>
       </div>
 
-      {/* Table */}
       <div className="overflow-hidden rounded-xl border border-[#2A2F3A] bg-[#1A1F27] shadow-sm">
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto text-sm">
@@ -218,15 +211,6 @@ export default function TransactionTable({ transactions }: Props) {
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${
-                          tx.category === "income" ? "bg-emerald-500/10" : "bg-rose-500/10"
-                        }`}>
-                          {tx.category === "income" ? (
-                            <ArrowDownLeft className="w-4 h-4 text-emerald-500" />
-                          ) : (
-                            <ArrowUpRight className="w-4 h-4 text-rose-500" />
-                          )}
-                        </div>
                         <div>
                           <Link 
                             href={`/transactions/${tx.id}`}
@@ -235,39 +219,27 @@ export default function TransactionTable({ transactions }: Props) {
                             {truncateAddress(tx.hash)}
                             <ExternalLinkIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </Link>
-                          <a
-                            href={`https://etherscan.io/tx/${tx.hash}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-[#9CA3AF] hover:text-[#00FFC6] transition-colors"
-                          >
-                            View on Etherscan
-                          </a>
                         </div>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
                         <span className="text-[#E5E7EB] font-medium">{truncateAddress(tx.from)}</span>
-                        <span className="text-xs text-[#9CA3AF]">Sender</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
                         <span className="text-[#E5E7EB] font-medium">{truncateAddress(tx.to)}</span>
-                        <span className="text-xs text-[#9CA3AF]">Recipient</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
                         <span className="text-white font-medium">{formatEth(tx.value)} ETH</span>
-                        <span className="text-xs text-[#9CA3AF]">{formatUsd(tx.value)}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
                         <span className="text-white font-medium">{formatEth(tx.txnFee)} ETH</span>
-                        <span className="text-xs text-[#9CA3AF]">{formatUsd(tx.txnFee)}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
@@ -293,12 +265,18 @@ export default function TransactionTable({ transactions }: Props) {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
-                        <span className="text-[#E5E7EB] font-medium">
+                        <p className="font-semibold text-[#F0F0F0]">
+                          {format(new Date(tx.date), 'dd.MM.yyyy')}
+                        </p>
+                        <p className="text-sm text-[#A3A3A3]">
+                          {format(new Date(tx.date), 'HH:mm:ss')}
+                        </p>
+                        {/* <span className="text-[#E5E7EB] font-medium">
                           {formatDistanceToNow(new Date(tx.date), { addSuffix: true })}
                         </span>
                         <span className="text-xs text-[#9CA3AF]">
                           {new Date(tx.date).toLocaleDateString()}
-                        </span>
+                        </span> */}
                       </div>
                     </td>
                     <td className="px-4 py-3">
@@ -306,9 +284,7 @@ export default function TransactionTable({ transactions }: Props) {
                         variant="outline"
                         className={`
                           px-3 py-1 rounded-full font-medium capitalize
-                          ${tx.category === "income"
-                            ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                            : "bg-rose-500/10 text-rose-500 border border-rose-500/20"}
+                          bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
                         `}
                       >
                         {tx.category}

@@ -36,9 +36,9 @@ function Transactions() {
 
   return (
     <div
-      className="min-h-screen bg-[#1A1F27] p-6"
+      className="min-h-screen bg-[#1A1F27]"
     >
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="mx-auto space-y-6">
         <TransactionsHeader />
         {isLoading ? (
           <div

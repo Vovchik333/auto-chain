@@ -13,7 +13,7 @@ export const OverviewHeader = () => {
         <div>
             <PageContentTitle text="Overview" />
             <p className="text-sm text-[#A3A3A3] mt-1">
-              Track your portfolio performance and activity
+              Track your transactions performance and activity
             </p>
           </div>
       </div>

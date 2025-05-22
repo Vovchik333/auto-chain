@@ -1,3 +1,4 @@
+import { TruncatedText } from '@/components/TruncatedText';
 import React from 'react';
 
 interface Props {
@@ -8,19 +9,37 @@ interface Props {
 
 export const SuggestionItem: React.FC<Props> = ({ from, to, amount }) => {
   return (
-    <div className="p-4 bg-[#1A1F27] rounded-xl border border-[#2A2F38] flex flex-col sm:flex-row justify-between items-start sm:items-center">
-      <div className="text-sm break-all text-[#F0F0F0]">
-        <div>
-          <strong className="text-[#A3A3A3]">From:</strong>{' '}
-          <span>{from}</span>
+    <div
+      className="bg-[#1A1F27] p-4 rounded-xl border border-[#353B43] hover:border-[#00FFC6] transition-colors"
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center space-x-2">
+          <span className="text-[#A3A3A3] text-sm">From</span>
+          <TruncatedText text={from} />
         </div>
-        <div>
-          <strong className="text-[#A3A3A3]">To:</strong>{' '}
-          <span>{to}</span>
+        <svg 
+          className="w-5 h-5 text-[#00FFC6]" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth={2} 
+            d="M17 8l4 4m0 0l-4 4m4-4H3" 
+          />
+        </svg>
+        <div className="flex items-center space-x-2">
+          <span className="text-[#A3A3A3] text-sm">To</span>
+          <TruncatedText text={to} />
         </div>
       </div>
-      <div className="mt-2 sm:mt-0 sm:text-right font-mono text-sm text-[#00FFC6]">
-        {amount} ETH
+      <div className="flex justify-between items-center">
+        <span className="text-[#A3A3A3] text-sm">Amount</span>
+        <span className="text-[#00FFC6] font-semibold">
+          {amount} ETH
+        </span>
       </div>
     </div>
   );

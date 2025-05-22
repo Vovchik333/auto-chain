@@ -2,8 +2,8 @@ import React from 'react';
 import { DiversificationDto } from '@/common/types/diversification.dto';
 import { SuggestionList } from '../SuggestionList';
 import { Wallet } from 'lucide-react';
-import { TruncatedText } from '../SuggestionList';
 import { WalletDto } from '@/common/types/wallet/wallet.dto';
+import { TruncatedText } from '@/components/TruncatedText';
 
 interface Props {
   diversification: DiversificationDto;
@@ -38,6 +38,7 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
         <div className="grid gap-3">
           {involvedWallets.map((wallet, index) => (
             <div
+              key={wallet.id}
               className="bg-[#1A1F27] p-4 rounded-xl border border-[#353B43] flex items-center justify-between"
             >
               <div className="flex items-center gap-3">

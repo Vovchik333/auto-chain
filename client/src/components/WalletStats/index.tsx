@@ -6,7 +6,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { ArrowDownIcon, ArrowUpIcon, WalletIcon, CoinsIcon, TrendingUpIcon, ExternalLinkIcon } from 'lucide-react';
+import { 
+  ArrowDownIcon, 
+  ArrowUpIcon, 
+  WalletIcon, 
+  CoinsIcon, 
+  TrendingUpIcon, 
+  ExternalLinkIcon,
+  Receipt
+} from 'lucide-react';
 import { StatisticsDto } from '@/common/types/statistics.dto';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -21,20 +29,10 @@ const formatEth = (value: number) => {
   }).format(value);
 };
 
-const formatUsd = (ethValue: number) => {
-  const ethPrice = 2000; // This should come from an API in production
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-  }).format(ethValue * ethPrice);
-};
-
-const StatCard = ({ title, value, icon, secondaryValue, trend }: {
+const StatCard = ({ title, value, icon }: {
   title: string;
   value: string;
   icon: React.ReactNode;
-  secondaryValue?: string;
-  trend?: number;
 }) => (
   <Card className="rounded-2xl shadow-sm bg-[#1A1F27] border border-[#2A2F3A] hover:border-[#00FFC6] transition-all">
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -46,56 +44,38 @@ const StatCard = ({ title, value, icon, secondaryValue, trend }: {
     <CardContent>
       <div className="space-y-1">
         <div className="text-2xl font-bold text-white">{value}</div>
-        {secondaryValue && (
-          <div className="text-sm text-[#9CA3AF]">{secondaryValue}</div>
-        )}
-        {trend !== undefined && (
-          <div className={`flex items-center gap-1 text-sm ${trend >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-            {trend >= 0 ? <TrendingUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
-            <span>{Math.abs(trend).toFixed(2)}%</span>
-          </div>
-        )}
       </div>
     </CardContent>
   </Card>
 );
 
 export default function WalletStats({ stats }: Props) {
-  const balanceUsd = formatUsd(stats.balance);
-  const sentUsd = formatUsd(stats.totalSent);
-  const receivedUsd = formatUsd(stats.totalReceived);
-  
-  // Calculate trends (this should ideally come from the backend)
-  const sentTrend = stats.totalSent > 0 ? ((stats.totalSent - stats.totalReceived) / stats.totalSent) * 100 : 0;
-  const receivedTrend = stats.totalReceived > 0 ? ((stats.totalReceived - stats.totalSent) / stats.totalReceived) * 100 : 0;
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <StatCard
           title="Balance"
           value={`${formatEth(stats.balance)} ETH`}
-          secondaryValue={balanceUsd}
           icon={<CoinsIcon className="h-5 w-5 text-[#00FFC6]" />}
         />
         <StatCard
           title="Total Sent"
           value={`${formatEth(stats.totalSent)} ETH`}
-          secondaryValue={sentUsd}
           icon={<ArrowUpIcon className="h-5 w-5 text-rose-400" />}
-          trend={sentTrend}
         />
         <StatCard
           title="Total Received"
           value={`${formatEth(stats.totalReceived)} ETH`}
-          secondaryValue={receivedUsd}
           icon={<ArrowDownIcon className="h-5 w-5 text-emerald-400" />}
-          trend={receivedTrend}
+        />
+        <StatCard
+          title="Total Fees"
+          value={`${formatEth(stats.totalFeeUsed)} ETH`}
+          icon={<Receipt className="h-5 w-5 text-[#00FFC6]" />}
         />
         <StatCard
           title="Transactions Count"
           value={stats.totalTxCount.toLocaleString()}
-          secondaryValue={`${formatEth(stats.totalFeeUsed)} ETH in fees`}
           icon={<WalletIcon className="h-5 w-5 text-[#00FFC6]" />}
         />
       </div>
@@ -117,7 +97,6 @@ export default function WalletStats({ stats }: Props) {
                 <div className="font-medium text-white text-lg">
                   {formatEth(stats.largestAmountTransaction.value)} ETH
                 </div>
-                <div className="text-sm text-[#9CA3AF]">{formatUsd(stats.largestAmountTransaction.value)}</div>
               </div>
               <a
                 href={`https://etherscan.io/tx/${stats.largestAmountTransaction.hash}`}

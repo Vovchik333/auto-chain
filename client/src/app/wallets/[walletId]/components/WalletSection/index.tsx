@@ -12,7 +12,7 @@ export default function WalletSection({ wallet }: Props) {
   return (
     <div className="space-y-4">
       <WalletStats stats={wallet.statistics} />
-      <TransactionTable transactions={wallet.transactions} />
+      <TransactionTable transactions={wallet.transactions} walletId={wallet.id}/>
     </div>
   );
 }

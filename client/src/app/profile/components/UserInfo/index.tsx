@@ -89,7 +89,7 @@ export default function ProfileData() {
 
   return (
     <div
-      className="max-w-2xl mx-auto"
+      className="mx-auto"
     >
       <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
         <CardHeader>

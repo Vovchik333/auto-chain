@@ -54,7 +54,7 @@ function Home() {
     >
       <OverviewHeader />
       <WalletStats stats={globalStats} />
-      <Dashboard />
+      {/* <Dashboard /> */}
     </div>
   );
 }

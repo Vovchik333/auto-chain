@@ -40,9 +40,9 @@ function Wallets() {
 
   return (
     <div
-      className="min-h-screen bg-[#1A1F27] p-6"
+      className="min-h-screen bg-[#1A1F27]"
     >
-      <div className="max-w-7xl mx-auto space-y-6">
+      <div className="mx-auto space-y-6">
         <WalletsHeader onSearch={handleSearch} />
         {isLoading ? (
           <div
@@ -95,8 +95,8 @@ function Wallets() {
           <div
             className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2"
           >
-            {filteredWallets.map((wallet, index) => (
-              <WalletPreview wallet={wallet} />
+            {filteredWallets.map((wallet) => (
+              <WalletPreview key={wallet.id} wallet={wallet} />
             ))}
           </div>
         )}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { WalletDto } from "@/common/types/wallet/wallet.dto";
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { Wallet, ArrowRight } from "lucide-react";
+import { CopyButton } from "@/components/CopyButton";
 
 interface Props {
   wallet: WalletDto
@@ -42,15 +43,10 @@ const WalletPreview: React.FC<Props> = ({
               <code className="px-2 py-1 rounded-md bg-[#2A2F38] text-sm font-mono text-[#A3A3A3]">
                 {wallet.address.slice(0, 8)}...{wallet.address.slice(-6)}
               </code>
-              <button 
-                className="text-xs text-[#00FFC6] hover:text-[#00FFC6]/80 transition-colors cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigator.clipboard.writeText(wallet.address);
-                }}
-              >
-                Copy
-              </button>
+              <CopyButton 
+                text={wallet.address}
+                isPreventDefault
+              />
             </div>
           </div>
         </div>

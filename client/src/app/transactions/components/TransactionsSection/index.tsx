@@ -1,6 +1,5 @@
 import { TransactionDto } from "@/common/types/transaction/transaction.dto";
 import TransactionTable from "../../../../components/TransactionTable";
-import ExportToCSVButton from "../../../../components/ExportToCSVButton";
 
 type Props = {
   tableTitle: string;
@@ -26,10 +25,9 @@ export default function TransactionsSection({
             {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <ExportToCSVButton address={walletAddress as string} />
       </div>
       <div className="overflow-hidden rounded-lg border border-[#2A2F38]">
-        <TransactionTable transactions={transactions} />
+        <TransactionTable transactions={transactions} walletId={walletAddress as string} />
       </div>
     </section>
   );

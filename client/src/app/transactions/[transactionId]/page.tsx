@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useTransactionStore } from '@/stores/transaction/transaction.store';
 import { 
   ArrowLeft, 
@@ -11,35 +11,23 @@ import {
   Copy, 
   ExternalLink, 
   CheckCircle2, 
-  Clock, 
-  XCircle,
-  ArrowUpRight,
-  ArrowDownLeft,
-  HelpCircle
 } from 'lucide-react';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { SecondaryButton } from '@/components/SecondaryButton';
+import { CopyButton } from '@/components/CopyButton';
 
 const TransactionPage: FC = () => {
   const params = useParams();
-  const router = useRouter();
   const transactionId = params.transactionId;
-  const [copied, setCopied] = useState<string | null>(null);
 
   const { selectedTransaction, getTransactionById } = useTransactionStore();
 
@@ -47,61 +35,11 @@ const TransactionPage: FC = () => {
     getTransactionById(transactionId as string);
   }, [transactionId, getTransactionById]);
 
-  const handleCopy = async (text: string, field: string) => {
-    await navigator.clipboard.writeText(text);
-    setCopied(field);
-    toast.success('Copied to clipboard');
-    setTimeout(() => setCopied(null), 2000);
-  };
-
   const formatEth = (value: number) => {
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 4,
       maximumFractionDigits: 8
     }).format(value);
-  };
-
-  const formatUsd = (ethValue: number) => {
-    const ethPrice = 2000; // This should come from an API in production
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(ethValue * ethPrice);
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'Success':
-        return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
-      case 'Pending':
-        return <Clock className="w-5 h-5 text-yellow-500" />;
-      default:
-        return <XCircle className="w-5 h-5 text-rose-500" />;
-    }
-  };
-
-  const getStatusDescription = (status: string) => {
-    switch (status) {
-      case 'Success':
-        return 'Transaction has been successfully confirmed and included in the blockchain';
-      case 'Pending':
-        return 'Transaction has been submitted and is waiting to be confirmed';
-      case 'Failed':
-        return 'Transaction failed to execute or was reverted';
-      default:
-        return 'Unknown transaction status';
-    }
-  };
-
-  const getCategoryDescription = (category: string) => {
-    switch (category) {
-      case 'income':
-        return 'Incoming transaction - you received funds';
-      case 'expense':
-        return 'Outgoing transaction - you sent funds';
-      default:
-        return 'Transaction type';
-    }
   };
 
   if (!selectedTransaction) {
@@ -166,7 +104,7 @@ const TransactionPage: FC = () => {
               <ExternalLink className="w-4 h-4 mr-2" />
               View on Etherscan
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleCopy(selectedTransaction.hash, 'hash')}>
+            <DropdownMenuItem onClick={() => {}}>
               <Copy className="w-4 h-4 mr-2" />
               Copy Transaction Hash
             </DropdownMenuItem>
@@ -178,109 +116,21 @@ const TransactionPage: FC = () => {
         className="space-y-6"
       >
         <Card className="border-[#2A2F3A] bg-[#1A1F27]">
-          <CardHeader className="border-b border-[#2A2F3A] bg-[#232936] px-6">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center space-x-4">
-                <div className={`p-3 rounded-xl ${
-                  selectedTransaction.category === "income" ? "bg-emerald-500/10" : "bg-rose-500/10"
-                }`}>
-                  {selectedTransaction.category === "income" ? (
-                    <ArrowDownLeft className="w-6 h-6 text-emerald-500" />
-                  ) : (
-                    <ArrowUpRight className="w-6 h-6 text-rose-500" />
-                  )}
-                </div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <p className="text-2xl font-bold text-[#00FFC6]">
-                      {formatEth(selectedTransaction.value)} ETH
-                    </p>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <div className={`p-1 rounded-full ${
-                            selectedTransaction.category === "income" ? "bg-emerald-500/10" : "bg-rose-500/10"
-                          }`}>
-                            <HelpCircle className="w-4 h-4 text-[#A3A3A3]" />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent className="bg-[#2A2F38] border-[#353B45] text-[#F0F0F0]">
-                          <p>{getCategoryDescription(selectedTransaction.category)}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                  <p className="text-base text-[#A3A3A3]">{formatUsd(selectedTransaction.value)}</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge
-                        variant="outline"
-                        className={`
-                          px-3 py-1.5 rounded-full font-medium text-sm
-                          ${selectedTransaction.status === "Success"
-                            ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                            : selectedTransaction.status === "Pending"
-                            ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20"
-                            : "bg-rose-500/10 text-rose-500 border border-rose-500/20"}
-                        `}
-                      >
-                        <span className="flex items-center gap-2">
-                          {getStatusIcon(selectedTransaction.status)}
-                          {selectedTransaction.status}
-                        </span>
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-[#2A2F38] border-[#353B45] text-[#F0F0F0]">
-                      <p>{getStatusDescription(selectedTransaction.status)}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Badge
-                        variant="outline"
-                        className={`
-                          px-3 py-1.5 rounded-full font-medium text-sm capitalize
-                          ${selectedTransaction.category === "income"
-                            ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                            : "bg-rose-500/10 text-rose-500 border border-rose-500/20"}
-                        `}
-                      >
-                        {selectedTransaction.category}
-                      </Badge>
-                    </TooltipTrigger>
-                    <TooltipContent className="bg-[#2A2F38] border-[#353B45] text-[#F0F0F0]">
-                      <p>{getCategoryDescription(selectedTransaction.category)}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </div>
-          </CardHeader>
           <CardContent className="p-6 space-y-6">
             <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Value</label>
+                <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
+                  <p className="font-mono text-sm text-[#F0F0F0]">
+                    {formatEth(selectedTransaction.value)} ETH
+                  </p>
+                </div>
+              </div>
               <div>
                 <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Transaction Hash</label>
                 <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                   <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.hash}</p>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={() => handleCopy(selectedTransaction.hash, 'hash')}
-                  >
-                    {copied === 'hash' ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                    ) : (
-                      <Copy className="w-4 h-4 text-[#A3A3A3]" />
-                    )}
-                  </Button>
+                  <CopyButton text={selectedTransaction.hash} />
                 </div>
               </div>
 
@@ -288,39 +138,17 @@ const TransactionPage: FC = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">From</label>
-                    <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
+                    <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A] gap-2">
                       <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.from}</p>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => handleCopy(selectedTransaction.from, 'from')}
-                      >
-                        {copied === 'from' ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        ) : (
-                          <Copy className="w-4 h-4 text-[#A3A3A3]" />
-                        )}
-                      </Button>
+                      <CopyButton text={selectedTransaction.from} />
                     </div>
                   </div>
 
                   <div>
                     <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">To</label>
-                    <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
+                    <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A] gap-2">
                       <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.to}</p>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        onClick={() => handleCopy(selectedTransaction.to, 'to')}
-                      >
-                        {copied === 'to' ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        ) : (
-                          <Copy className="w-4 h-4 text-[#A3A3A3]" />
-                        )}
-                      </Button>
+                      <CopyButton text={selectedTransaction.to} />
                     </div>
                   </div>
                 </div>
@@ -330,7 +158,6 @@ const TransactionPage: FC = () => {
                     <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Transaction Fee</label>
                     <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                       <p className="font-semibold text-[#F0F0F0]">{formatEth(selectedTransaction.txnFee)} ETH</p>
-                      <p className="text-sm text-[#A3A3A3]">{formatUsd(selectedTransaction.txnFee)}</p>
                     </div>
                   </div>
 
@@ -342,6 +169,24 @@ const TransactionPage: FC = () => {
                       </p>
                       <p className="text-sm text-[#A3A3A3]">
                         {format(new Date(selectedTransaction.date), 'HH:mm:ss')} UTC
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Status</label>
+                    <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
+                      <p className="flex gap-2 font-semibold text-[#F0F0F0]">
+                        {selectedTransaction.status}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Type</label>
+                    <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
+                      <p className="flex gap-2 font-semibold text-[#F0F0F0]">
+                      {selectedTransaction.category}
                       </p>
                     </div>
                   </div>
