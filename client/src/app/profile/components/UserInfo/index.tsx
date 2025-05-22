@@ -8,37 +8,10 @@ import { useForm } from "react-hook-form";
 import { useUserStore } from "@/stores/user/user.store";
 import { SecondaryButton } from "@/components/SecondaryButton";
 import { PrimaryButton } from "@/components/PrimaryButton";
-import { motion, AnimatePresence } from "framer-motion";
 import { Mail, User, Lock, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { toast } from "sonner";
-
-const profileSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  currentPassword: z.string().optional(),
-  newPassword: z.string().min(6, "Password must be at least 6 characters").optional(),
-  confirmPassword: z.string().optional(),
-}).refine((data) => {
-  if (data.newPassword && !data.currentPassword) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Current password is required when setting a new password",
-  path: ["currentPassword"],
-}).refine((data) => {
-  if (data.newPassword && data.newPassword !== data.confirmPassword) {
-    return false;
-  }
-  return true;
-}, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
-
-type ProfileFormData = z.infer<typeof profileSchema>;
+import { ProfileFormData, profileSchema } from "./schemas";
 
 const InputWrapper = ({ children, icon: Icon, label, error, success }: { 
   children: React.ReactNode; 
@@ -53,30 +26,22 @@ const InputWrapper = ({ children, icon: Icon, label, error, success }: {
       {label}
     </Label>
     {children}
-    <AnimatePresence mode="wait">
-      {error && (
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="flex items-center gap-2 text-red-400 text-sm mt-1"
-        >
-          <AlertCircle className="w-4 h-4" />
-          {error}
-        </motion.div>
-      )}
-      {success && (
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="flex items-center gap-2 text-green-400 text-sm mt-1"
-        >
-          <CheckCircle2 className="w-4 h-4" />
-          Saved successfully
-        </motion.div>
-      )}
-    </AnimatePresence>
+    {error && (
+      <div 
+        className="flex items-center gap-2 text-red-400 text-sm mt-1"
+      >
+        <AlertCircle className="w-4 h-4" />
+        {error}
+      </div>
+    )}
+    {success && (
+      <div 
+        className="flex items-center gap-2 text-green-400 text-sm mt-1"
+      >
+        <CheckCircle2 className="w-4 h-4" />
+        Saved successfully
+      </div>
+    )}
   </div>
 );
 
@@ -106,7 +71,6 @@ export default function ProfileData() {
   );
 
   const onSubmit = async (data: ProfileFormData) => {
-    console.log('wekeiweoi')
     try {
       await updateProfile(data);
       setSuccessFields({
@@ -124,10 +88,7 @@ export default function ProfileData() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+    <div
       className="max-w-2xl mx-auto"
     >
       <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
@@ -135,136 +96,126 @@ export default function ProfileData() {
           <CardTitle className="text-[#F0F0F0] text-xl">Account Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <AnimatePresence mode="wait">
-            {!editing ? (
-              <motion.div 
-                className="space-y-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                key="view"
-              >
-                <div className="grid gap-4 p-4 bg-[#2A2F38] rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <Mail className="w-5 h-5 text-[#00FFC6]" />
-                    <div>
-                      <p className="text-sm text-[#A3A3A3]">Email</p>
-                      <p className="text-[#F0F0F0]">{user.email}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <User className="w-5 h-5 text-[#00FFC6]" />
-                    <div>
-                      <p className="text-sm text-[#A3A3A3]">Username</p>
-                      <p className="text-[#F0F0F0]">{user.username}</p>
-                    </div>
+          {!editing ? (
+            <div 
+              className="space-y-6"
+            >
+              <div className="grid gap-4 p-4 bg-[#2A2F38] rounded-lg">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-[#00FFC6]" />
+                  <div>
+                    <p className="text-sm text-[#A3A3A3]">Email</p>
+                    <p className="text-[#F0F0F0]">{user.email}</p>
                   </div>
                 </div>
-                <PrimaryButton
-                  onClick={() => setEditing(true)}
-                  className="w-full sm:w-auto"
+                <div className="flex items-center gap-3">
+                  <User className="w-5 h-5 text-[#00FFC6]" />
+                  <div>
+                    <p className="text-sm text-[#A3A3A3]">Username</p>
+                    <p className="text-[#F0F0F0]">{user.username}</p>
+                  </div>
+                </div>
+              </div>
+              <PrimaryButton
+                onClick={() => setEditing(true)}
+                className="w-full sm:w-auto"
+              >
+                Edit Profile
+              </PrimaryButton>
+            </div>
+          ) : (
+            <form 
+              onSubmit={handleSubmit(onSubmit)} 
+              className="space-y-6"
+            >
+              <div className="space-y-4">
+                <InputWrapper 
+                  icon={Mail} 
+                  label="Email" 
+                  error={errors.email?.message}
+                  success={successFields.email}
                 >
-                  Edit Profile
+                  <Input
+                    type="email"
+                    className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
+                    {...register("email")}
+                  />
+                </InputWrapper>
+
+                <InputWrapper 
+                  icon={User} 
+                  label="Username" 
+                  error={errors.username?.message}
+                  success={successFields.username}
+                >
+                  <Input
+                    className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
+                    {...register("username")}
+                  />
+                </InputWrapper>
+              </div>
+
+              <div className="pt-4 border-t border-[#2A2F38] space-y-4">
+                <InputWrapper 
+                  icon={Lock} 
+                  label="Change Password" 
+                  error={errors.currentPassword?.message || errors.newPassword?.message || errors.confirmPassword?.message}
+                  success={successFields.password}
+                >
+                  <div className="space-y-3">
+                    <Input
+                      type="password"
+                      placeholder="Current password"
+                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
+                      {...register("currentPassword")}
+                    />
+                    <Input
+                      type="password"
+                      placeholder="New password"
+                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
+                      {...register("newPassword")}
+                    />
+                    <Input
+                      type="password"
+                      placeholder="Confirm new password"
+                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
+                      {...register("confirmPassword")}
+                    />
+                  </div>
+                </InputWrapper>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                <PrimaryButton
+                  type="submit"
+                  disabled={!isDirty || isLoading}
+                  className="flex-1 relative"
+                >
+                  {isLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Saving...
+                    </span>
+                  ) : (
+                    'Save Changes'
+                  )}
                 </PrimaryButton>
-              </motion.div>
-            ) : (
-              <motion.form 
-                onSubmit={handleSubmit(onSubmit)} 
-                className="space-y-6"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                key="edit"
-              >
-                <div className="space-y-4">
-                  <InputWrapper 
-                    icon={Mail} 
-                    label="Email" 
-                    error={errors.email?.message}
-                    success={successFields.email}
-                  >
-                    <Input
-                      type="email"
-                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
-                      {...register("email")}
-                    />
-                  </InputWrapper>
-
-                  <InputWrapper 
-                    icon={User} 
-                    label="Username" 
-                    error={errors.username?.message}
-                    success={successFields.username}
-                  >
-                    <Input
-                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
-                      {...register("username")}
-                    />
-                  </InputWrapper>
-                </div>
-
-                <div className="pt-4 border-t border-[#2A2F38] space-y-4">
-                  <InputWrapper 
-                    icon={Lock} 
-                    label="Change Password" 
-                    error={errors.currentPassword?.message || errors.newPassword?.message || errors.confirmPassword?.message}
-                    success={successFields.password}
-                  >
-                    <div className="space-y-3">
-                      <Input
-                        type="password"
-                        placeholder="Current password"
-                        className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
-                        {...register("currentPassword")}
-                      />
-                      <Input
-                        type="password"
-                        placeholder="New password"
-                        className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
-                        {...register("newPassword")}
-                      />
-                      <Input
-                        type="password"
-                        placeholder="Confirm new password"
-                        className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
-                        {...register("confirmPassword")}
-                      />
-                    </div>
-                  </InputWrapper>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                  <PrimaryButton
-                    type="submit"
-                    disabled={!isDirty || isLoading}
-                    className="flex-1 relative"
-                  >
-                    {isLoading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Saving...
-                      </span>
-                    ) : (
-                      'Save Changes'
-                    )}
-                  </PrimaryButton>
-                  <SecondaryButton
-                    onClick={() => {
-                      reset();
-                      setEditing(false);
-                    }}
-                    disabled={isLoading}
-                    className="flex-1 sm:flex-none"
-                    type="button"
-                  >
-                    Cancel
-                  </SecondaryButton>
-                </div>
-              </motion.form>
-            )}
-          </AnimatePresence>
+                <SecondaryButton
+                  onClick={() => {
+                    reset();
+                    setEditing(false);
+                  }}
+                  disabled={isLoading}
+                  className="flex-1 sm:flex-none"
+                  type="button"
+                >
+                  Cancel
+                </SecondaryButton>
+              </div>
+            </form>
+          )}
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 }

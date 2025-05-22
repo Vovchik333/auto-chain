@@ -9,7 +9,6 @@ import AddTransactionButton from "../AddTransaction";
 import ImportFromCSVButton from "../ImportFromCSVButton";
 import { PageContentTitle } from "@/components/PageContentTitle";
 import { PageContentHeader } from "@/components/PageContentHeader";
-import { motion } from "framer-motion";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { ChevronDown, Wallet } from "lucide-react";
 
@@ -18,28 +17,18 @@ const TransactionsHeader = () => {
 
   return (
     <PageContentHeader className="flex flex-col space-y-6 bg-[#1A1F27] rounded-lg border border-[#2A2F38] p-6">
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div 
         className="flex flex-col md:flex-row md:justify-between md:items-center gap-6"
       >
         <div className="flex flex-col gap-4">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-          >
+          <div>
             <PageContentTitle text="Transactions"/>
             <p className="text-sm text-[#A3A3A3] mt-1">
               Manage and track your transactions
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 text-sm text-[#F0F0F0] bg-[#2A2F38] px-4 py-2 rounded-lg hover:bg-[#353B45] transition-colors">
                 <Wallet className="w-4 h-4 text-[#00FFC6]" />
@@ -60,19 +49,16 @@ const TransactionsHeader = () => {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-          </motion.div>
+          </div>
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
+        <div 
           className="flex flex-col sm:flex-row gap-3"
         >
           <ImportFromCSVButton />
           <AddTransactionButton />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </PageContentHeader>
   );
 };

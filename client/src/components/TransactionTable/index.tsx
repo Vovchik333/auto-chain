@@ -3,8 +3,7 @@
 import { TransactionDto } from "@/common/types/transaction/transaction.dto";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLinkIcon, ArrowUpRight, ArrowDownLeft, Search, SlidersHorizontal, ChevronDown, ChevronUp, Filter } from "lucide-react";
+import { ExternalLinkIcon, ArrowUpRight, ArrowDownLeft, Search, ChevronDown, ChevronUp, Filter } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
@@ -107,9 +106,7 @@ export default function TransactionTable({ transactions }: Props) {
 
   if (!transactions.length) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+      <div
         className="flex flex-col items-center justify-center p-8 rounded-xl border border-[#2A2F3A] bg-[#1A1F27]"
       >
         <div className="w-16 h-16 rounded-full bg-[#2A2F38] flex items-center justify-center mb-4">
@@ -119,17 +116,14 @@ export default function TransactionTable({ transactions }: Props) {
         <p className="text-sm text-[#9CA3AF] text-center">
           Your transactions will appear here once you start making transfers.
         </p>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       className="space-y-4"
     >
-      {/* Filters and Search */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:flex-none sm:w-64">
@@ -217,14 +211,9 @@ export default function TransactionTable({ transactions }: Props) {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#2A2F3A]">
-              <AnimatePresence mode="wait">
                 {currentTransactions.map((tx) => (
-                  <motion.tr
+                  <tr
                     key={tx.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    whileHover={{ backgroundColor: "rgba(42, 47, 56, 0.5)" }}
                     className="group transition-colors"
                   >
                     <td className="px-4 py-3">
@@ -325,9 +314,8 @@ export default function TransactionTable({ transactions }: Props) {
                         {tx.category}
                       </Badge>
                     </td>
-                  </motion.tr>
+                  </tr>
                 ))}
-              </AnimatePresence>
             </tbody>
           </table>
         </div>
@@ -375,6 +363,6 @@ export default function TransactionTable({ transactions }: Props) {
           </div>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

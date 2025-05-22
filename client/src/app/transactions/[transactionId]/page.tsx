@@ -15,11 +15,9 @@ import {
   XCircle,
   ArrowUpRight,
   ArrowDownLeft,
-  AlertCircle,
   HelpCircle
 } from 'lucide-react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -176,9 +174,7 @@ const TransactionPage: FC = () => {
         </DropdownMenu>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+      <div
         className="space-y-6"
       >
         <Card className="border-[#2A2F3A] bg-[#1A1F27]">
@@ -354,7 +350,7 @@ const TransactionPage: FC = () => {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
+      </div>
     </div>
   );
 };

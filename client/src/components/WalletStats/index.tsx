@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/card';
 import { ArrowDownIcon, ArrowUpIcon, WalletIcon, CoinsIcon, TrendingUpIcon, ExternalLinkIcon } from 'lucide-react';
 import { StatisticsDto } from '@/common/types/statistics.dto';
-import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 
 type Props = {
@@ -37,35 +36,28 @@ const StatCard = ({ title, value, icon, secondaryValue, trend }: {
   secondaryValue?: string;
   trend?: number;
 }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    whileHover={{ scale: 1.02 }}
-    transition={{ duration: 0.2 }}
-  >
-    <Card className="rounded-2xl shadow-sm bg-[#1A1F27] border border-[#2A2F3A] hover:border-[#00FFC6] transition-all">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-[#CFCFCF]">{title}</CardTitle>
-        <div className="p-2 rounded-lg bg-[#2A2F38] ring-1 ring-[#353B45]">
-          {icon}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-1">
-          <div className="text-2xl font-bold text-white">{value}</div>
-          {secondaryValue && (
-            <div className="text-sm text-[#9CA3AF]">{secondaryValue}</div>
-          )}
-          {trend !== undefined && (
-            <div className={`flex items-center gap-1 text-sm ${trend >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {trend >= 0 ? <TrendingUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
-              <span>{Math.abs(trend).toFixed(2)}%</span>
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  </motion.div>
+  <Card className="rounded-2xl shadow-sm bg-[#1A1F27] border border-[#2A2F3A] hover:border-[#00FFC6] transition-all">
+    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardTitle className="text-sm font-medium text-[#CFCFCF]">{title}</CardTitle>
+      <div className="p-2 rounded-lg bg-[#2A2F38] ring-1 ring-[#353B45]">
+        {icon}
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-1">
+        <div className="text-2xl font-bold text-white">{value}</div>
+        {secondaryValue && (
+          <div className="text-sm text-[#9CA3AF]">{secondaryValue}</div>
+        )}
+        {trend !== undefined && (
+          <div className={`flex items-center gap-1 text-sm ${trend >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            {trend >= 0 ? <TrendingUpIcon className="h-4 w-4" /> : <ArrowDownIcon className="h-4 w-4" />}
+            <span>{Math.abs(trend).toFixed(2)}%</span>
+          </div>
+        )}
+      </div>
+    </CardContent>
+  </Card>
 );
 
 export default function WalletStats({ stats }: Props) {
@@ -109,57 +101,51 @@ export default function WalletStats({ stats }: Props) {
       </div>
 
       {stats.largestAmountTransaction && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="rounded-2xl shadow-sm bg-[#1A1F27] border border-[#2A2F3A] overflow-hidden">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-sm font-medium text-[#CFCFCF]">Largest Transaction</CardTitle>
-                <span className="text-xs text-[#9CA3AF]">
-                  {formatDistanceToNow(new Date(stats.largestAmountTransaction.date), { addSuffix: true })}
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between p-4 rounded-lg bg-[#2A2F38]">
-                <div className="space-y-1">
-                  <div className="text-sm text-[#9CA3AF]">Amount</div>
-                  <div className="font-medium text-white text-lg">
-                    {formatEth(stats.largestAmountTransaction.value)} ETH
-                  </div>
-                  <div className="text-sm text-[#9CA3AF]">{formatUsd(stats.largestAmountTransaction.value)}</div>
+        <Card className="rounded-2xl shadow-sm bg-[#1A1F27] border border-[#2A2F3A] overflow-hidden">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-medium text-[#CFCFCF]">Largest Transaction</CardTitle>
+              <span className="text-xs text-[#9CA3AF]">
+                {formatDistanceToNow(new Date(stats.largestAmountTransaction.date), { addSuffix: true })}
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between p-4 rounded-lg bg-[#2A2F38]">
+              <div className="space-y-1">
+                <div className="text-sm text-[#9CA3AF]">Amount</div>
+                <div className="font-medium text-white text-lg">
+                  {formatEth(stats.largestAmountTransaction.value)} ETH
                 </div>
-                <a
-                  href={`https://etherscan.io/tx/${stats.largestAmountTransaction.hash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1A1F27] text-[#00FFC6] hover:bg-[#2A2F38] transition-colors"
-                >
-                  <span className="text-sm">View on Etherscan</span>
-                  <ExternalLinkIcon className="h-4 w-4" />
-                </a>
+                <div className="text-sm text-[#9CA3AF]">{formatUsd(stats.largestAmountTransaction.value)}</div>
               </div>
+              <a
+                href={`https://etherscan.io/tx/${stats.largestAmountTransaction.hash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1A1F27] text-[#00FFC6] hover:bg-[#2A2F38] transition-colors"
+              >
+                <span className="text-sm">View on Etherscan</span>
+                <ExternalLinkIcon className="h-4 w-4" />
+              </a>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <div className="text-sm text-[#9CA3AF]">From</div>
-                  <code className="block p-3 rounded-lg bg-[#2A2F38] text-sm text-[#E5E7EB] break-all">
-                    {stats.largestAmountTransaction.from}
-                  </code>
-                </div>
-                <div className="space-y-2">
-                  <div className="text-sm text-[#9CA3AF]">To</div>
-                  <code className="block p-3 rounded-lg bg-[#2A2F38] text-sm text-[#E5E7EB] break-all">
-                    {stats.largestAmountTransaction.to}
-                  </code>
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="text-sm text-[#9CA3AF]">From</div>
+                <code className="block p-3 rounded-lg bg-[#2A2F38] text-sm text-[#E5E7EB] break-all">
+                  {stats.largestAmountTransaction.from}
+                </code>
               </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+              <div className="space-y-2">
+                <div className="text-sm text-[#9CA3AF]">To</div>
+                <code className="block p-3 rounded-lg bg-[#2A2F38] text-sm text-[#E5E7EB] break-all">
+                  {stats.largestAmountTransaction.to}
+                </code>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

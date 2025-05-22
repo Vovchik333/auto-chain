@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { WalletDto } from "@/common/types/wallet/wallet.dto";
 import { ActionsMenu } from "@/components/ActionsMenu";
-import { motion } from "framer-motion";
-import { Wallet, Clock, ArrowRight, TrendingUp, TrendingDown } from "lucide-react";
+import { Wallet, ArrowRight } from "lucide-react";
 
 interface Props {
   wallet: WalletDto
@@ -20,9 +19,7 @@ const WalletPreview: React.FC<Props> = ({
 
   return (
     <Link href={`/wallets/${wallet.id}`}>
-      <motion.div 
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
+      <div 
         className="group relative flex flex-col sm:flex-row items-start gap-6 p-6 border border-[#2A2F3A] rounded-xl bg-[#1A1F27] hover:border-[#00FFC6] hover:shadow-lg transition-all duration-200"
       >
         <div className="flex items-start gap-4 w-full sm:w-auto">
@@ -70,7 +67,7 @@ const WalletPreview: React.FC<Props> = ({
             onEdit={() => {}}
           />
         </div>
-      </motion.div>
+      </div>
     </Link>
   );
 };

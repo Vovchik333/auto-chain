@@ -1,7 +1,6 @@
 import React from 'react';
 import { DiversificationDto } from '@/common/types/diversification.dto';
 import { SuggestionList } from '../SuggestionList';
-import { motion } from 'framer-motion';
 import { Wallet } from 'lucide-react';
 import { TruncatedText } from '../SuggestionList';
 import { WalletDto } from '@/common/types/wallet/wallet.dto';
@@ -19,11 +18,7 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
   );
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
+    <div>
       <div className="grid gap-4 md:grid-cols-2 mb-6">
         <div className="bg-[#2A2F38] p-6 rounded-2xl border border-[#1A1F27] flex flex-col">
           <span className="text-[#A3A3A3] text-sm mb-2">Total amount</span>
@@ -42,11 +37,7 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
         </h2>
         <div className="grid gap-3">
           {involvedWallets.map((wallet, index) => (
-            <motion.div
-              key={wallet.id}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.2, delay: index * 0.1 }}
+            <div
               className="bg-[#1A1F27] p-4 rounded-xl border border-[#353B43] flex items-center justify-between"
             >
               <div className="flex items-center gap-3">
@@ -66,7 +57,7 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
@@ -90,6 +81,6 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
         </h2>
         <SuggestionList suggestions={transfers} />
       </div>
-    </motion.div>
+    </div>
   );
 };

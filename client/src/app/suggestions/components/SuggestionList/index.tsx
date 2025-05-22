@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { TransferInstruction } from '@/common/types/transfer-instruction.dto';
-import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 
 interface Props {
@@ -39,11 +38,8 @@ export const SuggestionList: React.FC<Props> = ({ suggestions }) => {
   return (
     <div className="space-y-4">
       {suggestions.map((suggestion, index) => (
-        <motion.div
+        <div
           key={`${suggestion.from}-${suggestion.to}`}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.2, delay: index * 0.1 }}
           className="bg-[#1A1F27] p-4 rounded-xl border border-[#353B43] hover:border-[#00FFC6] transition-colors"
         >
           <div className="flex items-center justify-between mb-3">
@@ -75,7 +71,7 @@ export const SuggestionList: React.FC<Props> = ({ suggestions }) => {
               {suggestion.amount} ETH
             </span>
           </div>
-        </motion.div>
+        </div>
       ))}
     </div>
   );

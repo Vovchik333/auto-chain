@@ -1,12 +1,12 @@
 'use client'
 
 // pages/Dashboard.tsx
-import { useState, useEffect, useMemo } from 'react';
-import { Line } from 'react-chartjs-2'; // Для графіка
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'; // Імпортуємо компонент DateRangePicker
-import { format, subDays, isWithinInterval } from 'date-fns'; // Для форматування дат
+import { useState, useMemo } from 'react';
+import { Line } from 'react-chartjs-2'; 
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { format, subDays, isWithinInterval } from 'date-fns';
 import DateRangePicker from '../../../../components/DataRangePicker';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import { TrendingUp, TrendingDown, Calendar, AlertCircle } from 'lucide-react';
 import { useWalletStore } from '@/stores/wallet/wallet.store';
 import { useTransactionStore } from '@/stores/transaction/transaction.store';
@@ -147,10 +147,7 @@ const Dashboard = () => {
   const percentageChange = previousValue ? ((latestValue - previousValue) / previousValue) * 100 : 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
+    <div
       className="space-y-6"
     >
       {/* Chart Card */}
@@ -185,30 +182,21 @@ const Dashboard = () => {
             </span>
           </button>
         </div>
-
-        <AnimatePresence>
-          {isDatePickerOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mb-6"
-            >
-              <DateRangePicker
-                startDate={startDate}
-                endDate={endDate}
-                setStartDate={(date) => setStartDate(date)}
-                setEndDate={(date) => setEndDate(date)}
-                onConfirm={handleConfirm}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
+        {isDatePickerOpen && (
+          <div
+            className="mb-6"
+          >
+            <DateRangePicker
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={(date) => setStartDate(date)}
+              setEndDate={(date) => setEndDate(date)}
+              onConfirm={handleConfirm}
+            />
+          </div>
+        )}
         {transactions.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <div
             className="flex flex-col items-center justify-center h-[400px] text-center"
           >
             <AlertCircle className="w-12 h-12 text-[#A3A3A3] mb-4" />
@@ -216,14 +204,14 @@ const Dashboard = () => {
             <p className="text-[#A3A3A3] text-sm mt-2">
               Start making transactions to see your portfolio value over time
             </p>
-          </motion.div>
+          </div>
         ) : (
           <div className="h-[400px]">
             <Line data={chartData} options={options} />
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 
