@@ -53,9 +53,9 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
               <div className="flex items-center gap-2">
                 <div className="flex flex-col items-end gap-3">
                   <span className="text-[#A3A3A3] text-xs">Current Balance</span>
-                  <span className="text-[#00FFC6] font-semibold">
+                  {/* <span className="text-[#00FFC6] font-semibold">
                     {wallet.statistics.balance} ETH
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>

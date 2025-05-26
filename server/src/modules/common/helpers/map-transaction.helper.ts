@@ -9,9 +9,18 @@ const calculateFee = (gasUsed: string, gasPrice: string): string => {
   return ethers.formatUnits(feeWei, "ether");
 };
 
+const getTransactionType = (address: string, transaction: EtherscanNormalTransactionDto): "deposit" | "withdraw" => {
+  if (address.toLowerCase() === transaction.to.toLowerCase() && address.toLowerCase() === transaction.from.toLowerCase()) {
+    return "withdraw";
+  }
+
+  return address.toLowerCase() === transaction.to.toLowerCase() ? "deposit" : "withdraw";
+};
+
 export const mapTransactionFromList = (
   transaction: EtherscanNormalTransactionDto,
-  userWallet: UserIdAndWalletIdDto
+  userWallet: UserIdAndWalletIdDto,
+  address: string
 ): Omit<TransactionDto, 'id'> => {
   const { walletId } = userWallet;
 
@@ -25,6 +34,7 @@ export const mapTransactionFromList = (
     txnFee: calculateFee(transaction.gasUsed, transaction.gasPrice),
     category: "imported",
     walletId,
+    type: address.toLowerCase() === transaction.to.toLowerCase() ? "deposit" : "withdraw"
   };
 };
 
@@ -43,6 +53,7 @@ export const mapTransactionFromDb = (tx: Transaction): TransactionDto => {
     status: tx.status,
     txnFee: tx.txnFee,
     category: tx.category,
-    walletId: tx.walletId
+    walletId: tx.walletId,
+    type: tx.type
   }
 };

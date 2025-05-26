@@ -1,7 +1,5 @@
 'use client'
 
-import Dashboard from "@/app/(overview)/components/Dashboard";
-import WalletStats from "@/components/WalletStats";
 import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
 import { useTransactionStore } from "@/stores/transaction/transaction.store";
 import { useUserStore } from "@/stores/user/user.store";
@@ -9,19 +7,17 @@ import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { useEffect } from "react";
 import { OverviewHeader } from "./(overview)/components/OverviewHeader";
 import { Loader2 } from "lucide-react";
+import WalletStats from "@/components/WalletStats";
 
 function Home() {
   const { user } = useUserStore();
   const { loadTransactions, isLoading: isLoadingTransactions } = useTransactionStore();
   const { 
-    wallets, 
-    globalStats, 
-    getGlobalStats, 
     loadWallets,
     isLoading: isLoadingWallets 
   } = useWalletStore();
 
-  const isLoading = isLoadingTransactions || isLoadingWallets || !globalStats;
+  const isLoading = isLoadingTransactions || isLoadingWallets;
 
   useEffect(() => {
     if (!user) return;
@@ -31,7 +27,6 @@ function Home() {
     Promise.all([
       loadTransactions({ userId }),
       loadWallets({ userId }),
-      getGlobalStats(userId)
     ]);
   }, [user]);
 
@@ -53,7 +48,7 @@ function Home() {
       className="space-y-6"
     >
       <OverviewHeader />
-      <WalletStats stats={globalStats} />
+      <WalletStats filter={{userId: user?.id}} />
       {/* <Dashboard /> */}
     </div>
   );

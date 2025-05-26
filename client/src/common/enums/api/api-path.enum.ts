@@ -9,6 +9,7 @@ export const ApiPath = {
     WALLETS: '/wallets',
     TRANSACTIONS: '/transactions',
     CATEGORIES: '/categories',
+    STATISTICS: '/stats',
     IMPORT_FROM_CSV: '/import-from-csv',
     EXPORT_TO_CSV: '/export-to-csv',
     DIVERSIFICATION: '/diversification',

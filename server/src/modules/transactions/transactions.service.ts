@@ -10,19 +10,32 @@ import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
 import { mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
+import { Wallet, WalletDocument } from 'src/schemas/wallet.schema';
 
 @Injectable()
 export class TransactionsService {
   constructor(
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
+    @InjectModel(Wallet.name) private readonly walletModel: Model<WalletDocument>, // Replace 'any' with the actual WalletDocument type if available
   ) {}
 
   async getByFilter(filter: TransactionFilterDto) {
-    const txs = await this.transactionModel
-      .find({ ...filter })
-      .exec();
+    const { userId, ...rest } = filter;
+    let transactions = [];
 
-    return txs.map(mapTransactionFromDb);
+    if (userId) {
+      const wallets = await this.walletModel.find({ userId }).exec();
+      const walletsIds = wallets.map(wallet => wallet._id);
+      transactions = await this.transactionModel
+        .find({...rest, walletId: { $in: walletsIds }})
+        .exec();
+    } else {
+      transactions = await this.transactionModel
+        .find(filter)
+        .exec();
+    }
+
+    return transactions.map(mapTransactionFromDb);
   }
 
   async create(payload: CreateTransactionDto) {

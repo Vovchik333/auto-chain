@@ -11,66 +11,53 @@ import {
   ArrowUpIcon, 
   WalletIcon, 
   CoinsIcon, 
-  TrendingUpIcon, 
   ExternalLinkIcon,
   Receipt
 } from 'lucide-react';
-import { StatisticsDto } from '@/common/types/statistics.dto';
+import { StatisticsDto } from '@/common/types/stats/statistics.dto';
 import { formatDistanceToNow } from 'date-fns';
+import { StatCard } from './StatCard';
+import { StatsFilterDto } from '@/common/types/stats/stats-filter.dto';
+import { useStatsStore } from '@/stores/statistics/statistics.store';
+import { useEffect } from 'react';
 
 type Props = {
-  stats: StatisticsDto;
+  filter: StatsFilterDto;
 };
 
-const formatEth = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 6
-  }).format(value);
-};
+export default function WalletStats({ filter }: Props) {
 
-const StatCard = ({ title, value, icon }: {
-  title: string;
-  value: string;
-  icon: React.ReactNode;
-}) => (
-  <Card className="rounded-2xl shadow-sm bg-[#1A1F27] border border-[#2A2F3A] hover:border-[#00FFC6] transition-all">
-    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle className="text-sm font-medium text-[#CFCFCF]">{title}</CardTitle>
-      <div className="p-2 rounded-lg bg-[#2A2F38] ring-1 ring-[#353B45]">
-        {icon}
-      </div>
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-1">
-        <div className="text-2xl font-bold text-white">{value}</div>
-      </div>
-    </CardContent>
-  </Card>
-);
+  const { stats, isLoading, loadStats } = useStatsStore();
 
-export default function WalletStats({ stats }: Props) {
+  useEffect(() => {
+    loadStats(filter);
+  }, [filter]);
+
+  if (isLoading || !stats) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <StatCard
           title="Balance"
-          value={`${formatEth(stats.balance)} ETH`}
+          value={`${stats.balance} ETH`}
           icon={<CoinsIcon className="h-5 w-5 text-[#00FFC6]" />}
         />
         <StatCard
           title="Total Sent"
-          value={`${formatEth(stats.totalSent)} ETH`}
+          value={`${stats.totalSent} ETH`}
           icon={<ArrowUpIcon className="h-5 w-5 text-rose-400" />}
         />
         <StatCard
           title="Total Received"
-          value={`${formatEth(stats.totalReceived)} ETH`}
+          value={`${stats.totalReceived} ETH`}
           icon={<ArrowDownIcon className="h-5 w-5 text-emerald-400" />}
         />
         <StatCard
           title="Total Fees"
-          value={`${formatEth(stats.totalFeeUsed)} ETH`}
+          value={`${stats.totalFeeUsed} ETH`}
           icon={<Receipt className="h-5 w-5 text-[#00FFC6]" />}
         />
         <StatCard
@@ -95,7 +82,7 @@ export default function WalletStats({ stats }: Props) {
               <div className="space-y-1">
                 <div className="text-sm text-[#9CA3AF]">Amount</div>
                 <div className="font-medium text-white text-lg">
-                  {formatEth(stats.largestAmountTransaction.value)} ETH
+                  {stats.largestAmountTransaction.value} ETH
                 </div>
               </div>
               <a

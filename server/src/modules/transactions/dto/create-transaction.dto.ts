@@ -37,4 +37,8 @@ export class CreateTransactionDto {
   @IsString()
   @IsNotEmpty()
   walletId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  type: 'deposit' | 'withdraw';
 }

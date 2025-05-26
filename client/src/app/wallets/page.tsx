@@ -7,11 +7,12 @@ import { useUserStore } from "@/stores/user/user.store";
 import { useEffect, useState } from "react";
 import WalletPreview from "./components/WalletPreview";
 import { Loader2, Plus } from "lucide-react";
+import { WalletDto } from "@/common/types/wallet/wallet.dto";
 
 function Wallets() {
   const { user } = useUserStore()
   const { wallets, loadWallets, isLoading } = useWalletStore();
-  const [filteredWallets, setFilteredWallets] = useState(wallets);
+  const [filteredWallets, setFilteredWallets] = useState<WalletDto[]>(wallets);
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (query: string) => {

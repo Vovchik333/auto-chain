@@ -39,15 +39,17 @@ const WalletPreview: React.FC<Props> = ({
                 <span>{wallet.transactions.length} {wallet.transactions.length === 1 ? "transaction" : "transactions"}</span>
               </div>
             </div> */}
-            <div className="mt-2 flex items-center gap-2">
-              <code className="px-2 py-1 rounded-md bg-[#2A2F38] text-sm font-mono text-[#A3A3A3]">
-                {wallet.address.slice(0, 8)}...{wallet.address.slice(-6)}
-              </code>
-              <CopyButton 
-                text={wallet.address}
-                isPreventDefault
-              />
-            </div>
+            {wallet.address && (
+              <div className="mt-2 flex items-center gap-2">
+                <code className="px-2 py-1 rounded-md bg-[#2A2F38] text-sm font-mono text-[#A3A3A3]">
+                  {wallet.address.slice(0, 8)}...{wallet.address.slice(-6)}
+                </code>
+                <CopyButton 
+                  text={wallet.address}
+                  isPreventDefault
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-6 mt-4 sm:mt-0 w-full sm:w-auto sm:ml-auto h-full">

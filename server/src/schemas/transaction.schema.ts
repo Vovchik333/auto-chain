@@ -27,7 +27,7 @@ export class Transaction {
   @Prop()
   date: string;
 
-  @Prop()
+  @Prop({default: 'Success'})
   status: string;
 
   @Prop()
@@ -35,6 +35,9 @@ export class Transaction {
 
   @Prop()
   category: string;
+
+  @Prop()
+  type: 'deposit' | 'withdraw';
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);

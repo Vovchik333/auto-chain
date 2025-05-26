@@ -48,35 +48,33 @@ export class WalletService {
     const txsList = await getTransactiionsFromEtherscanByAddress(address, this.etherscanApiUrl, this.etherscanApiKey);
     
     const wallet = await this.walletModel.create(payload);
-    await this.transactionModel.insertMany(txsList.map(tx => mapTransactionFromList(tx, {...payload, walletId: wallet._id})));
+    await this.transactionModel.insertMany(txsList.map(tx => mapTransactionFromList(tx, {...payload, walletId: wallet._id}, address)));
 
     return mapWalletFromDb(wallet);
   }
 
-  async getSuggestionsForDiversification(walletIds: string[]) {
-    const objectIds = walletIds.map(id => new Types.ObjectId(id));
-
+  async getSuggestionsForDiversification(walletIds: string[]) {;
     const wallets = await this.walletModel
-      .find({ _id: { $in: objectIds } })
+      .find({ _id: { $in: walletIds } })
       .exec();
     
     const txs = await this.transactionModel
       .find({ 
-        walletId: { $in: objectIds },
+        walletId: { $in: walletIds },
         status: 'Success' 
       })
       .exec();
     
 
     const walletsWithBalances = wallets.map(wallet => {
-        const walletTxs = txs.filter(tx => tx.walletId === wallet._id);
-        const balance = getBalance(walletTxs, wallet.address);
+      const walletTxs = txs.filter(tx => tx.walletId === wallet._id.toString());
+      const balance = getBalance(walletTxs, wallet.address);
 
-        return {
-          address: wallet.address,
-          balance
-        };
-      })
+      return {
+        address: wallet.address,
+        balance
+      };
+    })
 
     const total = findTotalSum(walletsWithBalances);
     const target = findTargetSum(total, BigInt(wallets.length));

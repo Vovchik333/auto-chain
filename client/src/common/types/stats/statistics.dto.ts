@@ -1,4 +1,4 @@
-import { TransactionDto } from "./transaction/transaction.dto";
+import { TransactionDto } from "../transaction/transaction.dto";
 
 export type StatisticsDto = {
   id: string;
@@ -6,6 +6,6 @@ export type StatisticsDto = {
   totalSent: string;
   totalReceived: string;
   totalTxCount: number;
-  largestAmountTransaction: TransactionDto;
+  largestAmountTransaction?: TransactionDto;
   totalFeeUsed: string;
 };
