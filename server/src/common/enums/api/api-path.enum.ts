@@ -10,7 +10,8 @@ const ApiPath = {
     WALLETS: '/wallets',
     FRAUD_REPORTS: '/fraud-reports',
     AUTH_CODE: '/auth-code',
-    DIVERSIFICATION: '/diversification'
+    DIVERSIFICATION: '/diversification',
+    IMPORT_FROM_ETHERSCAN: '/import-from-etherscan'
 } as const;
 
 export { ApiPath };

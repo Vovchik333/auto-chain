@@ -9,30 +9,11 @@ const calculateFee = (gasUsed: string, gasPrice: string): string => {
   return ethers.formatUnits(feeWei, "ether");
 };
 
-export const mapTx = (
-  transaction: any,
-  userWallet: UserIdAndWalletIdDto
-): Omit<TransactionDto, 'id' | 'status' | 'date' | 'txnFee'> => {
-  const { userId, walletId } = userWallet;
-  console.log(transaction);
-
-  return {
-    hash: transaction.hash,
-    from: transaction.from,
-    to: transaction.to,
-    value: ethers.formatUnits(transaction.value, "ether"),
-    // txnFee: calculateFee(transaction.gasUsed, transaction.gasPrice),
-    category: "imported",
-    userId,
-    walletId,
-  };
-};
-
 export const mapTransactionFromList = (
   transaction: EtherscanNormalTransactionDto,
   userWallet: UserIdAndWalletIdDto
 ): Omit<TransactionDto, 'id'> => {
-  const { userId, walletId } = userWallet;
+  const { walletId } = userWallet;
 
   return {
     hash: transaction.hash,
@@ -43,7 +24,6 @@ export const mapTransactionFromList = (
     status: transaction.isError === "0" ? "Success" : "Failed",
     txnFee: calculateFee(transaction.gasUsed, transaction.gasPrice),
     category: "imported",
-    userId,
     walletId,
   };
 };
@@ -63,7 +43,6 @@ export const mapTransactionFromDb = (tx: Transaction): TransactionDto => {
     status: tx.status,
     txnFee: tx.txnFee,
     category: tx.category,
-    userId: tx.userId,
     walletId: tx.walletId
   }
 };

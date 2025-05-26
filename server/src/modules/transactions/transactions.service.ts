@@ -1,4 +1,4 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
@@ -8,26 +8,14 @@ import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
 import { UserIdAndWalletIdDto } from '../common/dto/user-id-and-wallet-id.dto';
 import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
-import { mapTransactionFromDb, mapTx } from '../common/helpers/map-transaction.helper';
+import { mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
-import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
-import { ConfigService } from '@nestjs/config';
-import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
-import { EtherscanResponseDto } from '../common/dto/etherscan-response.dto';
 
 @Injectable()
 export class TransactionsService {
-  private etherscanApiUrl: string;
-  private etherscanApiKey: string;
-
   constructor(
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
-    @InjectModel(Statistics.name) private readonly statisticsModel: Model<StatisticsDocument>,
-    private readonly configService: ConfigService
-  ) {
-    this.etherscanApiUrl = this.configService.get<string>('ETHERSCAN_API_URL');
-    this.etherscanApiKey = this.configService.get<string>('ETHERSCAN_API_KEY');
-  }
+  ) {}
 
   async getByFilter(filter: TransactionFilterDto) {
     const txs = await this.transactionModel
@@ -38,27 +26,7 @@ export class TransactionsService {
   }
 
   async create(payload: CreateTransactionDto) {
-    const { hash, ...rest } = payload; 
-    const response = await fetch(
-      `${this.etherscanApiUrl}?chainid=1&module=proxy&action=eth_getTransactionByHash&txhash=${hash}&apikey=${this.etherscanApiKey}`,
-    );
-
-    const data = await response.json() as EtherscanResponseDto;
-
-    if (data.status === '0' && !Array.isArray(data.result)) {
-      throw new HttpException(data.result, HttpStatusCode.BAD_REQUEST);
-    }
-
-    const txFromEtherscan = mapTx(data.result, rest);
-    const tx = await this.transactionModel.create(txFromEtherscan);
-    // await this.statisticsModel.updateOne(
-    //   {id: payload.statisticsId},
-      // {
-      //   $inc: {
-      //     totalReceived: payload.amount,
-      //   }
-      // }
-    // )
+    const tx = await this.transactionModel.create(payload);
 
     return mapTransactionFromDb(tx);
   }
@@ -84,6 +52,16 @@ export class TransactionsService {
       payload,
       { new: true },
     );
+
+    if (!tx) {
+      throw new NotFoundException('Transaction not found');
+    }
+
+    return mapTransactionFromDb(tx);
+  }
+
+  async deleteById(id: string) {
+    const tx = await this.transactionModel.findByIdAndDelete(id);
 
     if (!tx) {
       throw new NotFoundException('Transaction not found');

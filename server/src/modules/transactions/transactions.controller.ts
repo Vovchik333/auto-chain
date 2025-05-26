@@ -1,6 +1,7 @@
 import { 
   Body, 
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -64,6 +65,15 @@ export class TransactionsController {
     const tx = await this.txService.updateById(id, payload);
 
     return tx;
+  }
+
+  @Delete(ApiPath.ID)
+  async deleteById(
+    @Param('id', ObjectIdPipe) id: string
+  ): Promise<{ message: string }> {
+    await this.txService.deleteById(id);
+
+    return { message: 'Transaction deleted successfully' };
   }
 
   @Post('/import-from-csv')

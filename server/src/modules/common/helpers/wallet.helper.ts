@@ -49,5 +49,5 @@ export const getAnalyticsFromTxs = (
     largestAmountTransaction,
   };
 
-  return { analytics, mappedTxsFromDb };
+  return { analytics };
 };

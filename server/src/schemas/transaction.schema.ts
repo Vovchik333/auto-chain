@@ -10,11 +10,6 @@ export class Transaction {
   @Prop({
     required: true,
   })
-  userId: string;
-
-  @Prop({
-    required: true,
-  })
   walletId: string;
 
   @Prop()
