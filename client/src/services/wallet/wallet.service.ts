@@ -1,7 +1,6 @@
 import { HttpApi, HttpMethod } from "../http";
 import { ApiPath } from "@/common/enums/api/api-path.enum";
 import { UserWalletAddressDto } from '@/common/types/user-wallet-address.dto';
-import { TransactionDto } from '@/common/types/transaction/transaction.dto';
 import { WalletDto } from "@/common/types/wallet/wallet.dto";
 import { WalletFilterDto } from "@/common/types/wallet/wallet-filter.dto";
 import { StatisticsDto } from "@/common/types/statistics.dto";

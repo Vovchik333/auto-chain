@@ -13,10 +13,10 @@ interface Props {
 const WalletPreview: React.FC<Props> = ({
   wallet,
 }) => {
-  const formattedBalance = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 6
-  }).format(wallet.statistics.balance);
+  // const formattedBalance = new Intl.NumberFormat('en-US', {
+  //   minimumFractionDigits: 2,
+  //   maximumFractionDigits: 6
+  // }).format(wallet.statistics.balance);
 
   return (
     <Link href={`/wallets/${wallet.id}`}>
@@ -34,11 +34,11 @@ const WalletPreview: React.FC<Props> = ({
               </h3>
               <ArrowRight className="w-4 h-4 text-[#00FFC6] opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+            {/* <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="text-sm text-[#A3A3A3]">
                 <span>{wallet.transactions.length} {wallet.transactions.length === 1 ? "transaction" : "transactions"}</span>
               </div>
-            </div>
+            </div> */}
             <div className="mt-2 flex items-center gap-2">
               <code className="px-2 py-1 rounded-md bg-[#2A2F38] text-sm font-mono text-[#A3A3A3]">
                 {wallet.address.slice(0, 8)}...{wallet.address.slice(-6)}
@@ -51,13 +51,13 @@ const WalletPreview: React.FC<Props> = ({
           </div>
         </div>
         <div className="flex items-center gap-6 mt-4 sm:mt-0 w-full sm:w-auto sm:ml-auto h-full">
-          <div className="flex flex-col items-end flex-grow sm:flex-grow-0">
+          {/* <div className="flex flex-col items-end flex-grow sm:flex-grow-0">
             <div className="flex items-center gap-2">
               <div className="text-lg font-semibold text-[#F0F0F0]">
                 {formattedBalance} <span className="text-[#00FFC6]">ETH</span>
               </div>
             </div>
-          </div>
+          </div> */}
           <ActionsMenu 
             onDelete={() => {}}
             onEdit={() => {}}

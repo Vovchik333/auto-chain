@@ -1,3 +1,10 @@
-import { TransactionDto } from "./transaction.dto";
-
-export type CreateTxDto = Pick<TransactionDto, 'userId' | 'hash' | 'walletId'>;
+export type CreateTxDto = {
+  from: string;
+  to: string;
+  value: string;
+  date: string;
+  txnFee: string;
+  type: string;
+  category: string;
+  walletId: string;
+}

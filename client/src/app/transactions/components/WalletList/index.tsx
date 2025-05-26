@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/select"
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
 
 type Props = {
   walletId: string;

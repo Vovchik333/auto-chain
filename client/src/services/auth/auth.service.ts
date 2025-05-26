@@ -51,7 +51,7 @@ class AuthService {
 
   public async updateProfile(data: UpdateProfileData): Promise<User> {
     return this.#httpApi.load<User>(
-      `${this.#apiPath}${ApiPath.AUTH}${ApiPath.USER}`,
+      `${this.#apiPath}${ApiPath.AUTH}${ApiPath.USERS}`,
       {
         method: HttpMethod.PUT,
         payload: JSON.stringify(data),
