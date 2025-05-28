@@ -20,6 +20,7 @@ import { StatCard } from './StatCard';
 import { StatsFilterDto } from '@/common/types/stats/stats-filter.dto';
 import { useStatsStore } from '@/stores/statistics/statistics.store';
 import { useEffect } from 'react';
+import { formatStringNumber } from '@/lib/string.utils';
 
 type Props = {
   filter: StatsFilterDto;
@@ -42,22 +43,22 @@ export default function WalletStats({ filter }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         <StatCard
           title="Balance"
-          value={`${stats.balance} ETH`}
+          value={`${formatStringNumber(stats.balance)} ETH`}
           icon={<CoinsIcon className="h-5 w-5 text-[#00FFC6]" />}
         />
         <StatCard
           title="Total Sent"
-          value={`${stats.totalSent} ETH`}
+          value={`${formatStringNumber(stats.totalSent)} ETH`}
           icon={<ArrowUpIcon className="h-5 w-5 text-rose-400" />}
         />
         <StatCard
           title="Total Received"
-          value={`${stats.totalReceived} ETH`}
+          value={`${formatStringNumber(stats.totalReceived)} ETH`}
           icon={<ArrowDownIcon className="h-5 w-5 text-emerald-400" />}
         />
         <StatCard
           title="Total Fees"
-          value={`${stats.totalFeeUsed} ETH`}
+          value={`${formatStringNumber(stats.totalFeeUsed)} ETH`}
           icon={<Receipt className="h-5 w-5 text-[#00FFC6]" />}
         />
         <StatCard
@@ -82,7 +83,7 @@ export default function WalletStats({ filter }: Props) {
               <div className="space-y-1">
                 <div className="text-sm text-[#9CA3AF]">Amount</div>
                 <div className="font-medium text-white text-lg">
-                  {stats.largestAmountTransaction.value} ETH
+                  {formatStringNumber(stats.largestAmountTransaction.value)} ETH
                 </div>
               </div>
               <a

@@ -1,49 +1,32 @@
 import { 
   Controller, 
   Get, 
-  Post, 
-  Body, 
-  Patch, 
   Param, 
-  Delete,
   UseGuards
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
-import { CreateCategoryDto } from './dto/create-category.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { ObjectIdPipe } from 'src/pipes/object-id.pipe';
+import { ApiPath } from 'src/common/enums/api/api-path.enum';
 
-@Controller('categories')
+@Controller(ApiPath.CATEGORIES)
 @UseGuards(AuthGuard)
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
-  @Post()
-  async create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
-  }
-
   @Get()
-  async findAll() {
-    return this.categoriesService.findAll();
+  async getAll() {
+    const categories = await this.categoriesService.getAll();
+
+    return categories;
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(id);
-  }
-
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
+  @Get(ApiPath.ID)
+  async getbyId(
+    @Param('id', ObjectIdPipe) id: string
   ) {
-    return this.categoriesService.update(id, updateCategoryDto);
-  }
-
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
-    await this.categoriesService.remove(id);
-    return { message: 'Category deleted successfully' };
+    const category = await this.categoriesService.getById(id);
+    
+    return category;
   }
 }

@@ -23,7 +23,7 @@ import { MultipartInterceptor } from 'src/interceptors/files.interceptor';
 import { UserIdAndWalletIdDto } from '../common/dto/user-id-and-wallet-id.dto';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
 
-@Controller('transactions')
+@Controller(ApiPath.TRANSACTIONS)
 @UseGuards(AuthGuard)
 export class TransactionsController {
   constructor(
@@ -76,23 +76,23 @@ export class TransactionsController {
     return { message: 'Transaction deleted successfully' };
   }
 
-  @Post('/import-from-csv')
+  @Post(ApiPath.IMPORT_FROM_CSV)
   @UseInterceptors(MultipartInterceptor({fileType: 'csv' }))
   async importTransactionsFromCsvFile(
     @Files() files: Record<string, Storage.MultipartFile[]>, 
     @Body() payload: UserIdAndWalletIdDto
   ) {
-    const txs = await this.txService.importTransactionsFromCsv(files, payload);
+    const txs = await this.txService.importFromCsv(files, payload);
 
     return txs;
   }
 
-  @Post('/export-to-csv')
+  @Post(ApiPath.EXPORT_TO_CSV)
   async exportTransactionsToCsv(
-    @Body() payload: UserIdAndWalletIdDto,
+    @Body() payload: TransactionFilterDto,
     @Res({ passthrough: true }) res: App.Response
   ) {
-    const csv = await this.txService.exportTransactionsToCsv(payload);
+    const csv = await this.txService.exportToCsv(payload);
 
     res.header('Content-Type', 'text/csv');
     res.header("Access-Control-Expose-Headers", "Content-Disposition");

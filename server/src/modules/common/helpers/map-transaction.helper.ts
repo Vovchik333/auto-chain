@@ -17,10 +17,11 @@ const getTransactionType = (address: string, transaction: EtherscanNormalTransac
   return address.toLowerCase() === transaction.to.toLowerCase() ? "deposit" : "withdraw";
 };
 
-export const mapTransactionFromList = (
+export const mapTransactionFromEtherscan = (
   transaction: EtherscanNormalTransactionDto,
   userWallet: UserIdAndWalletIdDto,
-  address: string
+  address: string,
+  isInternal: boolean = false
 ): Omit<TransactionDto, 'id'> => {
   const { walletId } = userWallet;
 
@@ -31,7 +32,7 @@ export const mapTransactionFromList = (
     value: ethers.formatUnits(transaction.value, "ether"),
     date: new Date(Number(transaction.timeStamp) * 1000).toISOString(),
     status: transaction.isError === "0" ? "Success" : "Failed",
-    txnFee: calculateFee(transaction.gasUsed, transaction.gasPrice),
+    txnFee: isInternal ? '0' : calculateFee(transaction.gasUsed, transaction.gasPrice),
     category: "imported",
     walletId,
     type: address.toLowerCase() === transaction.to.toLowerCase() ? "deposit" : "withdraw"

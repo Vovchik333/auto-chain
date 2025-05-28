@@ -83,7 +83,7 @@ export class TransactionsService {
     return mapTransactionFromDb(tx);
   }
 
-  async importTransactionsFromCsv(
+  async importFromCsv(
     files: Record<string, Storage.MultipartFile[]>, 
     payload: UserIdAndWalletIdDto
   ): Promise<TransactionDto[]> {
@@ -100,7 +100,7 @@ export class TransactionsService {
     return savedTxs.map(mapTransactionFromDb);
   }
 
-  async exportTransactionsToCsv(payload: UserIdAndWalletIdDto): Promise<string> {
+  async exportToCsv(payload: TransactionFilterDto): Promise<string> {
     const { walletId, userId } = payload;
     const filter = walletId ? { userId, walletId } : { userId };
 

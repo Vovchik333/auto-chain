@@ -1,7 +1,7 @@
 import { HttpApi, HttpMethod } from "../http";
 import { ApiPath } from "@/common/enums/api/api-path.enum";
 import { DiversificationDto } from "@/common/types/diversification.dto";
-import { TransferInstruction } from "@/common/types/transfer-instruction.dto";
+import { TransferDto } from "@/common/types/transfer-instruction.dto";
 
 type Constructor = {
   apiPath: string;

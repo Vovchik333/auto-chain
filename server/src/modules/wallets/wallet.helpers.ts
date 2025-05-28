@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { TransferInstruction } from "./dto/transfer-instruction.dto";
+import { TransferDto } from "./dto/transfer.dto";
 import { EtherscanNormalTransactionDto } from "../common/dto/etherscan-normal-transaction.dto";
 import { EtherscanResponseDto } from "../common/dto/etherscan-response.dto";
 import { BadRequestException } from "@nestjs/common";
@@ -29,7 +29,7 @@ export const findDeltas = (wallets: AddressAndBalance[], target: bigint) => {
 }
 
 export const findTransfers = (deltas: AddressAndBalance[], ) => {
-  const transfers: TransferInstruction[] = [];
+  const transfers: TransferDto[] = [];
 
   for (let i = 0; i < deltas.length; i++) {
     if (deltas[i].balance <= 0n) continue;
@@ -71,7 +71,7 @@ export const getBalance = (transactions: Transaction[], ownerAddress: string) =>
   return balance;
 }
 
-export const getTransactiionsFromEtherscanByAddress = async (
+export const getNormalTxsFromEtherscan = async (
   address: string,
   url: string,
   apikey: string
@@ -80,6 +80,37 @@ export const getTransactiionsFromEtherscanByAddress = async (
     chainId: 1,
     module: 'account',
     action: 'txlist',
+    address,
+    startblock: 0,
+    endblock: 99999999,
+    page: 1,
+    offset: 10000,
+    sort: 'desc',
+    apikey
+  });
+
+  const response = await fetch(
+    `${url}?${query}`,
+  );
+
+  const data = await response.json() as EtherscanResponseDto;
+
+  if (data.status === '0' && !Array.isArray(data.result)) {
+    throw new BadRequestException(data.result);
+  }
+
+  return data.result as EtherscanNormalTransactionDto[];
+}
+
+export const getInternalTxsFromEtherscan = async (
+  address: string,
+  url: string,
+  apikey: string
+) => {
+  const query = mapObjectToQuery({
+    chainId: 1,
+    module: 'account',
+    action: 'txlistinternal',
     address,
     startblock: 0,
     endblock: 99999999,

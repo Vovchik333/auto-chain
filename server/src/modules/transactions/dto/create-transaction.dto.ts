@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEthereumAddress, IsOptional, IsNumber, Matches } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 import { IsEthAddress } from 'src/decorators/is-eth-address.decorator';
 
 export class CreateTransactionDto {

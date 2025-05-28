@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { mapTransactionFromList } from '../common/helpers/map-transaction.helper';
+import { mapTransactionFromEtherscan } from '../common/helpers/map-transaction.helper';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,7 +11,8 @@ import { WalletDto } from '../common/dto/wallet.dto';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { CreateWalletFromBlockchainDto } from './dto/create-wallet-from-blockchain.dto';
 import { ethers } from 'ethers';
-import { findDeltas, findTargetSum, findTotalSum, findTransfers, getBalance, getTransactiionsFromEtherscanByAddress } from './wallet.helpers';
+import { findDeltas, findTargetSum, findTotalSum, findTransfers, getBalance, getInternalTxsFromEtherscan, getNormalTxsFromEtherscan } from './wallet.helpers';
+import { UpdateWalletDto } from './dto/update-wallet.dto';
 
 @Injectable()
 export class WalletService {
@@ -45,10 +46,13 @@ export class WalletService {
     payload: CreateWalletFromBlockchainDto
   ): Promise<WalletDto> {
     const { address } = payload; 
-    const txsList = await getTransactiionsFromEtherscanByAddress(address, this.etherscanApiUrl, this.etherscanApiKey);
+    const normalTxsList = await getNormalTxsFromEtherscan(address, this.etherscanApiUrl, this.etherscanApiKey);
+    const internalTxsList = await getInternalTxsFromEtherscan(address, this.etherscanApiUrl, this.etherscanApiKey);
     
     const wallet = await this.walletModel.create(payload);
-    await this.transactionModel.insertMany(txsList.map(tx => mapTransactionFromList(tx, {...payload, walletId: wallet._id}, address)));
+    const mappedNormalTxs = normalTxsList.map(tx => mapTransactionFromEtherscan(tx, {...payload, walletId: wallet._id}, address));
+    const mappedInternalTxs = internalTxsList.map(tx => mapTransactionFromEtherscan(tx, {...payload, walletId: wallet._id}, address, true));
+    await this.transactionModel.insertMany([...mappedNormalTxs, ...mappedInternalTxs].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()));
 
     return mapWalletFromDb(wallet);
   }
@@ -86,6 +90,18 @@ export class WalletService {
       target: ethers.formatUnits(target, "ether"),
       transfers
     };
+  }
+
+  async updateById(id: string, payload: UpdateWalletDto) {
+    const wallet = await this.walletModel
+      .findByIdAndUpdate(id, payload, { new: true })
+      .exec();
+    
+    if (!wallet) {
+      throw new NotFoundException('Wallet not found');
+    }
+
+    return mapWalletFromDb(wallet);
   }
 
   async deleteById(id: string) {

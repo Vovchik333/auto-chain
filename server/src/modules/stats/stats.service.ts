@@ -6,6 +6,7 @@ import { TransactionFilterDto } from '../transactions/dto/transaction-filter.dto
 import { mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
 import { ethers, Wallet } from 'ethers';
 import { WalletDocument } from 'src/schemas/wallet.schema';
+import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
 
 @Injectable()
 export class StatsService {
@@ -14,23 +15,7 @@ export class StatsService {
     @InjectModel(Wallet.name) private readonly walletModel: Model<WalletDocument>,
   ) {}
 
-  async getByFilter(filter: TransactionFilterDto) {
-    const { userId, ...rest } = filter;
-    let transactions = [];
-
-    if (userId) {
-      const wallets = await this.walletModel.find({ userId }).exec();
-      const walletsIds = wallets.map(wallet => wallet._id);
-      console.log('Wallets IDs:', walletsIds);
-      transactions = await this.transactionModel
-        .find({...rest, walletId: { $in: walletsIds }})
-        .exec();
-    } else {
-      transactions = await this.transactionModel
-        .find(filter)
-        .exec();
-    }
-
+  private async calculateStats(transactions: Transaction[]) {
     const mappedTransactions = transactions.map(mapTransactionFromDb);
     const successfulTransactions = mappedTransactions.filter(tx => tx.status === 'Success');
 
@@ -67,6 +52,48 @@ export class StatsService {
       totalFeeUsed: ethers.formatUnits(totalFeeUsed, 'ether'),
       balance: ethers.formatUnits(balance, 'ether'),
       largestAmountTransaction
-    };
+    }
+  }
+
+  async getByFilter(filter: TransactionFilterDto) {
+    const { userId, ...rest } = filter;
+    let transactions = [];
+
+    if (userId) {
+      const wallets = await this.walletModel.find({ userId }).exec();
+      const walletsIds = wallets.map(wallet => wallet._id);
+      transactions = await this.transactionModel
+        .find({...rest, walletId: { $in: walletsIds }})
+        .exec();
+    } else {
+      transactions = await this.transactionModel
+        .find(filter)
+        .exec();
+    }
+
+    const stats = await this.calculateStats(transactions);
+
+    return stats;
+  }
+
+  async exportToCsv(payload: TransactionFilterDto): Promise<string> {
+    const { userId, ...rest } = payload;
+    let transactions = [];
+
+    if (userId) {
+      const wallets = await this.walletModel.find({ userId }).exec();
+      const walletsIds = wallets.map(wallet => wallet._id);
+      transactions = await this.transactionModel
+        .find({...rest, walletId: { $in: walletsIds }})
+        .exec();
+    } else {
+      transactions = await this.transactionModel
+        .find(payload)
+        .exec();
+    }
+
+    const {largestAmountTransaction, ...stats} = await this.calculateStats(transactions);
+
+    return jsonToCsv([stats]);
   }
 }

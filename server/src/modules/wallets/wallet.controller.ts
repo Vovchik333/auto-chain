@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiPath } from 'src/common/enums/api/api-path.enum';
 import { WalletService } from './wallet.service';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -8,6 +8,7 @@ import { DiversificationDto } from './dto/diversification.dto';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { CreateWalletFromBlockchainDto } from './dto/create-wallet-from-blockchain.dto';
 import { ObjectIdPipe } from 'src/pipes/object-id.pipe';
+import { UpdateWalletDto } from './dto/update-wallet.dto';
 
 @Controller(ApiPath.WALLETS)
 @UseGuards(AuthGuard)
@@ -42,7 +43,7 @@ export class WalletController {
   }
 
   @Post(ApiPath.IMPORT_FROM_ETHERSCAN)
-  async importTransactionsFromEtherscan(
+  async importFromEtherscan(
     @Body() payload: CreateWalletFromBlockchainDto
   ): Promise<WalletDto> {
     const wallet = await this.walletService.importTransactionsFromEtherscan(payload);
@@ -50,7 +51,17 @@ export class WalletController {
     return wallet;
   }
 
-  @Delete(':id')
+  @Patch(ApiPath.ID)
+  async updateById(
+    @Param('id', ObjectIdPipe) id: string,
+    @Body() payload: UpdateWalletDto
+  ) {
+    const wallet = await this.walletService.updateById(id, payload);
+
+    return wallet;
+  }
+
+  @Delete(ApiPath.ID)
   async deleteById(
     @Param('id', ObjectIdPipe) id: string
   ) {

@@ -16,11 +16,11 @@ export class CategoriesService {
     return createdCategory;
   }
 
-  async findAll(): Promise<Category[]> {
+  async getAll(): Promise<Category[]> {
     return this.categoryModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Category> {
+  async getById(id: string): Promise<Category> {
     const category = await this.categoryModel.findById(id).exec();
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
@@ -28,7 +28,7 @@ export class CategoriesService {
     return category;
   }
 
-  async update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+  async updateById(id: string, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
     const updatedCategory = await this.categoryModel
       .findByIdAndUpdate(id, updateCategoryDto, { new: true })
       .exec();
@@ -40,7 +40,7 @@ export class CategoriesService {
     return updatedCategory;
   }
 
-  async remove(id: string): Promise<void> {
+  async deleteById(id: string): Promise<void> {
     const result = await this.categoryModel.findByIdAndDelete(id).exec();
     if (!result) {
       throw new NotFoundException(`Category with ID ${id} not found`);

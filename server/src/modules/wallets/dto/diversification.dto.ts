@@ -1,7 +1,7 @@
-import { TransferInstruction } from "./transfer-instruction.dto";
+import { TransferDto } from "./transfer.dto";
 
 export type DiversificationDto = {
   total: string;
   target: string;
-  transfers: TransferInstruction[]
+  transfers: TransferDto[]
 };

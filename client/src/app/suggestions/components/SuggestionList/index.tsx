@@ -1,9 +1,9 @@
 import React from 'react';
-import { TransferInstruction } from '@/common/types/transfer-instruction.dto';
+import { TransferDto } from '@/common/types/transfer-instruction.dto';
 import { SuggestionItem } from '../SuggestionItem';
 
 interface Props {
-  suggestions: TransferInstruction[];
+  suggestions: TransferDto[];
 }
 
 export const SuggestionList: React.FC<Props> = ({ suggestions }) => {
