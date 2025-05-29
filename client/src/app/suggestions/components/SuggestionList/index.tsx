@@ -1,12 +1,23 @@
 import React from 'react';
 import { TransferDto } from '@/common/types/transfer-instruction.dto';
 import { SuggestionItem } from '../SuggestionItem';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   suggestions: TransferDto[];
 }
 
 export const SuggestionList: React.FC<Props> = ({ suggestions }) => {
+  const t = useTranslations('suggestions');
+
+  if (suggestions.length === 0) {
+    return (
+      <div className="text-center p-6 bg-secondary/50 rounded-2xl border border-border theme-transition">
+        <p className="text-muted-foreground theme-transition">{t('noSuggestions')}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {suggestions.map((suggestion, idx) => (

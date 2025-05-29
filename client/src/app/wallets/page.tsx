@@ -42,29 +42,23 @@ function Wallets() {
   }, [wallets]);
 
   return (
-    <div
-      className="min-h-screen bg-[#1A1F27]"
-    >
+    <div className="min-h-screen bg-background theme-transition">
       <div className="mx-auto space-y-6">
         <WalletsHeader onSearch={handleSearch} />
         {isLoading ? (
-          <div
-            className="flex items-center justify-center py-12"
-          >
-            <div className="flex items-center gap-2 text-[#00FFC6]">
+          <div className="flex items-center justify-center py-12">
+            <div className="flex items-center gap-2 text-primary theme-transition">
               <Loader2 className="w-6 h-6 animate-spin" />
               <span>{t('loading')}</span>
             </div>
           </div>
         ) : filteredWallets.length === 0 ? (
-          <div
-            className="flex flex-col items-center justify-center py-12 text-center"
-          >
+          <div className="flex flex-col items-center justify-center py-12 text-center">
             {searchQuery ? (
               <>
-                <div className="w-16 h-16 rounded-full bg-[#2A2F38] flex items-center justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-4 theme-transition">
                   <svg
-                    className="w-8 h-8 text-[#00FFC6]"
+                    className="w-8 h-8 text-primary"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -77,31 +71,29 @@ function Wallets() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">
+                <h3 className="text-xl font-semibold text-foreground mb-2 theme-transition">
                   {t('search.noResults.title')}
                 </h3>
-                <p className="text-[#A3A3A3] max-w-sm">
+                <p className="text-muted-foreground max-w-sm theme-transition">
                   {t('search.noResults.description')}
                 </p>
               </>
             ) : (
               <>
-                <div className="w-16 h-16 rounded-full bg-[#2A2F38] flex items-center justify-center mb-4">
-                  <Plus className="w-8 h-8 text-[#00FFC6]" />
+                <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mb-4 theme-transition">
+                  <Plus className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">
+                <h3 className="text-xl font-semibold text-foreground mb-2 theme-transition">
                   {t('noWallets.title')}
                 </h3>
-                <p className="text-[#A3A3A3] max-w-sm">
+                <p className="text-muted-foreground max-w-sm theme-transition">
                   {t('noWallets.description')}
                 </p>
               </>
             )}
           </div>
         ) : (
-          <div
-            className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2"
-          >
+          <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
             {filteredWallets.map((wallet) => (
               <WalletPreview key={wallet.id} wallet={wallet} />
             ))}

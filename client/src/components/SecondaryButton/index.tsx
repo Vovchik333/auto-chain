@@ -9,6 +9,7 @@ type Props = {
   disabled?: boolean;
   className?: string;
   isPreventDefault?: boolean;
+  variant?: 'default' | 'outline' | 'ghost';
 }
 
 export const SecondaryButton: React.FC<Props> = ({
@@ -17,7 +18,8 @@ export const SecondaryButton: React.FC<Props> = ({
   type = "button",
   disabled,
   className,
-  isPreventDefault = false
+  isPreventDefault = false,
+  variant = 'default'
 }) => {
   return (
     <Button 
@@ -31,7 +33,11 @@ export const SecondaryButton: React.FC<Props> = ({
       type={type}
       disabled={disabled}
       className={cn(
-        "bg-[#2A2F38] text-[#F0F0F0] border-none hover:bg-[#3A3F48] hover:text-[#00FFC6] transition-colors cursor-pointer",
+        "font-medium rounded-box-lg theme-transition hover-effect focus-ring",
+        variant === 'default' && "bg-secondary hover:bg-secondary/90 text-secondary-foreground",
+        variant === 'outline' && "border-2 border-secondary text-secondary-foreground hover:bg-secondary/10",
+        variant === 'ghost' && "text-secondary-foreground hover:bg-secondary/10",
+        "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-secondary disabled:hover:transform-none",
         className
       )}
     >

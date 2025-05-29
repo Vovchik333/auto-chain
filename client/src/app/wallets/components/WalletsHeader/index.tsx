@@ -25,34 +25,28 @@ const WalletsHeader: React.FC<Props> = ({
   };
 
   return (
-    <PageContentHeader className="flex flex-col space-y-6 bg-[#1A1F27] rounded-lg border border-[#2A2F38] p-6">
-      <div 
-        className="flex flex-col md:flex-row md:justify-between md:items-center gap-6"
-      >
+    <PageContentHeader className="flex flex-col space-y-6 bg-background rounded-lg border border-border p-6 theme-transition">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
         <div className="flex flex-col gap-4">
           <div>
             <PageContentTitle text={t('header.title')} />
-            <p className="text-sm text-[#A3A3A3] mt-1">
+            <p className="text-sm text-muted-foreground mt-1 theme-transition">
               {t('header.description')}
             </p>
           </div>
 
-          <div
-            className="relative"
-          >
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A3A3A3]" />
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground theme-transition" />
             <Input
               type="text"
               placeholder={t('header.search')}
               value={searchQuery}
               onChange={handleSearchChange}
-              className="w-full md:w-80 bg-[#2A2F38] text-[#F0F0F0] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-10"
+              className="w-full md:w-80 bg-secondary text-foreground border-border focus:ring-primary focus:border-primary rounded-lg pl-10 theme-transition"
             />
           </div>
         </div>
-        <div 
-          className="flex flex-col sm:flex-row gap-3"
-        >
+        <div className="flex flex-col sm:flex-row gap-3">
           <ImportFromEtherscanButton />
           <AddWalletButton />
         </div>

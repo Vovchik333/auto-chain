@@ -19,8 +19,9 @@ import { PrimaryButton } from "@/components/PrimaryButton"
 import { ErrorModal } from "@/components/Erorr/ErrorModal"
 import { useState } from "react"
 import { Mail, Lock, Eye, EyeOff, Loader2, User } from "lucide-react"
-import { formSchema, FormValues } from "./schemas"
+import { formSchema } from "./schemas"
 import { useTranslations } from 'next-intl';
+import type { FormValues } from "./schemas"
 
 export function SignUpForm() {
   const t = useTranslations('auth');
@@ -51,13 +52,11 @@ export function SignUpForm() {
   }
 
   return (
-    <div 
-      className={"flex flex-col gap-6 w-full max-w-sm mx-auto"} 
-    >
-      <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
+    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto">
+      <Card className="bg-background text-foreground border-border theme-transition">
         <CardHeader>
-          <CardTitle className="text-2xl text-[#F0F0F0]">{t('createAccount')}</CardTitle>
-          <CardDescription className="text-[#A3A3A3]">
+          <CardTitle className="text-2xl text-foreground theme-transition">{t('createAccount')}</CardTitle>
+          <CardDescription className="text-muted-foreground theme-transition">
             {t('createAccountDescription')}
           </CardDescription>
         </CardHeader>
@@ -65,8 +64,8 @@ export function SignUpForm() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-[#F0F0F0] flex items-center gap-2">
-                  <User className="w-4 h-4 text-[#00FFC6]" />
+                <Label htmlFor="username" className="text-foreground flex items-center gap-2 theme-transition">
+                  <User className="w-4 h-4 text-primary theme-transition" />
                   {t('username')}
                 </Label>
                 <div className="relative">
@@ -75,24 +74,22 @@ export function SignUpForm() {
                     {...register("username")}
                     placeholder={t('usernamePlaceholder')}
                     className={cn(
-                      "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-4",
-                      errors.username && "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      "bg-secondary text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-lg pl-4 theme-transition",
+                      errors.username && "border-destructive focus:border-destructive focus:ring-destructive"
                     )}
                     disabled={isLoading}
                   />
                   {errors.username && (
-                    <p 
-                      className="text-sm text-red-500 mt-1.5 flex items-center gap-1.5"
-                    >
-                      {errors.username.message}
+                    <p className="text-sm text-destructive mt-1.5 flex items-center gap-1.5">
+                      {t(errors.username.message as string)}
                     </p>
                   )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-[#F0F0F0] flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-[#00FFC6]" />
+                <Label htmlFor="email" className="text-foreground flex items-center gap-2 theme-transition">
+                  <Mail className="w-4 h-4 text-primary theme-transition" />
                   {t('email')}
                 </Label>
                 <div className="relative">
@@ -102,24 +99,22 @@ export function SignUpForm() {
                     {...register("email")}
                     placeholder={t('emailPlaceholder')}
                     className={cn(
-                      "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-4",
-                      errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      "bg-secondary text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-lg pl-4 theme-transition",
+                      errors.email && "border-destructive focus:border-destructive focus:ring-destructive"
                     )}
                     disabled={isLoading}
                   />
                   {errors.email && (
-                    <p 
-                      className="text-sm text-red-500 mt-1.5 flex items-center gap-1.5"
-                    >
-                      {errors.email.message}
+                    <p className="text-sm text-destructive mt-1.5 flex items-center gap-1.5">
+                      {t(errors.email.message as string)}
                     </p>
                   )}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-[#F0F0F0] flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-[#00FFC6]" />
+                <Label htmlFor="password" className="text-foreground flex items-center gap-2 theme-transition">
+                  <Lock className="w-4 h-4 text-primary theme-transition" />
                   {t('password')}
                 </Label>
                 <div className="relative">
@@ -128,15 +123,15 @@ export function SignUpForm() {
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
                     className={cn(
-                      "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pr-10",
-                      errors.password && "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      "bg-secondary text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-lg pr-10 theme-transition",
+                      errors.password && "border-destructive focus:border-destructive focus:ring-destructive"
                     )}
                     disabled={isLoading}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A3A3A3] hover:text-[#00FFC6] transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4" />
@@ -144,20 +139,16 @@ export function SignUpForm() {
                       <Eye className="w-4 h-4" />
                     )}
                   </button>
-                    {errors.password && (
-                      <p 
-                        className="text-sm text-red-500 mt-1.5 flex items-center gap-1.5"
-                      >
-                        {errors.password.message}
-                      </p>
-                    )}
+                  {errors.password && (
+                    <p className="text-sm text-destructive mt-1.5 flex items-center gap-1.5">
+                      {t(errors.password.message as string)}
+                    </p>
+                  )}
                 </div>
 
                 {/* Password strength indicator */}
                 {password && (
-                  <div 
-                    className="mt-3 space-y-2"
-                  >
+                  <div className="mt-3 space-y-2">
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((level) => (
                         <div
@@ -166,7 +157,7 @@ export function SignUpForm() {
                             "h-1 w-full rounded-full transition-colors",
                             level <= strengthScore
                               ? strengthScore === 1
-                                ? "bg-red-500"
+                                ? "bg-destructive"
                                 : strengthScore === 2
                                 ? "bg-orange-500"
                                 : strengthScore === 3
@@ -174,25 +165,25 @@ export function SignUpForm() {
                                 : strengthScore === 4
                                 ? "bg-green-400"
                                 : "bg-green-500"
-                              : "bg-[#2A2F38]"
+                              : "bg-secondary"
                           )}
                         />
                       ))}
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className={cn("text-[#A3A3A3]", passwordStrength.length && "text-green-400")}>
+                      <div className={cn("text-muted-foreground theme-transition", passwordStrength.length && "text-green-400")}>
                         • {t('passwordStrength.minLength')}
                       </div>
-                      <div className={cn("text-[#A3A3A3]", passwordStrength.uppercase && "text-green-400")}>
+                      <div className={cn("text-muted-foreground theme-transition", passwordStrength.uppercase && "text-green-400")}>
                         • {t('passwordStrength.uppercase')}
                       </div>
-                      <div className={cn("text-[#A3A3A3]", passwordStrength.lowercase && "text-green-400")}>
+                      <div className={cn("text-muted-foreground theme-transition", passwordStrength.lowercase && "text-green-400")}>
                         • {t('passwordStrength.lowercase')}
                       </div>
-                      <div className={cn("text-[#A3A3A3]", passwordStrength.number && "text-green-400")}>
+                      <div className={cn("text-muted-foreground theme-transition", passwordStrength.number && "text-green-400")}>
                         • {t('passwordStrength.number')}
                       </div>
-                      <div className={cn("text-[#A3A3A3]", passwordStrength.special && "text-green-400")}>
+                      <div className={cn("text-muted-foreground theme-transition", passwordStrength.special && "text-green-400")}>
                         • {t('passwordStrength.special')}
                       </div>
                     </div>
@@ -218,11 +209,11 @@ export function SignUpForm() {
               </PrimaryButton>
             </div>
 
-            <div className="text-center text-sm text-[#A3A3A3]">
+            <div className="text-center text-sm text-muted-foreground theme-transition">
               {t('alreadyHaveAccount')}{" "}
               <Link 
                 href={AppRoute.SIGN_IN} 
-                className="text-[#00FFC6] hover:underline underline-offset-4 transition-colors"
+                className="text-primary hover:underline underline-offset-4 transition-colors"
               >
                 {t('signIn')}
               </Link>

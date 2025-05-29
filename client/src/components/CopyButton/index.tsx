@@ -29,9 +29,9 @@ export const CopyButton: React.FC<Props> = ({
       onClick={() => handleCopy(text)}
     >
       {copied ? (
-        <CheckCircle2 className="w-4 h-4 text-[#00ffc6]" />
+        <CheckCircle2 className="w-4 h-4 text-primary theme-transition" />
       ) : (
-        <Copy className="w-4 h-4 text-[#A3A3A3]" />
+        <Copy className="w-4 h-4 text-muted-foreground theme-transition" />
       )}
     </SecondaryButton>
   );

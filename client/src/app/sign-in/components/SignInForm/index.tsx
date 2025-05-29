@@ -19,8 +19,9 @@ import { useForm } from "react-hook-form"
 import { ErrorModal } from "@/components/Erorr/ErrorModal"
 import { useState } from "react"
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react"
-import { formSchema, FormValues } from "./schemas"
+import { formSchema } from "./schemas"
 import { useTranslations } from 'next-intl';
+import type { FormValues } from "./schemas"
 
 export function SignInForm() {
   const t = useTranslations('auth');
@@ -40,13 +41,11 @@ export function SignInForm() {
   }
 
   return (
-    <div 
-      className={"flex flex-col gap-6 w-full max-w-sm mx-auto"}
-    >
-      <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
+    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto">
+      <Card className="bg-background text-foreground border-border theme-transition">
         <CardHeader>
-          <CardTitle className="text-2xl text-[#F0F0F0]">{t('welcomeBack')}</CardTitle>
-          <CardDescription className="text-[#A3A3A3]">
+          <CardTitle className="text-2xl text-foreground theme-transition">{t('welcomeBack')}</CardTitle>
+          <CardDescription className="text-muted-foreground theme-transition">
             {t('signInDescription')}
           </CardDescription>
         </CardHeader>
@@ -54,8 +53,8 @@ export function SignInForm() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-[#F0F0F0] flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-[#00FFC6]" />
+                <Label htmlFor="email" className="text-foreground flex items-center gap-2 theme-transition">
+                  <Mail className="w-4 h-4 text-primary theme-transition" />
                   {t('email')}
                 </Label>
                 <div className="relative">
@@ -65,15 +64,13 @@ export function SignInForm() {
                     placeholder={t('emailPlaceholder')}
                     {...register("email")}
                     className={cn(
-                      "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-4",
-                      errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      "bg-secondary text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-lg pl-4 theme-transition",
+                      errors.email && "border-destructive focus:border-destructive focus:ring-destructive"
                     )}
                     disabled={isLoading}
                   />
                   {errors.email && (
-                    <p 
-                      className="text-sm text-red-500 mt-1.5 flex items-center gap-1.5"
-                    >
+                    <p className="text-sm text-destructive mt-1.5 flex items-center gap-1.5">
                       {errors.email.message}
                     </p>
                   )}
@@ -82,13 +79,13 @@ export function SignInForm() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-[#F0F0F0] flex items-center gap-2">
-                    <Lock className="w-4 h-4 text-[#00FFC6]" />
+                  <Label htmlFor="password" className="text-foreground flex items-center gap-2 theme-transition">
+                    <Lock className="w-4 h-4 text-primary theme-transition" />
                     {t('password')}
                   </Label>
                   <Link
                     href="#"
-                    className="text-sm text-[#00FFC6] hover:underline underline-offset-4 transition-colors"
+                    className="text-sm text-primary hover:underline underline-offset-4 transition-colors"
                   >
                     {t('forgotPassword')}
                   </Link>
@@ -99,15 +96,15 @@ export function SignInForm() {
                     type={showPassword ? "text" : "password"}
                     {...register("password")}
                     className={cn(
-                      "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pr-10",
-                      errors.password && "border-red-500 focus:border-red-500 focus:ring-red-500"
+                      "bg-secondary text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-lg pr-10 theme-transition",
+                      errors.password && "border-destructive focus:border-destructive focus:ring-destructive"
                     )}
                     disabled={isLoading}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#A3A3A3] hover:text-[#00FFC6] transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="w-4 h-4" />
@@ -116,9 +113,7 @@ export function SignInForm() {
                     )}
                   </button>
                   {errors.password && (
-                    <p 
-                      className="text-sm text-red-500 mt-1.5 flex items-center gap-1.5"
-                    >
+                    <p className="text-sm text-destructive mt-1.5 flex items-center gap-1.5">
                       {errors.password.message}
                     </p>
                   )}
@@ -143,11 +138,11 @@ export function SignInForm() {
               </PrimaryButton>
             </div>
 
-            <div className="text-center text-sm text-[#A3A3A3]">
+            <div className="text-center text-sm text-muted-foreground theme-transition">
               {t('dontHaveAccount')}{" "}
               <Link 
                 href={AppRoute.SIGN_UP} 
-                className="text-[#00FFC6] hover:underline underline-offset-4 transition-colors"
+                className="text-primary hover:underline underline-offset-4 transition-colors"
               >
                 {t('signUp')}
               </Link>

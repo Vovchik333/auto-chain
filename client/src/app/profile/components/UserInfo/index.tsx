@@ -23,24 +23,20 @@ const InputWrapper = ({ children, icon: Icon, label, error, success }: {
 }) => {
   const t = useTranslations('profile');
   return (
-    <div className="space-y-2">
-      <Label className="text-[#A3A3A3] flex items-center gap-2">
-        <Icon className={`w-4 h-4 ${success ? 'text-green-400' : 'text-[#00FFC6]'}`} />
+    <div className="space-y-2.5">
+      <Label className="flex items-center gap-2.5 text-foreground theme-transition">
+        <Icon className={`w-4 h-4 ${success ? 'text-green-400' : 'text-primary'} theme-transition`} />
         {label}
       </Label>
       {children}
       {error && (
-        <div 
-          className="flex items-center gap-2 text-red-400 text-sm mt-1"
-        >
+        <div className="flex items-center gap-2.5 text-destructive text-sm mt-1.5 theme-transition">
           <AlertCircle className="w-4 h-4" />
           {error}
         </div>
       )}
       {success && (
-        <div 
-          className="flex items-center gap-2 text-green-400 text-sm mt-1"
-        >
+        <div className="flex items-center gap-2.5 text-green-400 text-sm mt-1.5 theme-transition">
           <CheckCircle2 className="w-4 h-4" />
           {t('savedSuccessfully')}
         </div>
@@ -59,7 +55,6 @@ export default function ProfileData() {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, isDirty },
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
@@ -71,7 +66,7 @@ export default function ProfileData() {
 
   if (!user) return (
     <div className="flex items-center justify-center p-8">
-      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#00FFC6]" />
+      <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-primary theme-transition" />
     </div>
   );
 
@@ -93,27 +88,27 @@ export default function ProfileData() {
   };
 
   return (
-    <div className="mx-auto">
-      <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
-        <CardHeader>
-          <CardTitle className="text-[#F0F0F0] text-xl">{t('accountInformation')}</CardTitle>
+    <div className="mx-auto mt-6">
+      <Card className="rounded-2xl shadow-sm">
+        <CardHeader className="px-6 pt-6">
+          <CardTitle>{t('accountInformation')}</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           {!editing ? (
             <div className="space-y-6">
-              <div className="grid gap-4 p-4 bg-[#2A2F38] rounded-lg">
+              <div className="grid gap-4 p-6 bg-secondary/50 rounded-2xl border border-border theme-transition">
                 <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-[#00FFC6]" />
+                  <Mail className="w-5 h-5 text-primary theme-transition" />
                   <div>
-                    <p className="text-sm text-[#A3A3A3]">{t('email')}</p>
-                    <p className="text-[#F0F0F0]">{user.email}</p>
+                    <p className="text-sm text-muted-foreground theme-transition">{t('email')}</p>
+                    <p className="text-foreground theme-transition">{user.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <User className="w-5 h-5 text-[#00FFC6]" />
+                  <User className="w-5 h-5 text-primary theme-transition" />
                   <div>
-                    <p className="text-sm text-[#A3A3A3]">{t('username')}</p>
-                    <p className="text-[#F0F0F0]">{user.username}</p>
+                    <p className="text-sm text-muted-foreground theme-transition">{t('username')}</p>
+                    <p className="text-foreground theme-transition">{user.username}</p>
                   </div>
                 </div>
               </div>
@@ -129,7 +124,7 @@ export default function ProfileData() {
               onSubmit={handleSubmit(onSubmit)} 
               className="space-y-6"
             >
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <InputWrapper 
                   icon={Mail} 
                   label={t('email')}
@@ -138,7 +133,7 @@ export default function ProfileData() {
                 >
                   <Input
                     type="email"
-                    className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
+                    className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl theme-transition"
                     {...register("email")}
                   />
                 </InputWrapper>
@@ -150,43 +145,43 @@ export default function ProfileData() {
                   success={successFields.username}
                 >
                   <Input
-                    className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6]"
+                    className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl theme-transition"
                     {...register("username")}
                   />
                 </InputWrapper>
               </div>
 
-              <div className="pt-4 border-t border-[#2A2F38] space-y-4">
+              <div className="pt-6 border-t border-border space-y-6 theme-transition">
                 <InputWrapper 
                   icon={Lock} 
                   label={t('changePassword')}
                   error={errors.currentPassword?.message || errors.newPassword?.message || errors.confirmPassword?.message}
                   success={successFields.password}
                 >
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <Input
                       type="password"
                       placeholder={t('currentPasswordPlaceholder')}
-                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
+                      className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
                       {...register("currentPassword")}
                     />
                     <Input
                       type="password"
                       placeholder={t('newPasswordPlaceholder')}
-                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
+                      className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
                       {...register("newPassword")}
                     />
                     <Input
                       type="password"
                       placeholder={t('confirmPasswordPlaceholder')}
-                      className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
+                      className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
                       {...register("confirmPassword")}
                     />
                   </div>
                 </InputWrapper>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
                 <PrimaryButton
                   type="submit"
                   disabled={!isDirty || isLoading}

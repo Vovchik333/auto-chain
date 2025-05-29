@@ -12,7 +12,9 @@
     "submit": "Підтвердити",
     "confirm": "Підтвердити",
     "back": "Назад",
-    "copiedToClipboard": "Скопійовано в буфер обміну"
+    "copiedToClipboard": "Скопійовано в буфер обміну",
+    "switchToLight": "Перейти на світлу тему",
+    "switchToDark": "Перейти на темну тему"
   },
   "navigation": {
     "overview": "Огляд",
@@ -100,7 +102,7 @@
     "actions": {
       "edit": "Редагувати",
       "delete": "Видалити",
-      "import": "Імпорт з Etherscan",
+      "import": "Імпорт з Blockchain",
       "add": "Додати гаманець"
     }
   },
@@ -145,7 +147,12 @@
       "viewOnEtherscan": "Переглянути на Etherscan",
       "copyHash": "Копіювати хеш транзакції",
       "utc": "UTC"
-    }
+    },
+    "importFromCSV": "Імпорт з CSV",
+    "exportToCSV": "Експорт в CSV",
+    "addTransaction": "Додати транзакцію",
+    "add": "Додати",
+    "cancel": "Скасувати"
   },
   "profile": {
     "personalInfo": "Особиста інформація",
@@ -197,10 +204,16 @@
       "from": "Від",
       "to": "До",
       "amount": "Сума"
-    }
+    },
+    "processing": "Обробка...",
+    "selectWallets": "Вибрати гаманці ({count})",
+    "selectWalletsTitle": "Вибір гаманців",
+    "confirmSelection": "Підтвердити вибір",
+    "noSuggestions": "Немає доступних пропозицій"
   },
   "overview": {
-    "welcome": "Вітаємо",
+    "welcome": "Огляд",
+    "description": "Відстежуйте ефективність та активність ваших транзакцій",
     "totalAssets": "Загальні активи",
     "recentTransactions": "Останні транзакції",
     "viewAll": "Переглянути все",
@@ -221,8 +234,8 @@
     "largestTransaction": "Найбільша транзакція",
     "amount": "Сума",
     "viewOnEtherscan": "Переглянути на Etherscan",
-    "from": "Від",
-    "to": "До"
+    "from": "Відправник",
+    "to": "Отримувач"
   },
   "errors": {
     "somethingWentWrong": "Щось пішло не так",
@@ -231,7 +244,17 @@
     "insufficientFunds": "Недостатньо коштів",
     "networkError": "Помилка мережі",
     "invalidAmount": "Невірна сума",
-    "required": "Це поле обов'язкове"
+    "required": "Це поле обов'язкове",
+    "invalidEmail": "Будь ласка, введіть дійсну електронну адресу",
+    "passwordTooShort": "Пароль повинен містити щонайменше 6 символів",
+    "invalidCredentials": "Невірна електронна адреса або пароль",
+    "usernameTooShort": "Ім'я користувача повинно містити щонайменше 2 символи",
+    "usernameTooLong": "Ім'я користувача повинно бути менше 50 символів",
+    "usernameInvalid": "Ім'я користувача може містити лише літери, цифри, підкреслення та дефіси",
+    "passwordNoUppercase": "Пароль повинен містити хоча б одну велику літеру",
+    "passwordNoLowercase": "Пароль повинен містити хоча б одну малу літеру",
+    "passwordNoNumber": "Пароль повинен містити хоча б одну цифру",
+    "passwordNoSpecial": "Пароль повинен містити хоча б один спеціальний символ"
   },
   "dateRange": {
     "from": "Від",
@@ -240,7 +263,21 @@
     "selectEndDate": "Виберіть кінцеву дату"
   },
   "dropZone": {
-    "dragAndDrop": "Перетягніть CSV файл сюди або натисніть для вибору"
+    "dragAndDrop": "Перетягніть CSV файли сюди",
+    "dropHere": "Відпустіть файли тут",
+    "orClickToUpload": "або натисніть для завантаження"
+  },
+  "files": {
+    "selectedFiles": "{count, plural, one {# файл вибрано} few {# файли вибрано} many {# файлів вибрано} other {# файлів вибрано}}"
+  },
+  "importModal": {
+    "title": "Імпорт транзакцій",
+    "import": "Імпортувати",
+    "selectWallet": "Виберіть гаманець",
+    "uploadFiles": "Завантажити файли",
+    "importInProgress": "Імпортування...",
+    "importSuccess": "Транзакції успішно імпортовано",
+    "importError": "Не вдалося імпортувати транзакції"
   },
   "actions": {
     "edit": "Редагувати",

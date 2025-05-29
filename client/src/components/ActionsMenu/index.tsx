@@ -26,14 +26,14 @@ export const ActionsMenu: React.FC<Props> = ({
         <Button
           variant="ghost"
           size="icon"
-          className="hover:bg-[#2C3440] rounded-full p-2 transition-colors cursor-pointer"
+          className="hover:bg-secondary rounded-full p-2 transition-colors cursor-pointer theme-transition"
           onClick={(e) => e.stopPropagation()} 
         >
-          <MoreVertical className="h-5 w-5 text-[#A3A3A3] hover:text-[#00FFC6] transition-colors" />
+          <MoreVertical className="h-5 w-5 text-muted-foreground hover:text-primary transition-colors theme-transition" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-44 bg-[#1A1F27] border border-[#2A2F38] text-[#F0F0F0] shadow-xl rounded-2xl p-3"
+        className="w-44 bg-background border border-border text-foreground shadow-xl rounded-2xl p-3 theme-transition"
         align="end"
         onClick={(e) => e.stopPropagation()}
       >
@@ -42,9 +42,9 @@ export const ActionsMenu: React.FC<Props> = ({
             e.stopPropagation();
             onEdit();
           }}
-          className="text-sm rounded-xl px-3 py-2 transition-colors cursor-pointer flex items-center gap-2 !bg-transparent hover:!bg-[#00ffc615] !text-[#F0F0F0] hover:!text-[#00FFC6]"
+          className="text-sm rounded-xl px-3 py-2 transition-colors cursor-pointer flex items-center gap-2 !bg-transparent hover:!bg-primary/10 !text-foreground hover:!text-primary theme-transition"
         >
-          <Pencil className="w-4 h-4 text-[#00FFC6]" />
+          <Pencil className="w-4 h-4 text-primary theme-transition" />
           {t('edit')}
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -52,9 +52,9 @@ export const ActionsMenu: React.FC<Props> = ({
             e.stopPropagation();
             onDelete();
           }}
-          className="text-sm rounded-xl px-3 py-2 transition-colors cursor-pointer flex items-center gap-2 !bg-transparent hover:!bg-red-500/10 !text-red-400"
+          className="text-sm rounded-xl px-3 py-2 transition-colors cursor-pointer flex items-center gap-2 !bg-transparent hover:!bg-destructive/10 !text-destructive theme-transition"
         >
-          <Trash2 className="w-4 h-4 text-red-400 " />
+          <Trash2 className="w-4 h-4 text-destructive theme-transition" />
           {t('remove')}
         </DropdownMenuItem>
       </DropdownMenuContent>

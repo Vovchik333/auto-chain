@@ -5,8 +5,10 @@ import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { useUserStore } from "@/stores/user/user.store";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { CreateWalletFromBlockchainDto } from "@/common/types/wallet/create-wallet-from-blockchain.dto";
+import { useTranslations } from 'next-intl';
 
 export default function ImportFromEtherscanButton() {
+  const t = useTranslations('wallet');
   const { importFromEtherscan } = useWalletStore();
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +27,7 @@ export default function ImportFromEtherscanButton() {
     <>
       <PrimaryButton onClick={() => setIsModalOpen(true)}>
         <UploadCloud className="w-4 h-4 mr-2" />
-        Import From Blockchain
+        {t('actions.import')}
       </PrimaryButton>
       <EthAddressModalContent
         onOpenChange={setIsModalOpen}

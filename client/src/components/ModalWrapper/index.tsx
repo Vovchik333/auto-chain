@@ -24,12 +24,16 @@ export const ModalWrapper: React.FC<Props> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#1A1F27] border-[#2A2F38] text-[#F0F0F0]">
+      <DialogContent className="rounded-box-xl bg-background/95 backdrop-blur-sm border-border shadow-lg theme-transition">
         <DialogHeader>
-          <DialogTitle className="text-[#F0F0F0]">{title}</DialogTitle>
+          <DialogTitle className="text-xl font-semibold text-foreground theme-transition">
+            {title}
+          </DialogTitle>
         </DialogHeader>
-        {modalContent}
-        <DialogFooter>
+        <div className="py-4">
+          {modalContent}
+        </div>
+        <DialogFooter className="gap-2 sm:gap-0">
           {footerButtons}
         </DialogFooter>
       </DialogContent>

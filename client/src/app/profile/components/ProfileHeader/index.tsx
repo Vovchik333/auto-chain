@@ -10,11 +10,11 @@ export const ProfileHeader: React.FC = () => {
   if (!user) return null;
 
   return (
-    <PageContentHeader className="bg-[#1A1F27] p-6">
+    <PageContentHeader className="bg-background rounded-2xl border border-border p-6 theme-transition">
       <div className="flex items-center gap-4">
         <div>
           <PageContentTitle text={t('title')} />
-          <p className="text-[#A3A3A3] text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1.5 theme-transition">
             {t('subtitle')}
           </p>
         </div>

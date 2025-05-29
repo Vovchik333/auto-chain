@@ -12,7 +12,9 @@
     "submit": "Submit",
     "confirm": "Confirm",
     "back": "Back",
-    "copiedToClipboard": "Copied to clipboard"
+    "copiedToClipboard": "Copied to clipboard",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
   },
   "navigation": {
     "overview": "Overview",
@@ -100,7 +102,7 @@
     "actions": {
       "edit": "Edit",
       "delete": "Delete",
-      "import": "Import from Etherscan",
+      "import": "Import from Blockchain",
       "add": "Add Wallet"
     }
   },
@@ -145,7 +147,12 @@
       "viewOnEtherscan": "View on Etherscan",
       "copyHash": "Copy Transaction Hash",
       "utc": "UTC"
-    }
+    },
+    "importFromCSV": "Import from CSV",
+    "exportToCSV": "Export to CSV",
+    "addTransaction": "Add Transaction",
+    "add": "Add",
+    "cancel": "Cancel"
   },
   "profile": {
     "personalInfo": "Personal Information",
@@ -157,7 +164,6 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm New Password",
     "darkMode": "Dark Mode",
-    "cancel": "Cancel",
     "notifications": "Notifications",
     "language": "Language",
     "timezone": "Timezone",
@@ -197,10 +203,16 @@
       "from": "From",
       "to": "To",
       "amount": "Amount"
-    }
+    },
+    "processing": "Processing...",
+    "selectWallets": "Select Wallets ({count})",
+    "selectWalletsTitle": "Select Wallets",
+    "confirmSelection": "Confirm Selection",
+    "noSuggestions": "No suggestions available"
   },
   "overview": {
-    "welcome": "Welcome",
+    "welcome": "Overview",
+    "description": "Track your transactions performance and activity",
     "totalAssets": "Total Assets",
     "recentTransactions": "Recent Transactions",
     "viewAll": "View All",
@@ -231,7 +243,17 @@
     "insufficientFunds": "Insufficient funds",
     "networkError": "Network error",
     "invalidAmount": "Invalid amount",
-    "required": "This field is required"
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "invalidCredentials": "Invalid email or password",
+    "usernameTooShort": "Username must be at least 2 characters",
+    "usernameTooLong": "Username must be less than 50 characters",
+    "usernameInvalid": "Username can only contain letters, numbers, underscores, and hyphens",
+    "passwordNoUppercase": "Password must contain at least one uppercase letter",
+    "passwordNoLowercase": "Password must contain at least one lowercase letter",
+    "passwordNoNumber": "Password must contain at least one number",
+    "passwordNoSpecial": "Password must contain at least one special character"
   },
   "dateRange": {
     "from": "From",
@@ -240,7 +262,21 @@
     "selectEndDate": "Select end date"
   },
   "dropZone": {
-    "dragAndDrop": "Drag & drop CSV file here or click to browse"
+    "dragAndDrop": "Drag and drop CSV files here",
+    "dropHere": "Drop files here",
+    "orClickToUpload": "or click to upload"
+  },
+  "files": {
+    "selectedFiles": "{count, plural, =1 {# file selected} other {# files selected}}"
+  },
+  "importModal": {
+    "title": "Import Transactions",
+    "import": "Import",
+    "selectWallet": "Select wallet",
+    "uploadFiles": "Upload files",
+    "importInProgress": "Importing...",
+    "importSuccess": "Successfully imported transactions",
+    "importError": "Failed to import transactions"
   },
   "actions": {
     "edit": "Edit",

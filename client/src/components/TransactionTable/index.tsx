@@ -103,13 +103,13 @@ export default function TransactionTable({ transactions, walletId }: Props) {
   if (!transactions.length) {
     return (
       <div
-        className="flex flex-col items-center justify-center p-8 rounded-xl border border-[#2A2F3A] bg-[#1A1F27]"
+        className="flex flex-col items-center justify-center p-8 rounded-box-lg border border-border bg-background theme-transition"
       >
-        <div className="w-16 h-16 rounded-full bg-[#2A2F38] flex items-center justify-center mb-4">
-          <ArrowUpRight className="w-8 h-8 text-[#00FFC6] rotate-45" />
+        <div className="w-16 h-16 rounded-full bg-secondary/50 flex items-center justify-center mb-4 theme-transition">
+          <ArrowUpRight className="w-8 h-8 text-primary rotate-45 theme-transition" />
         </div>
-        <h3 className="text-lg font-medium text-[#F0F0F0] mb-2">{t('noTransactions')}</h3>
-        <p className="text-sm text-[#9CA3AF] text-center">
+        <h3 className="text-lg font-medium text-foreground mb-2 theme-transition">{t('noTransactions')}</h3>
+        <p className="text-sm text-muted-foreground text-center theme-transition">
           {t('noTransactionsDescription')}
         </p>
       </div>
@@ -117,13 +117,11 @@ export default function TransactionTable({ transactions, walletId }: Props) {
   }
 
   return (
-    <div
-      className="space-y-4"
-    >
+    <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:flex-none sm:w-64">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground theme-transition" />
             <Input
               placeholder={t('searchTransactions')}
               value={searchTerm}
@@ -131,17 +129,17 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="pl-9 bg-[#2A2F38] border-[#353B45] text-[#F0F0F0] placeholder-[#9CA3AF] w-full"
+              className="pl-9 bg-secondary/50 border-border text-foreground placeholder-muted-foreground w-full theme-transition"
             />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="bg-[#2A2F38] border-[#353B45] text-[#F0F0F0] hover:bg-[#353B45]">
+              <Button variant="outline" className="bg-secondary/50 border-border text-foreground hover:bg-secondary theme-transition">
                 <Filter className="w-4 h-4 mr-2" />
                 {statusFilter === 'all' ? t('filterByStatus') : t(statusFilter.toLowerCase())}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-[#2A2F38] border-[#353B45] text-[#F0F0F0]">
+            <DropdownMenuContent className="bg-secondary/50 border-border text-foreground theme-transition">
               <DropdownMenuItem onClick={() => setStatusFilter('all')}>{t('filterByStatus')}</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setStatusFilter('Success')}>{t('completed')}</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setStatusFilter('Pending')}>{t('pending')}</DropdownMenuItem>
@@ -150,26 +148,26 @@ export default function TransactionTable({ transactions, walletId }: Props) {
           </DropdownMenu>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-[#9CA3AF]">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground theme-transition">
           <ExportToCSVButton walletId={walletId} />
           {searchTerm && (
-            <Badge variant="outline" className="bg-[#2A2F38] text-[#F0F0F0]">
+            <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
               {t('searchResults')}
             </Badge>
           )}
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-[#2A2F3A] bg-[#1A1F27] shadow-sm">
+      <div className="overflow-hidden rounded-box-lg border border-border bg-background shadow-sm theme-transition">
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto text-sm">
-            <thead className="bg-[#232936] border-b border-[#2A2F3A]">
-              <tr className="text-left font-medium text-[#CFCFCF]">
+            <thead className="bg-secondary/50 border-b border-border theme-transition">
+              <tr className="text-left font-medium text-foreground theme-transition">
                 <th className="px-4 py-3">{t('transaction')}</th>
                 <th className="px-4 py-3">{t('from')}</th>
                 <th className="px-4 py-3">{t('to')}</th>
                 <th 
-                  className="px-4 py-3 cursor-pointer hover:text-[#00FFC6] transition-colors"
+                  className="px-4 py-3 cursor-pointer hover:text-primary transition-colors theme-transition"
                   onClick={() => handleSort('value')}
                 >
                   <div className="flex items-center gap-1">
@@ -181,7 +179,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                 </th>
                 <th className="px-4 py-3">{t('fee')}</th>
                 <th 
-                  className="px-4 py-3 cursor-pointer hover:text-[#00FFC6] transition-colors"
+                  className="px-4 py-3 cursor-pointer hover:text-primary transition-colors theme-transition"
                   onClick={() => handleSort('status')}
                 >
                   <div className="flex items-center gap-1">
@@ -192,7 +190,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                   </div>
                 </th>
                 <th 
-                  className="px-4 py-3 cursor-pointer hover:text-[#00FFC6] transition-colors"
+                  className="px-4 py-3 cursor-pointer hover:text-primary transition-colors theme-transition"
                   onClick={() => handleSort('date')}
                 >
                   <div className="flex items-center gap-1">
@@ -206,100 +204,72 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                 <th className="px-4 py-3">{t('category')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#2A2F3A]">
-                {currentTransactions.map((tx) => (
-                  <tr
-                    key={tx.id}
-                    className="group transition-colors"
-                  >
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <div>
-                          <Link 
-                            href={`/transactions/${tx.id}`}
-                            className="text-[#00FFC6] hover:underline font-medium flex items-center gap-1 group-hover:gap-2 transition-all"
-                          >
-                            {truncateAddress(tx.hash)}
-                            <ExternalLinkIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          </Link>
-                        </div>
+            <tbody className="divide-y divide-border">
+              {currentTransactions.map((tx) => (
+                <tr
+                  key={tx.id}
+                  className="group transition-colors hover:bg-secondary/50 theme-transition"
+                >
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <Link 
+                          href={`/transactions/${tx.id}`}
+                          className="text-primary hover:underline font-medium flex items-center gap-1 group-hover:gap-2 transition-all theme-transition"
+                        >
+                          {truncateAddress(tx.hash)}
+                          <ExternalLinkIcon className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </Link>
                       </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <span className="text-[#E5E7EB] font-medium">{truncateAddress(tx.from)}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <span className="text-[#E5E7EB] font-medium">{truncateAddress(tx.to)}</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <span className="text-white font-medium">{formatStringNumber(tx.value)} ETH</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <span className="text-white font-medium">{formatStringNumber(tx.txnFee)} ETH</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge
-                        variant={
-                          tx.status === "Success"
-                            ? "default"
-                            : tx.status === "Pending"
-                            ? "secondary"
-                            : "destructive"
-                        }
-                        className={`
-                          px-3 py-1 rounded-full font-medium
-                          ${tx.status === "Success"
-                            ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                            : tx.status === "Pending"
-                            ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20"
-                            : "bg-rose-500/10 text-rose-500 border border-rose-500/20"}
-                        `}
-                      >
-                        {tx.status}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-col">
-                        <p className="font-semibold text-[#F0F0F0]">
-                          {format(new Date(tx.date), 'dd.MM.yyyy')}
-                        </p>
-                        <p className="text-sm text-[#A3A3A3]">
-                          {format(new Date(tx.date), 'HH:mm:ss')}
-                        </p>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge
-                        variant="outline"
-                        className={`
-                          px-3 py-1 rounded-full font-medium capitalize
-                          bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
-                        `}
-                      >
-                        {tx.type === 'deposit' ? 'Deposit' : 'Withdraw'}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge
-                        variant="outline"
-                        className={`
-                          px-3 py-1 rounded-full font-medium capitalize
-                          bg-blue-500/10 text-blue-500 border border-blue-500/20
-                        `}
-                      >
-                        {tx.category}
-                      </Badge>
-                    </td>
-                  </tr>
-                ))}
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-col">
+                      <span className="text-foreground font-medium theme-transition">{truncateAddress(tx.from)}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-col">
+                      <span className="text-foreground font-medium theme-transition">{truncateAddress(tx.to)}</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-col">
+                      <span className="text-foreground font-medium theme-transition">{formatStringNumber(tx.value)} ETH</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-col">
+                      <span className="text-foreground font-medium theme-transition">{formatStringNumber(tx.txnFee)} ETH</span>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <Badge
+                      variant={
+                        tx.status === 'Success' ? 'default' :
+                        tx.status === 'Failed' ? 'destructive' :
+                        'secondary'
+                      }
+                      className="theme-transition"
+                    >
+                      {t(tx.status.toLowerCase())}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3 text-muted-foreground theme-transition">
+                    {formatDistanceToNow(new Date(tx.date), { addSuffix: true })}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
+                      {t(tx.type)}
+                    </Badge>
+                  </td>
+                  <td className="px-4 py-3">
+                    <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
+                      {t(tx.category)}
+                    </Badge>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

@@ -21,28 +21,30 @@ export const WalletList: React.FC<Props> = ({
 
   return (
     <div className="grid gap-2">
-      <Label htmlFor="wallet-select" className="text-[#F0F0F0]">Select Wallet:</Label>
+      <Label htmlFor="wallet-select" className="text-foreground theme-transition">Select Wallet:</Label>
       <Select 
         value={walletId} 
         onValueChange={onSetWalletId}
       >
         <SelectTrigger 
           id="wallet-select"
-          className="bg-[#2A2F38] text-[#F0F0F0] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded w-full"
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-box-lg w-full theme-transition"
         >
           <SelectValue placeholder="Choose a wallet" />
         </SelectTrigger>
-        <SelectContent className="bg-[#1A1F27] border-[#2A2F38]">
+        <SelectContent className="bg-background border-border theme-transition">
           {wallets.filter(wallet => !wallet.address).map((wallet) => (
             <SelectItem 
               key={wallet.id} 
               value={wallet.id}
-              className="text-[#F0F0F0] hover:bg-[#2A2F38] focus:bg-[#00FFC6] focus:text-[#1A1F27]"
+              className="text-foreground hover:bg-secondary focus:bg-primary focus:text-background theme-transition"
             >
               <div className="flex items-center gap-2">
                 <span>{wallet.name || 'Unnamed Wallet'}</span>
                 {wallet.address && (
-                  <span className="text-[#A3A3A3] text-sm truncate">{wallet.address.slice(0, 6)}...{wallet.address.slice(-4)}</span>
+                  <span className="text-muted-foreground text-sm truncate theme-transition">
+                    {wallet.address.slice(0, 6)}...{wallet.address.slice(-4)}
+                  </span>
                 )}
               </div>
             </SelectItem>

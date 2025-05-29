@@ -17,14 +17,14 @@ export default function TransactionsSection({
 
   return (
     <section 
-      className="space-y-6 p-6 bg-[#1A1F27] rounded-lg border border-[#2A2F38] shadow-lg"
+      className="space-y-6 p-6 bg-background shadow-lg theme-transition"
     >
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-[#F0F0F0]">
+          <h2 className="text-xl font-semibold text-foreground theme-transition">
             {tableTitle}
           </h2>
-          <p className="text-sm text-[#A3A3A3] mt-1">
+          <p className="text-sm text-muted-foreground mt-1 theme-transition">
             {t('transactionCount', {
               count: transactions.length,
               plural: transactions.length !== 1 ? 'ї' : 'я'
@@ -32,9 +32,7 @@ export default function TransactionsSection({
           </p>
         </div>
       </div>
-      <div className="overflow-hidden rounded-lg border border-[#2A2F38]">
-        <TransactionTable transactions={transactions} walletId={walletAddress as string} />
-      </div>
+      <TransactionTable transactions={transactions} walletId={walletAddress as string} />
     </section>
   );
 }

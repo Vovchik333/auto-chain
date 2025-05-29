@@ -35,11 +35,11 @@ const TransactionPage: FC = () => {
     getTransactionById(transactionId as string);
   }, [transactionId, getTransactionById]);
 
-  const formatEth = (value: number) => {
+  const formatEth = (value: string) => {
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 4,
       maximumFractionDigits: 8
-    }).format(value);
+    }).format(Number(value));
   };
 
   if (!selectedTransaction) {
@@ -48,27 +48,27 @@ const TransactionPage: FC = () => {
         <div className="flex items-center space-x-3 mb-6">
           <Link href="/transactions">
             <Button variant="ghost" size="icon" className="h-9 w-9">
-              <ArrowLeft className="h-5 w-5 text-[#A3A3A3]" />
+              <ArrowLeft className="h-5 w-5 text-muted-foreground theme-transition" />
             </Button>
           </Link>
-          <h1 className="text-xl font-semibold text-[#F0F0F0]">{t('title')}</h1>
+          <h1 className="text-xl font-semibold text-foreground theme-transition">{t('title')}</h1>
         </div>
         
         <div className="space-y-6">
-          <Card className="border-[#2A2F3A] bg-[#1A1F27]">
-            <CardHeader className="border-b border-[#2A2F3A] bg-[#232936]">
+          <Card>
+            <CardHeader className="border-b border-border bg-secondary/50 theme-transition">
               <div className="flex items-center space-x-2">
-                <Skeleton className="h-8 w-8 rounded-full bg-[#353B45]" />
-                <Skeleton className="h-6 w-32 bg-[#353B45]" />
+                <Skeleton className="h-8 w-8 rounded-full" />
+                <Skeleton className="h-6 w-32" />
               </div>
             </CardHeader>
             <CardContent className="p-6 space-y-6">
-              <Skeleton className="h-6 w-3/4 bg-[#353B45]" />
-              <Skeleton className="h-6 w-1/2 bg-[#353B45]" />
-              <Skeleton className="h-6 w-2/3 bg-[#353B45]" />
+              <Skeleton className="h-6 w-3/4" />
+              <Skeleton className="h-6 w-1/2" />
+              <Skeleton className="h-6 w-2/3" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Skeleton className="h-24 bg-[#353B45]" />
-                <Skeleton className="h-24 bg-[#353B45]" />
+                <Skeleton className="h-24" />
+                <Skeleton className="h-24" />
               </div>
             </CardContent>
           </Card>
@@ -83,12 +83,12 @@ const TransactionPage: FC = () => {
         <div className="flex items-center space-x-3">
           <Link href="/transactions">
             <Button variant="ghost" size="icon" className="h-9 w-9">
-              <ArrowLeft className="h-5 w-5 text-[#A3A3A3]" />
+              <ArrowLeft className="h-5 w-5 text-muted-foreground theme-transition" />
             </Button>
           </Link>
           <div>
-            <h1 className="text-xl font-semibold text-[#F0F0F0]">{t('title')}</h1>
-            <p className="text-sm text-[#A3A3A3]">
+            <h1 className="text-xl font-semibold text-foreground theme-transition">{t('title')}</h1>
+            <p className="text-sm text-muted-foreground theme-transition">
               {formatDistanceToNow(new Date(selectedTransaction.date), { addSuffix: true })}
             </p>
           </div>
@@ -96,10 +96,10 @@ const TransactionPage: FC = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-9 w-9">
-              <MoreVertical className="h-5 w-5 text-[#A3A3A3]" />
+              <MoreVertical className="h-5 w-5 text-muted-foreground theme-transition" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-[#2A2F38] border-[#353B45]">
+          <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => window.open(`https://etherscan.io/tx/${selectedTransaction.hash}`, '_blank')}>
               <ExternalLink className="w-4 h-4 mr-2" />
               {t('viewOnEtherscan')}
@@ -112,85 +112,64 @@ const TransactionPage: FC = () => {
         </DropdownMenu>
       </div>
 
-      <div
-        className="space-y-6"
-      >
-        <Card className="border-[#2A2F3A] bg-[#1A1F27]">
+      <div className="space-y-6">
+        <Card>
+          <CardHeader className="border-b border-border bg-secondary/50 theme-transition">
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center theme-transition">
+                <span className="text-primary theme-transition">TX</span>
+              </div>
+              <h2 className="text-lg font-semibold text-foreground theme-transition">
+                {t('transactionDetails')}
+              </h2>
+            </div>
+          </CardHeader>
           <CardContent className="p-6 space-y-6">
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('value')}</label>
-                <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
-                  <p className="font-mono text-sm text-[#F0F0F0]">
-                    {formatStringNumber(selectedTransaction.value)} ETH
-                  </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('from')}</label>
+                  <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-box-lg border border-border gap-2 theme-transition">
+                    <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.from}</p>
+                    <CopyButton text={selectedTransaction.from} />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('to')}</label>
+                  <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-box-lg border border-border gap-2 theme-transition">
+                    <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.to}</p>
+                    <CopyButton text={selectedTransaction.to} />
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('hash')}</label>
-                <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
-                  <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.hash}</p>
-                  <CopyButton text={selectedTransaction.hash} />
+
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('value')}</label>
+                  <div className="bg-secondary/50 p-3 rounded-box-lg border border-border theme-transition">
+                    <p className="text-foreground font-medium theme-transition">
+                      {formatEth(selectedTransaction.value)} ETH
+                    </p>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('date')}</label>
+                  <div className="bg-secondary/50 p-3 rounded-box-lg border border-border theme-transition">
+                    <p className="text-foreground theme-transition">
+                      {format(new Date(selectedTransaction.date), 'PPpp')}
+                    </p>
+                  </div>
                 </div>
               </div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('from')}</label>
-                    <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A] gap-2">
-                      <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.from}</p>
-                      <CopyButton text={selectedTransaction.from} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('to')}</label>
-                    <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A] gap-2">
-                      <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.to}</p>
-                      <CopyButton text={selectedTransaction.to} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('fee')}</label>
-                    <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
-                      <p className="font-semibold text-[#F0F0F0]">{formatStringNumber(selectedTransaction.txnFee)} ETH</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('dateTime')}</label>
-                    <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
-                      <p className="font-semibold text-[#F0F0F0]">
-                        {format(new Date(selectedTransaction.date), 'MMMM dd, yyyy')}
-                      </p>
-                      <p className="text-sm text-[#A3A3A3]">
-                        {format(new Date(selectedTransaction.date), 'HH:mm:ss')} {t('utc')}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('status')}</label>
-                    <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
-                      <p className="flex gap-2 font-semibold text-[#F0F0F0]">
-                        {selectedTransaction.status}
-                      </p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('type')}</label>
-                    <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
-                      <p className="flex gap-2 font-semibold text-[#F0F0F0]">
-                      {selectedTransaction.category}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('hash')}</label>
+              <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-box-lg border border-border gap-2 theme-transition">
+                <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.hash}</p>
+                <CopyButton text={selectedTransaction.hash} />
               </div>
             </div>
           </CardContent>

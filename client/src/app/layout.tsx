@@ -1,3 +1,5 @@
+// 'use client';
+
 import { Header } from "@/components/Header";
 import type { Metadata } from "next";
 import { Roboto } from 'next/font/google';
@@ -6,17 +8,21 @@ import { ClientProvider } from "@/components/ClientProviders";
 import { AppErrorBoundary } from "@/components/Erorr/AppErrorBoundary";
 import { Toaster } from "sonner";
 import { TranslationsProvider } from '@/components/providers/TranslationsProvider';
+import { ThemeProvider } from '@/contexts/theme.context';
 
 const roboto = Roboto({
-  subsets: ['latin'],
+  subsets: ['latin', 'cyrillic'],
   weight: ['400', '700'],
   variable: '--font-roboto'
 });
 
-export const metadata: Metadata = {
-  title: 'Auto Chain',
-  description: 'Automated management system',
-};
+// export const metadata: Metadata = {
+//   title: 'Auto Chain',
+//   description: 'Automated blockchain management system',
+//   icons: {
+//     icon: '/favicon.ico',
+//   },
+// };
 
 export default function RootLayout({
   children,
@@ -24,25 +30,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${roboto.variable} bg-[#1A1F27]`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${roboto.variable} bg-background theme-transition`}>
         <AppErrorBoundary>
           <ClientProvider>
             <TranslationsProvider>
-              <Header />
-              <main className="p-8">
-                {children}
-              </main>
+              <ThemeProvider>
+                <Header />
+                <main className="p-8">
+                  {children}
+                </main>
+              </ThemeProvider>
             </TranslationsProvider>
           </ClientProvider>
           <Toaster 
-            theme="dark" 
+            theme="system"
             position="top-right"
             toastOptions={{
+              className: "rounded-box-lg theme-transition",
               style: {
-                background: '#1A1F27',
-                border: '1px solid #2A2F38',
-                color: '#F0F0F0',
+                background: 'var(--background)',
+                border: '1px solid var(--border)',
+                color: 'var(--foreground)',
               }
             }}
           />

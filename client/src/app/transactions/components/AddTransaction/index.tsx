@@ -14,10 +14,12 @@ import { RadioGroup } from "@/components/ui/radio-group";
 import { CategorySelect } from "@/components/ui/category-select";
 import { DEFAULT_CATEGORIES } from "@/common/types/category";
 import { TransactionTypeCard } from "../TransactionTypeCard";
+import { useTranslations } from 'next-intl';
 
 type TransactionType = 'deposit' | 'withdraw';
 
 export default function AddTransactionButton() {
+  const t = useTranslations('transaction');
   const { createTx, error: txError, resetError } = useTransactionStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [payload, setPayload] = useState<CreateTxDto>({
@@ -96,65 +98,70 @@ export default function AddTransactionButton() {
       >
         <TransactionTypeCard 
           type="deposit" 
-          label="Deposit" 
+          label={t('deposit')} 
           isSelected={payload.type === 'deposit'} 
         />
         <TransactionTypeCard 
           type="withdraw" 
-          label="Withdraw" 
+          label={t('withdraw')} 
           isSelected={payload.type === 'withdraw'} 
         />
       </RadioGroup>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Value (ETH)</Label>
+        <div className="space-y-2.5">
+          <Label className="text-foreground theme-transition">{t('amount')} (ETH)</Label>
           <Input
             type="number"
             placeholder="0.0"
             value={payload.value}
             onChange={handleSetValue}
+            className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
           />
         </div>
-        <div className="space-y-2">
-          <Label>Fee (ETH)</Label>
+        <div className="space-y-2.5">
+          <Label className="text-foreground theme-transition">{t('fee')} (ETH)</Label>
           <Input
             type="number"
             placeholder="0.0"
             value={payload.txnFee}
             onChange={handleSetFee}
+            className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
           />
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label>From Address</Label>
+      <div className="space-y-2.5">
+        <Label className="text-foreground theme-transition">{t('from')}</Label>
         <Input
           placeholder="0x..."
           value={payload.from}
           onChange={handleSetFrom}
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>To Address</Label>
+      <div className="space-y-2.5">
+        <Label className="text-foreground theme-transition">{t('to')}</Label>
         <Input
           placeholder="0x..."
           value={payload.to}
           onChange={handleSetTo}
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
         />
       </div>
 
-      <div className="space-y-2">
-        <Label>Category</Label>
+      <div className="space-y-2.5">
+        <Label className="text-foreground theme-transition">{t('category')}</Label>
         <CategorySelect
           categories={DEFAULT_CATEGORIES}
           value={payload.category}
           onValueChange={handleSetCategory}
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl theme-transition"
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <WalletList 
           walletId={payload.walletId} 
           onSetWalletId={handleSetWalletId} 
@@ -166,20 +173,23 @@ export default function AddTransactionButton() {
   return (
     <>
       <SecondaryButton onClick={handleImportClick}>
-        Add Transaction
+        {t('addTransaction')}
       </SecondaryButton>
 
       <ModalWrapper
-        title="Add Transaction"
+        title={t('addTransaction')}
         isOpen={isModalOpen}
         modalContent={modalContent}
         footerButtons={
           <>
             <SecondaryButton onClick={() => setIsModalOpen(false)}>
-              Cancel
+              {t('cancel')}
             </SecondaryButton>
-            <PrimaryButton onClick={handleSubmit}>
-              Add Transaction
+            <PrimaryButton 
+              onClick={handleSubmit}
+              disabled={!payload.walletId || !payload.from || !payload.to || payload.value === '0'}
+            >
+              {t('add')}
             </PrimaryButton>
           </>
         }

@@ -5,6 +5,7 @@ import { ModalWrapper } from "../ModalWrapper";
 import { PrimaryButton } from "../PrimaryButton";
 import { CreateWalletFromBlockchainDto } from "@/common/types/wallet/create-wallet-from-blockchain.dto";
 import { useTranslations } from 'next-intl';
+import { AlertCircle } from "lucide-react";
 
 type Props = {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export default function EthAddressModalContent({
   const handleSetAddress = (e: ChangeEvent<HTMLInputElement>) => {
     const address = e.target.value;
     setPayload(prev => ({...prev, address}));
+    if (error) setError("");
   }
 
   const handleSetName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,25 +57,46 @@ export default function EthAddressModalContent({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       modalContent={
-        <div className="grid gap-4 py-2">
-          <div className="grid gap-2">
-            <Label htmlFor="eth-address" className="text-[#F0F0F0]">{t('address')}:</Label>
-            <Input
-              id="eth-address"
-              value={payload.address}
-              onChange={handleSetAddress}
-              placeholder="0x..."
-              className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
-            />
-            <Label htmlFor="wallet-name" className="text-[#F0F0F0]">{t('name')}:</Label>
-            <Input
-              id="wallet-name"
-              value={payload.name}
-              onChange={handleSetName}
-              placeholder={t('walletNamePlaceholder')}
-              className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
-            />
-            {error && <p className="text-sm text-red-600">{error}</p>}
+        <div className="space-y-6 py-2">
+          <div className="space-y-4">
+            <div className="space-y-2.5">
+              <Label 
+                htmlFor="eth-address" 
+                className="text-foreground theme-transition"
+              >
+                {t('address')}:
+              </Label>
+              <Input
+                id="eth-address"
+                value={payload.address}
+                onChange={handleSetAddress}
+                placeholder="0x..."
+                className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
+              />
+            </div>
+            
+            <div className="space-y-2.5">
+              <Label 
+                htmlFor="wallet-name" 
+                className="text-foreground theme-transition"
+              >
+                {t('name')}:
+              </Label>
+              <Input
+                id="wallet-name"
+                value={payload.name}
+                onChange={handleSetName}
+                placeholder={t('walletNamePlaceholder')}
+                className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
+              />
+            </div>
+
+            {error && (
+              <div className="flex items-center gap-2.5 text-destructive text-sm theme-transition">
+                <AlertCircle className="w-4 h-4" />
+                {error}
+              </div>
+            )}
           </div>
         </div>
       }

@@ -7,32 +7,34 @@ import { PageContentTitle } from '@/components/PageContentTitle';
 import { PageContentHeader } from '@/components/PageContentHeader';
 import { useTranslations } from 'next-intl';
 
-interface SuggestionsHeaderProps {
+type Props = {
   wallets: WalletDto[];
   onWalletSelect: (walletIds: string[]) => void;
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
-export const SuggestionsHeader: React.FC<SuggestionsHeaderProps> = ({
+export const SuggestionsHeader: React.FC<Props> = ({
   wallets,
   onWalletSelect,
-  isLoading = false,
+  isLoading
 }) => {
   const t = useTranslations('suggestions');
 
   return (
-    <PageContentHeader className="flex justify-between items-center bg-[#1A1F27] p-6">
-      <div>
-        <PageContentTitle text={t('title')} />
-        <p className="text-[#A3A3A3] text-sm mt-1">
-          {t('description')}
-        </p>
+    <PageContentHeader>
+      <div className="flex justify-between items-center space-y-6">
+        <div>
+          <PageContentTitle text={t('title')} />
+          <p className="text-sm text-muted-foreground mt-1 theme-transition">
+            {t('description')}
+          </p>
+        </div>
+        <WalletSelector 
+          wallets={wallets} 
+          onSelect={onWalletSelect}
+          disabled={isLoading}
+        />
       </div>
-      <WalletSelector 
-        wallets={wallets}
-        onSelect={onWalletSelect}
-        disabled={isLoading}
-      />
     </PageContentHeader>
   );
 };

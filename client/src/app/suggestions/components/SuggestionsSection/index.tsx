@@ -5,6 +5,7 @@ import { Wallet } from 'lucide-react';
 import { WalletDto } from '@/common/types/wallet/wallet.dto';
 import { TruncatedText } from '@/components/TruncatedText';
 import { useTranslations } from 'next-intl';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Props {
   diversification: DiversificationDto;
@@ -22,68 +23,77 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
   return (
     <div>
       <div className="grid gap-4 md:grid-cols-2 mb-6">
-        <div className="bg-[#2A2F38] p-6 rounded-2xl border border-[#1A1F27] flex flex-col">
-          <span className="text-[#A3A3A3] text-sm mb-2">{t('stats.totalAmount')}</span>
-          <span className="text-[#00FFC6] text-2xl font-semibold">{total} ETH</span>
-        </div>
-        <div className="bg-[#2A2F38] p-6 rounded-2xl border border-[#1A1F27] flex flex-col">
-          <span className="text-[#A3A3A3] text-sm mb-2">{t('stats.targetPerWallet')}</span>
-          <span className="text-[#00FFC6] text-2xl font-semibold">{target} ETH</span>
-        </div>
+        <Card>
+          <CardContent className="p-6">
+            <span className="text-muted-foreground text-sm mb-2 block theme-transition">{t('stats.totalAmount')}</span>
+            <span className="text-primary text-2xl font-semibold theme-transition">{total} ETH</span>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <span className="text-muted-foreground text-sm mb-2 block theme-transition">{t('stats.targetPerWallet')}</span>
+            <span className="text-primary text-2xl font-semibold theme-transition">{target} ETH</span>
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="bg-[#2A2F38] rounded-2xl border border-[#1A1F27] p-6 mb-6">
-        <h2 className="text-xl font-semibold text-[#F0F0F0] mb-4 flex items-center">
-          <Wallet className="w-5 h-5 mr-2 text-[#00FFC6]" />
-          {t('wallets.title')}
-        </h2>
-        <div className="grid gap-3">
-          {involvedWallets.map((wallet, index) => (
-            <div
-              key={wallet.id}
-              className="bg-[#1A1F27] p-4 rounded-xl border border-[#353B43] flex items-center justify-between"
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Wallet className="w-5 h-5 mr-2 text-primary theme-transition" />
+            {t('wallets.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3">
+            {involvedWallets.map((wallet, index) => (
+              <div
+                key={wallet.id}
+                className="bg-secondary/50 p-4 rounded-box-lg border border-border flex items-center justify-between theme-transition hover:border-primary"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center theme-transition">
+                    <span className="text-primary font-medium theme-transition">{index + 1}</span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-foreground font-medium text-sm theme-transition">{wallet.name}</span>
+                    <TruncatedText text={wallet.address} />
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex flex-col items-end gap-3">
+                    <span className="text-muted-foreground text-xs theme-transition">{t('stats.currentBalance')}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <svg 
+              className="w-5 h-5 mr-2 text-primary theme-transition" 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#00FFC6]/10 flex items-center justify-center">
-                  <span className="text-[#00FFC6] font-medium">{index + 1}</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[#F0F0F0] font-medium text-sm">{wallet.name}</span>
-                  <TruncatedText text={wallet.address} />
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="flex flex-col items-end gap-3">
-                  <span className="text-[#A3A3A3] text-xs">{t('stats.currentBalance')}</span>
-                  {/* <span className="text-[#00FFC6] font-semibold">
-                    {wallet.statistics.balance} ETH
-                  </span> */}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-[#2A2F38] rounded-2xl border border-[#1A1F27] p-6">
-        <h2 className="text-xl font-semibold text-[#F0F0F0] mb-6 flex items-center">
-          <svg 
-            className="w-5 h-5 mr-2 text-[#00FFC6]" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" 
-            />
-          </svg>
-          {t('transfers.title')}
-        </h2>
-        <SuggestionList suggestions={transfers} />
-      </div>
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" 
+              />
+            </svg>
+            {t('transfers.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <SuggestionList suggestions={transfers} />
+        </CardContent>
+      </Card>
     </div>
   );
 };

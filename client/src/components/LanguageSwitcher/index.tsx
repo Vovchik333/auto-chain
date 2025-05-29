@@ -34,27 +34,27 @@ export function LanguageSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button 
-          variant="outline" 
-          size="sm"
-          className="flex items-center gap-2 bg-[#2A2F38] border-[#3A3F48] hover:bg-[#3A3F48] hover:border-[#4A4F58]"
+          variant="ghost" 
+          size="icon"
+          className="w-9 h-9 text-foreground hover:text-primary hover:bg-transparent theme-transition hover-effect"
         >
-          <span className="text-sm font-medium text-[#F0F0F0]">
+          <span className="text-base">
             {currentLanguage.flag}
           </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end"
-        className="bg-[#2A2F38] border-[#3A3F48]"
+        className="rounded-box-lg bg-background border-border shadow-lg backdrop-blur-sm theme-transition"
       >
         {Object.entries(languages).map(([key, { label, flag }]) => (
           <DropdownMenuItem
             key={key}
             onClick={() => switchLanguage(key)}
-            className={`flex items-center gap-2 text-[#F0F0F0] ${
+            className={`flex items-center gap-2 theme-transition ${
               locale === key 
-                ? 'bg-[#3A3F48] font-medium' 
-                : 'hover:bg-[#3A3F48] hover:text-[#00FFC6]'
+                ? 'bg-secondary/50 text-primary font-medium' 
+                : 'text-foreground hover:text-primary hover:bg-secondary/50'
             }`}
           >
             <span className="text-base">{flag}</span>

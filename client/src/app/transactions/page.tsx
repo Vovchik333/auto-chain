@@ -7,7 +7,7 @@ import { useUserStore } from "@/stores/user/user.store";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { useEffect } from "react";
 import TransactionsHeader from "./components/TransactionHeader";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 function Transactions() {
@@ -37,49 +37,35 @@ function Transactions() {
   }, [user, wallets]);
 
   return (
-    <div
-      className="min-h-screen bg-[#1A1F27]"
-    >
+    <div className="min-h-screen bg-background theme-transition">
       <div className="mx-auto space-y-6">
         <TransactionsHeader />
         {isLoading ? (
-          <div
-            className="flex items-center justify-center py-12"
-          >
-            <div className="flex items-center gap-2 text-[#00FFC6]">
+          <div className="flex items-center justify-center py-12">
+            <div className="flex items-center gap-2 text-primary theme-transition">
               <Loader2 className="w-6 h-6 animate-spin" />
               <span>{t('loading')}</span>
             </div>
           </div>
         ) : transactions.length === 0 ? (
-          <div
-            className="flex flex-col items-center justify-center py-12 text-center"
-          >
-            <div className="w-16 h-16 rounded-full bg-[#2A2F38] flex items-center justify-center mb-4">
-              <svg
-                className="w-8 h-8 text-[#00FFC6]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
+          <div className="flex flex-col items-center justify-center p-8 text-center rounded-box-xl bg-secondary border-border theme-transition">
+            <div className="w-16 h-16 rounded-full bg-background flex items-center justify-center mb-4 theme-transition">
+              <Plus className="w-8 h-8 text-primary theme-transition" />
             </div>
-            <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">{t('noTransactions')}</h3>
-            <p className="text-[#A3A3A3] max-w-sm">
+            <h3 className="text-xl font-semibold text-foreground mb-2 theme-transition">
+              {t('noTransactions')}
+            </h3>
+            <p className="text-muted-foreground max-w-sm theme-transition">
               {t('noTransactionsDescription')}
             </p>
           </div>
         ) : (
-          <TransactionsSection 
-            tableTitle={t('allTransactions')} 
-            transactions={transactions} 
-          />
+          <div className="rounded-box-xl bg-background theme-transition">
+            <TransactionsSection 
+              tableTitle={t('allTransactions')} 
+              transactions={transactions} 
+            />
+          </div>
         )}
       </div>
     </div>
