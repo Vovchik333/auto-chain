@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useParams } from 'next/navigation';
@@ -10,7 +10,6 @@ import {
   MoreVertical, 
   Copy, 
   ExternalLink, 
-  CheckCircle2, 
 } from 'lucide-react';
 import Link from 'next/link';
 import {
@@ -20,10 +19,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { SecondaryButton } from '@/components/SecondaryButton';
 import { CopyButton } from '@/components/CopyButton';
+import { formatStringNumber } from '@/lib/string.utils';
 
 const TransactionPage: FC = () => {
   const params = useParams();
@@ -122,7 +120,7 @@ const TransactionPage: FC = () => {
                 <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Value</label>
                 <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                   <p className="font-mono text-sm text-[#F0F0F0]">
-                    {formatEth(selectedTransaction.value)} ETH
+                    {formatStringNumber(selectedTransaction.value)} ETH
                   </p>
                 </div>
               </div>
@@ -157,7 +155,7 @@ const TransactionPage: FC = () => {
                   <div>
                     <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Transaction Fee</label>
                     <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
-                      <p className="font-semibold text-[#F0F0F0]">{formatEth(selectedTransaction.txnFee)} ETH</p>
+                      <p className="font-semibold text-[#F0F0F0]">{formatStringNumber(selectedTransaction.txnFee)} ETH</p>
                     </div>
                   </div>
 

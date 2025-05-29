@@ -65,7 +65,7 @@ const Dashboard = () => {
         tx.date && new Date(tx.date) <= date
       );
       
-      return txsBeforeDate.reduce((sum, tx) => sum + (tx.value || 0), 0);
+      return txsBeforeDate.reduce((sum, tx) => sum + (Number(tx.value) || 0), 0);
     });
 
     return {

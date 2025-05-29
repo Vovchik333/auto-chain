@@ -1,0 +1,54 @@
+{
+  "common": {
+    "language": "Language",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "navigation": {
+    "overview": "Overview",
+    "wallets": "Wallets",
+    "transactions": "Transactions",
+    "profile": "Profile",
+    "suggestions": "Suggestions",
+    "signOut": "Sign Out"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot Password?",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?"
+  },
+  "wallet": {
+    "balance": "Balance",
+    "address": "Address",
+    "transactions": "Transactions",
+    "send": "Send",
+    "receive": "Receive",
+    "import": "Import Wallet",
+    "create": "Create Wallet",
+    "name": "Wallet Name"
+  },
+  "transaction": {
+    "amount": "Amount",
+    "from": "From",
+    "to": "To",
+    "fee": "Transaction Fee",
+    "status": "Status",
+    "date": "Date",
+    "type": "Type",
+    "category": "Category",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw"
+  },
+  "stats": {
+    "totalSent": "Total Sent",
+    "totalReceived": "Total Received",
+    "totalFees": "Total Fees",
+    "transactionCount": "Transaction Count"
+  }
+} 

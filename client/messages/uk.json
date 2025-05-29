@@ -1,0 +1,54 @@
+{
+  "common": {
+    "language": "Мова",
+    "loading": "Завантаження...",
+    "error": "Помилка",
+    "success": "Успішно"
+  },
+  "navigation": {
+    "overview": "Огляд",
+    "wallets": "Гаманці",
+    "transactions": "Транзакції",
+    "profile": "Профіль",
+    "suggestions": "Пропозиції",
+    "signOut": "Вийти"
+  },
+  "auth": {
+    "signIn": "Увійти",
+    "signUp": "Зареєструватися",
+    "email": "Електронна пошта",
+    "password": "Пароль",
+    "confirmPassword": "Підтвердіть пароль",
+    "forgotPassword": "Забули пароль?",
+    "alreadyHaveAccount": "Вже маєте акаунт?",
+    "dontHaveAccount": "Не маєте акаунту?"
+  },
+  "wallet": {
+    "balance": "Баланс",
+    "address": "Адреса",
+    "transactions": "Транзакції",
+    "send": "Відправити",
+    "receive": "Отримати",
+    "import": "Імпортувати гаманець",
+    "create": "Створити гаманець",
+    "name": "Назва гаманця"
+  },
+  "transaction": {
+    "amount": "Сума",
+    "from": "Від",
+    "to": "До",
+    "fee": "Комісія",
+    "status": "Статус",
+    "date": "Дата",
+    "type": "Тип",
+    "category": "Категорія",
+    "deposit": "Поповнення",
+    "withdraw": "Виведення"
+  },
+  "stats": {
+    "totalSent": "Всього відправлено",
+    "totalReceived": "Всього отримано",
+    "totalFees": "Всього комісій",
+    "transactionCount": "Кількість транзакцій"
+  }
+} 
