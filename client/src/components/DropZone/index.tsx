@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   onSetFiles: (files: File[]) => void;
@@ -8,6 +9,7 @@ type Props = {
 export const DropZone: React.FC<Props> = ({
   onSetFiles
 }) => {
+  const t = useTranslations('dropZone');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [dragOver, setDragOver] = useState(false);
 
@@ -43,7 +45,7 @@ export const DropZone: React.FC<Props> = ({
       onClick={() => fileInputRef.current?.click()}
     >
       <p className="text-sm text-[#A3A3A3]">
-        Drag & drop CSV file here or click to browse
+        {t('dragAndDrop')}
       </p>
       <input
         ref={fileInputRef}

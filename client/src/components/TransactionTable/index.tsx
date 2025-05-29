@@ -8,6 +8,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useTranslations } from 'next-intl';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,6 +42,7 @@ const truncateAddress = (address: string) => {
 const ITEMS_PER_PAGE = 10;
 
 export default function TransactionTable({ transactions, walletId }: Props) {
+  const t = useTranslations('transaction');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
@@ -106,9 +108,9 @@ export default function TransactionTable({ transactions, walletId }: Props) {
         <div className="w-16 h-16 rounded-full bg-[#2A2F38] flex items-center justify-center mb-4">
           <ArrowUpRight className="w-8 h-8 text-[#00FFC6] rotate-45" />
         </div>
-        <h3 className="text-lg font-medium text-[#F0F0F0] mb-2">No Transactions Yet</h3>
+        <h3 className="text-lg font-medium text-[#F0F0F0] mb-2">{t('noTransactions')}</h3>
         <p className="text-sm text-[#9CA3AF] text-center">
-          Your transactions will appear here once you start making transfers.
+          {t('noTransactionsDescription')}
         </p>
       </div>
     );
@@ -123,7 +125,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
           <div className="relative flex-1 sm:flex-none sm:w-64">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
             <Input
-              placeholder="Search transactions..."
+              placeholder={t('searchTransactions')}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -136,14 +138,14 @@ export default function TransactionTable({ transactions, walletId }: Props) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="bg-[#2A2F38] border-[#353B45] text-[#F0F0F0] hover:bg-[#353B45]">
                 <Filter className="w-4 h-4 mr-2" />
-                {statusFilter === 'all' ? 'All Status' : statusFilter}
+                {statusFilter === 'all' ? t('filterByStatus') : t(statusFilter.toLowerCase())}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-[#2A2F38] border-[#353B45] text-[#F0F0F0]">
-              <DropdownMenuItem onClick={() => setStatusFilter('all')}>All Status</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter('Success')}>Success</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter('Pending')}>Pending</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter('Failed')}>Failed</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter('all')}>{t('filterByStatus')}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter('Success')}>{t('completed')}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter('Pending')}>{t('pending')}</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter('Failed')}>{t('failed')}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -152,7 +154,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
           <ExportToCSVButton walletId={walletId} />
           {searchTerm && (
             <Badge variant="outline" className="bg-[#2A2F38] text-[#F0F0F0]">
-              Search results
+              {t('searchResults')}
             </Badge>
           )}
         </div>
@@ -163,27 +165,27 @@ export default function TransactionTable({ transactions, walletId }: Props) {
           <table className="min-w-full table-auto text-sm">
             <thead className="bg-[#232936] border-b border-[#2A2F3A]">
               <tr className="text-left font-medium text-[#CFCFCF]">
-                <th className="px-4 py-3">Transaction</th>
-                <th className="px-4 py-3">From</th>
-                <th className="px-4 py-3">To</th>
+                <th className="px-4 py-3">{t('transaction')}</th>
+                <th className="px-4 py-3">{t('from')}</th>
+                <th className="px-4 py-3">{t('to')}</th>
                 <th 
                   className="px-4 py-3 cursor-pointer hover:text-[#00FFC6] transition-colors"
                   onClick={() => handleSort('value')}
                 >
                   <div className="flex items-center gap-1">
-                    Value
+                    {t('amount')}
                     {sortField === 'value' && (
                       sortOrder === 'desc' ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />
                     )}
                   </div>
                 </th>
-                <th className="px-4 py-3">Fee</th>
+                <th className="px-4 py-3">{t('fee')}</th>
                 <th 
                   className="px-4 py-3 cursor-pointer hover:text-[#00FFC6] transition-colors"
                   onClick={() => handleSort('status')}
                 >
                   <div className="flex items-center gap-1">
-                    Status
+                    {t('status')}
                     {sortField === 'status' && (
                       sortOrder === 'desc' ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />
                     )}
@@ -194,14 +196,14 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                   onClick={() => handleSort('date')}
                 >
                   <div className="flex items-center gap-1">
-                    Date
+                    {t('date')}
                     {sortField === 'date' && (
                       sortOrder === 'desc' ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />
                     )}
                   </div>
                 </th>
-                <th className="px-4 py-3">Type</th>
-                <th className="px-4 py-3">Category</th>
+                <th className="px-4 py-3">{t('type')}</th>
+                <th className="px-4 py-3">{t('category')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#2A2F3A]">

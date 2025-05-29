@@ -4,6 +4,7 @@ import { ChangeEvent, Dispatch, ReactNode, SetStateAction, useState } from "reac
 import { ModalWrapper } from "../ModalWrapper";
 import { PrimaryButton } from "../PrimaryButton";
 import { CreateWalletFromBlockchainDto } from "@/common/types/wallet/create-wallet-from-blockchain.dto";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   isOpen: boolean;
@@ -16,6 +17,7 @@ export default function EthAddressModalContent({
   onOpenChange,
   onSubmit,
 }: Props) {
+  const t = useTranslations('wallet');
   const [payload, setPayload] = useState<Omit<CreateWalletFromBlockchainDto, 'userId'>>({
     address: '',
     name: ''
@@ -37,7 +39,7 @@ export default function EthAddressModalContent({
 
   const handleSubmit = () => {
     if (!isValidEthAddress(payload.address)) {
-      setError("Invalid Ethereum address");
+      setError(t('invalidAddress'));
       return;
     }
     onSubmit(payload);
@@ -49,13 +51,13 @@ export default function EthAddressModalContent({
 
   return (
     <ModalWrapper 
-      title="Wallet"
+      title={t('importWallet')}
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       modalContent={
         <div className="grid gap-4 py-2">
           <div className="grid gap-2">
-            <Label htmlFor="eth-address" className="text-[#F0F0F0]">Address:</Label>
+            <Label htmlFor="eth-address" className="text-[#F0F0F0]">{t('address')}:</Label>
             <Input
               id="eth-address"
               value={payload.address}
@@ -63,12 +65,12 @@ export default function EthAddressModalContent({
               placeholder="0x..."
               className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
             />
-            <Label htmlFor="wallet-name" className="text-[#F0F0F0]">Name:</Label>
+            <Label htmlFor="wallet-name" className="text-[#F0F0F0]">{t('name')}:</Label>
             <Input
               id="wallet-name"
               value={payload.name}
               onChange={handleSetName}
-              placeholder="Cosmonaut"
+              placeholder={t('walletNamePlaceholder')}
               className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
             />
             {error && <p className="text-sm text-red-600">{error}</p>}
@@ -77,7 +79,7 @@ export default function EthAddressModalContent({
       }
       footerButtons={
         <PrimaryButton onClick={handleSubmit}>
-          Import
+          {t('import')}
         </PrimaryButton>
       }
     />

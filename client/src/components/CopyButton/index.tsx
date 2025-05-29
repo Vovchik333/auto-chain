@@ -2,6 +2,7 @@ import { CheckCircle2, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { SecondaryButton } from "../SecondaryButton";
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   text: string;
@@ -12,12 +13,13 @@ export const CopyButton: React.FC<Props> = ({
   text,
   isPreventDefault = false,
 }) => {
+  const t = useTranslations('common');
   const [copied, setCopied] = useState<boolean>(false);
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
     setCopied(true);
-    toast.success('Copied to clipboard');
+    toast.success(t('copiedToClipboard'));
     setTimeout(() => setCopied(false), 2000);
   };
 

@@ -3,7 +3,16 @@
     "language": "Мова",
     "loading": "Завантаження...",
     "error": "Помилка",
-    "success": "Успішно"
+    "success": "Успішно",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "edit": "Редагувати",
+    "create": "Створити",
+    "submit": "Підтвердити",
+    "confirm": "Підтвердити",
+    "back": "Назад",
+    "copiedToClipboard": "Скопійовано в буфер обміну"
   },
   "navigation": {
     "overview": "Огляд",
@@ -21,7 +30,11 @@
     "confirmPassword": "Підтвердіть пароль",
     "forgotPassword": "Забули пароль?",
     "alreadyHaveAccount": "Вже маєте акаунт?",
-    "dontHaveAccount": "Не маєте акаунту?"
+    "dontHaveAccount": "Немає акаунту?",
+    "welcomeBack": "Ласкаво просимо",
+    "createAccount": "Створити акаунт",
+    "rememberMe": "Запам'ятати мене",
+    "passwordRequirements": "Пароль повинен містити щонайменше 8 символів"
   },
   "wallet": {
     "balance": "Баланс",
@@ -29,9 +42,20 @@
     "transactions": "Транзакції",
     "send": "Відправити",
     "receive": "Отримати",
-    "import": "Імпортувати гаманець",
+    "import": "Імпортувати",
     "create": "Створити гаманець",
-    "name": "Назва гаманця"
+    "name": "Назва",
+    "totalBalance": "Загальний баланс",
+    "addNew": "Додати новий гаманець",
+    "copyAddress": "Копіювати адресу",
+    "addressCopied": "Адресу скопійовано",
+    "importFromJson": "Імпорт з JSON",
+    "exportToJson": "Експорт в JSON",
+    "deleteWallet": "Видалити гаманець",
+    "confirmDelete": "Ви впевнені, що хочете видалити цей гаманець?",
+    "importWallet": "Імпортувати гаманець",
+    "walletNamePlaceholder": "Космонавт",
+    "invalidAddress": "Невірна Ethereum адреса"
   },
   "transaction": {
     "amount": "Сума",
@@ -43,12 +67,90 @@
     "type": "Тип",
     "category": "Категорія",
     "deposit": "Поповнення",
-    "withdraw": "Виведення"
+    "withdraw": "Виведення",
+    "pending": "В обробці",
+    "completed": "Завершено",
+    "failed": "Помилка",
+    "noTransactions": "Немає транзакцій",
+    "noTransactionsDescription": "Ваші транзакції з'являться тут, коли ви почнете здійснювати перекази.",
+    "filterByDate": "Фільтр за датою",
+    "filterByType": "Фільтр за типом",
+    "filterByStatus": "Всі статуси",
+    "searchTransactions": "Пошук транзакцій...",
+    "searchResults": "Результати пошуку",
+    "transaction": "Транзакція"
+  },
+  "profile": {
+    "personalInfo": "Особиста інформація",
+    "settings": "Налаштування",
+    "preferences": "Вподобання",
+    "security": "Безпека",
+    "changePassword": "Змінити пароль",
+    "currentPassword": "Поточний пароль",
+    "newPassword": "Новий пароль",
+    "confirmNewPassword": "Підтвердіть новий пароль",
+    "darkMode": "Темна тема",
+    "notifications": "Сповіщення",
+    "language": "Мова",
+    "timezone": "Часовий пояс"
+  },
+  "suggestions": {
+    "title": "Пропозиції",
+    "description": "Отримайте персоналізовані пропозиції на основі історії транзакцій",
+    "noSuggestions": "Немає доступних пропозицій",
+    "viewAll": "Переглянути все",
+    "categories": {
+      "savings": "Заощадження",
+      "investments": "Інвестиції",
+      "spending": "Витрати",
+      "security": "Безпека"
+    }
+  },
+  "overview": {
+    "welcome": "Вітаємо",
+    "totalAssets": "Загальні активи",
+    "recentTransactions": "Останні транзакції",
+    "viewAll": "Переглянути все",
+    "quickActions": "Швидкі дії",
+    "statistics": "Статистика",
+    "portfolioValue": "Вартість портфеля"
   },
   "stats": {
     "totalSent": "Всього відправлено",
     "totalReceived": "Всього отримано",
     "totalFees": "Всього комісій",
-    "transactionCount": "Кількість транзакцій"
+    "transactionCount": "Кількість транзакцій",
+    "dailyVolume": "Денний об'єм",
+    "monthlyVolume": "Місячний об'єм",
+    "yearlyVolume": "Річний об'єм",
+    "loading": "Завантаження...",
+    "balance": "Баланс",
+    "largestTransaction": "Найбільша транзакція",
+    "amount": "Сума",
+    "viewOnEtherscan": "Переглянути на Etherscan",
+    "from": "Від",
+    "to": "До"
+  },
+  "errors": {
+    "somethingWentWrong": "Щось пішло не так",
+    "tryAgain": "Будь ласка, спробуйте ще раз",
+    "invalidAddress": "Невірна адреса",
+    "insufficientFunds": "Недостатньо коштів",
+    "networkError": "Помилка мережі",
+    "invalidAmount": "Невірна сума",
+    "required": "Це поле обов'язкове"
+  },
+  "dateRange": {
+    "from": "Від",
+    "to": "До",
+    "selectStartDate": "Виберіть початкову дату",
+    "selectEndDate": "Виберіть кінцеву дату"
+  },
+  "dropZone": {
+    "dragAndDrop": "Перетягніть CSV файл сюди або натисніть для вибору"
+  },
+  "actions": {
+    "edit": "Редагувати",
+    "remove": "Видалити"
   }
 } 
