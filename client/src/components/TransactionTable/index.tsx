@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ExportToCSVButton from "./components/ExportToCSVButton";
+import { formatStringNumber } from "@/lib/string.utils";
 
 type Props = {
   transactions: TransactionDto[];
@@ -49,7 +50,6 @@ export default function TransactionTable({ transactions, walletId }: Props) {
   const filteredAndSortedTransactions = useMemo(() => {
     let filtered = [...transactions];
 
-    // Apply search filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(tx =>
@@ -72,7 +72,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
           : new Date(a.date).getTime() - new Date(b.date).getTime();
       }
       if (sortField === 'value') {
-        return sortOrder === 'desc' ? b.value - a.value : a.value - b.value;
+        return sortOrder === 'desc' ? Number(b.value) - Number(a.value) : Number(a.value) - Number(b.value);
       }
       if (sortField === 'status') {
         return sortOrder === 'desc'
@@ -201,6 +201,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                   </div>
                 </th>
                 <th className="px-4 py-3">Type</th>
+                <th className="px-4 py-3">Category</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#2A2F3A]">
@@ -234,12 +235,12 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
-                        <span className="text-white font-medium">{formatEth(tx.value)} ETH</span>
+                        <span className="text-white font-medium">{formatStringNumber(tx.value)} ETH</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex flex-col">
-                        <span className="text-white font-medium">{formatEth(tx.txnFee)} ETH</span>
+                        <span className="text-white font-medium">{formatStringNumber(tx.txnFee)} ETH</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
@@ -271,12 +272,6 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                         <p className="text-sm text-[#A3A3A3]">
                           {format(new Date(tx.date), 'HH:mm:ss')}
                         </p>
-                        {/* <span className="text-[#E5E7EB] font-medium">
-                          {formatDistanceToNow(new Date(tx.date), { addSuffix: true })}
-                        </span>
-                        <span className="text-xs text-[#9CA3AF]">
-                          {new Date(tx.date).toLocaleDateString()}
-                        </span> */}
                       </div>
                     </td>
                     <td className="px-4 py-3">
@@ -285,6 +280,17 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                         className={`
                           px-3 py-1 rounded-full font-medium capitalize
                           bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
+                        `}
+                      >
+                        {tx.type === 'deposit' ? 'Deposit' : 'Withdraw'}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge
+                        variant="outline"
+                        className={`
+                          px-3 py-1 rounded-full font-medium capitalize
+                          bg-blue-500/10 text-blue-500 border border-blue-500/20
                         `}
                       >
                         {tx.category}

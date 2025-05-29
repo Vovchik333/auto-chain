@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Schema as MongooseSchema } from "mongoose";
+import { HydratedDocument } from "mongoose";
 
 export type WalletDocument = HydratedDocument<Wallet>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Wallet {
   readonly _id: string;
 
@@ -25,6 +25,9 @@ export class Wallet {
 
   @Prop({default: false})
   isSyncWithBlockchain: boolean;
+
+  // @Prop({ type: Number })
+  // lastSyncedBlock: number;
 }
 
 export const WalletSchema = SchemaFactory.createForClass(Wallet);
