@@ -1,5 +1,6 @@
 import { TransactionDto } from "@/common/types/transaction/transaction.dto";
 import TransactionTable from "../../../../components/TransactionTable";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   tableTitle: string;
@@ -12,6 +13,8 @@ export default function TransactionsSection({
   transactions,
   walletAddress
 }: Props) {
+  const t = useTranslations('transaction');
+
   return (
     <section 
       className="space-y-6 p-6 bg-[#1A1F27] rounded-lg border border-[#2A2F38] shadow-lg"
@@ -22,7 +25,10 @@ export default function TransactionsSection({
             {tableTitle}
           </h2>
           <p className="text-sm text-[#A3A3A3] mt-1">
-            {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
+            {t('transactionCount', {
+              count: transactions.length,
+              plural: transactions.length !== 1 ? 'ї' : 'я'
+            })}
           </p>
         </div>
       </div>

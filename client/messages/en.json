@@ -27,14 +27,26 @@
     "signUp": "Sign Up",
     "email": "Email",
     "password": "Password",
+    "username": "Username",
+    "forgotPassword": "Forgot password?",
     "confirmPassword": "Confirm Password",
-    "forgotPassword": "Forgot Password?",
-    "alreadyHaveAccount": "Already have an account?",
-    "dontHaveAccount": "Don't have an account?",
     "welcomeBack": "Welcome Back",
+    "signInDescription": "Sign in to your account to continue",
     "createAccount": "Create Account",
-    "rememberMe": "Remember me",
-    "passwordRequirements": "Password must be at least 8 characters"
+    "createAccountDescription": "Enter your details to create a new account",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "signingIn": "Signing in...",
+    "signingUp": "Signing up...",
+    "emailPlaceholder": "m@example.com",
+    "usernamePlaceholder": "johndoe",
+    "passwordStrength": {
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number",
+      "special": "One special character"
+    }
   },
   "wallet": {
     "balance": "Balance",
@@ -55,7 +67,42 @@
     "confirmDelete": "Are you sure you want to delete this wallet?",
     "importWallet": "Import Wallet",
     "walletNamePlaceholder": "Cosmonaut",
-    "invalidAddress": "Invalid Ethereum address"
+    "invalidAddress": "Invalid Ethereum address",
+    "loading": "Loading wallets...",
+    "noWallets": {
+      "title": "No wallets yet",
+      "description": "Get started by adding your first wallet or importing from Etherscan"
+    },
+    "search": {
+      "noResults": {
+        "title": "No wallets found",
+        "description": "No wallets match your search criteria. Try a different search term."
+      },
+      "placeholder": "Search by address or name..."
+    },
+    "details": {
+      "loading": "Loading...",
+      "overview": "Overview",
+      "transactions": "Transactions",
+      "settings": "Settings",
+      "statistics": "Statistics",
+      "actions": "Actions"
+    },
+    "header": {
+      "title": "Wallets",
+      "description": "Manage and track your Ethereum wallets",
+      "search": "Search by address or name..."
+    },
+    "preview": {
+      "defaultName": "Wallet {id}",
+      "transactionCount": "{count} {count, plural, one {transaction} other {transactions}}"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "import": "Import from Etherscan",
+      "add": "Add Wallet"
+    }
   },
   "transaction": {
     "amount": "Amount",
@@ -71,14 +118,34 @@
     "pending": "Pending",
     "completed": "Completed",
     "failed": "Failed",
-    "noTransactions": "No Transactions Yet",
-    "noTransactionsDescription": "Your transactions will appear here once you start making transfers.",
+    "noTransactions": "No transactions yet",
+    "noTransactionsDescription": "Get started by adding your first transaction or importing from CSV",
     "filterByDate": "Filter by date",
     "filterByType": "Filter by type",
     "filterByStatus": "All Status",
     "searchTransactions": "Search transactions...",
     "searchResults": "Search results",
-    "transaction": "Transaction"
+    "transaction": "Transaction",
+    "loading": "Loading transactions...",
+    "pageTitle": "Transactions",
+    "pageDescription": "Manage and track your transactions",
+    "allWallets": "All wallets",
+    "transactionCount": "{count} transaction{plural}",
+    "allTransactions": "All Transactions",
+    "details": {
+      "title": "Transaction Details",
+      "value": "Value",
+      "hash": "Transaction Hash",
+      "from": "From",
+      "to": "To",
+      "fee": "Transaction Fee",
+      "dateTime": "Date & Time",
+      "status": "Status",
+      "type": "Type",
+      "viewOnEtherscan": "View on Etherscan",
+      "copyHash": "Copy Transaction Hash",
+      "utc": "UTC"
+    }
   },
   "profile": {
     "personalInfo": "Personal Information",
@@ -110,15 +177,26 @@
     "updateError": "Failed to update profile. Please try again."
   },
   "suggestions": {
-    "title": "Suggestions",
-    "description": "Get personalized suggestions based on your transaction history",
-    "noSuggestions": "No suggestions available",
-    "viewAll": "View All",
-    "categories": {
-      "savings": "Savings",
-      "investments": "Investments",
-      "spending": "Spending",
-      "security": "Security"
+    "title": "Suggestions for diversification",
+    "description": "Select wallets to get suggestions for optimal fund distribution",
+    "noWallets": {
+      "title": "No Wallets Found",
+      "description": "Add some wallets to get diversification suggestions",
+      "action": "Add Wallet"
+    },
+    "stats": {
+      "totalAmount": "Total amount",
+      "targetPerWallet": "Target per wallet",
+      "currentBalance": "Current Balance"
+    },
+    "wallets": {
+      "title": "Participating Wallets"
+    },
+    "transfers": {
+      "title": "Recommended Transfers",
+      "from": "From",
+      "to": "To",
+      "amount": "Amount"
     }
   },
   "overview": {

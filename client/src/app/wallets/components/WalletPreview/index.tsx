@@ -5,6 +5,7 @@ import { WalletDto } from "@/common/types/wallet/wallet.dto";
 import { ActionsMenu } from "@/components/ActionsMenu";
 import { Wallet, ArrowRight } from "lucide-react";
 import { CopyButton } from "@/components/CopyButton";
+import { useTranslations } from 'next-intl';
 
 interface Props {
   wallet: WalletDto
@@ -13,11 +14,7 @@ interface Props {
 const WalletPreview: React.FC<Props> = ({
   wallet,
 }) => {
-  // const formattedBalance = new Intl.NumberFormat('en-US', {
-  //   minimumFractionDigits: 2,
-  //   maximumFractionDigits: 6
-  // }).format(wallet.statistics.balance);
-
+  const t = useTranslations('wallet');
   return (
     <Link href={`/wallets/${wallet.id}`}>
       <div 
@@ -30,13 +27,13 @@ const WalletPreview: React.FC<Props> = ({
           <div className="flex-grow">
             <div className="flex items-center gap-2">
               <h3 className="text-lg font-medium text-[#F0F0F0] group-hover:text-[#00FFC6] transition-colors">
-                {wallet.name || `Wallet ${wallet.id}`}
+                {wallet.name || t('preview.defaultName', { id: wallet.id })}
               </h3>
               <ArrowRight className="w-4 h-4 text-[#00FFC6] opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             {/* <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
               <div className="text-sm text-[#A3A3A3]">
-                <span>{wallet.transactions.length} {wallet.transactions.length === 1 ? "transaction" : "transactions"}</span>
+                <span>{t('preview.transactionCount', { count: wallet.transactions.length })}</span>
               </div>
             </div> */}
             {wallet.address && (

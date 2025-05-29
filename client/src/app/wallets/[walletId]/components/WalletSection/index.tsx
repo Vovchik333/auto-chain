@@ -5,12 +5,14 @@ import TransactionTable from '@/components/TransactionTable';
 import WalletStats from '@/components/WalletStats';
 import { useTransactionStore } from '@/stores/transaction/transaction.store';
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   wallet: WalletDto;
 };
 
 export default function WalletSection({ wallet }: Props) {
+  const t = useTranslations('wallet.details');
   const { transactions, isLoading, loadTransactions } = useTransactionStore();
 
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function WalletSection({ wallet }: Props) {
   }, [wallet.id]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>{t('loading')}</div>;
   }
 
   return (

@@ -7,6 +7,7 @@ import AddWalletButton from "../AddWalletButton";
 import { PageContentTitle } from "@/components/PageContentTitle";
 import { PageContentHeader } from "@/components/PageContentHeader";
 import { Search } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   onSearch: (query: string) => void
@@ -15,6 +16,7 @@ type Props = {
 const WalletsHeader: React.FC<Props> = ({
   onSearch
 }) => {
+  const t = useTranslations('wallet');
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,9 +31,9 @@ const WalletsHeader: React.FC<Props> = ({
       >
         <div className="flex flex-col gap-4">
           <div>
-            <PageContentTitle text="Wallets" />
+            <PageContentTitle text={t('header.title')} />
             <p className="text-sm text-[#A3A3A3] mt-1">
-              Manage and track your Ethereum wallets
+              {t('header.description')}
             </p>
           </div>
 
@@ -41,7 +43,7 @@ const WalletsHeader: React.FC<Props> = ({
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#A3A3A3]" />
             <Input
               type="text"
-              placeholder="Search by address or name..."
+              placeholder={t('header.search')}
               value={searchQuery}
               onChange={handleSearchChange}
               className="w-full md:w-80 bg-[#2A2F38] text-[#F0F0F0] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-10"

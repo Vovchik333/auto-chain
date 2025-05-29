@@ -8,8 +8,10 @@ import { useUserStore } from "@/stores/user/user.store";
 import { useEffect } from "react";
 import WalletSection from "./components/WalletSection";
 import { withPrivateRoute } from "@/hoc/with-private-route.hoc";
+import { useTranslations } from 'next-intl';
 
 function WalletPage() {
+  const t = useTranslations('wallet.details');
   const params = useParams();
   const walletId = params.walletId;
 
@@ -28,7 +30,7 @@ function WalletPage() {
 
   const wallet = wallets.find(w => w.id === walletId);
 
-  if (!wallet) return <div>Loading...</div>; 
+  if (!wallet) return <div>{t('loading')}</div>; 
 
   return (
     <>

@@ -8,8 +8,10 @@ import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { useEffect } from "react";
 import TransactionsHeader from "./components/TransactionHeader";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 function Transactions() {
+  const t = useTranslations('transaction');
   const { user } = useUserStore()
   const { transactions, loadTransactions, isLoading: isLoadingTransactions } = useTransactionStore();
   const { wallets, loadWallets , isLoading: isLoadingWallets} = useWalletStore();
@@ -46,7 +48,7 @@ function Transactions() {
           >
             <div className="flex items-center gap-2 text-[#00FFC6]">
               <Loader2 className="w-6 h-6 animate-spin" />
-              <span>Loading transactions...</span>
+              <span>{t('loading')}</span>
             </div>
           </div>
         ) : transactions.length === 0 ? (
@@ -68,14 +70,14 @@ function Transactions() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">No transactions yet</h3>
+            <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">{t('noTransactions')}</h3>
             <p className="text-[#A3A3A3] max-w-sm">
-              Get started by adding your first transaction or importing from CSV
+              {t('noTransactionsDescription')}
             </p>
           </div>
         ) : (
           <TransactionsSection 
-            tableTitle={'All Transactions'} 
+            tableTitle={t('allTransactions')} 
             transactions={transactions} 
           />
         )}

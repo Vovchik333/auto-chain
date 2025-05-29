@@ -22,8 +22,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/CopyButton';
 import { formatStringNumber } from '@/lib/string.utils';
+import { useTranslations } from 'next-intl';
 
 const TransactionPage: FC = () => {
+  const t = useTranslations('transaction.details');
   const params = useParams();
   const transactionId = params.transactionId;
 
@@ -49,7 +51,7 @@ const TransactionPage: FC = () => {
               <ArrowLeft className="h-5 w-5 text-[#A3A3A3]" />
             </Button>
           </Link>
-          <h1 className="text-xl font-semibold text-[#F0F0F0]">Transaction Details</h1>
+          <h1 className="text-xl font-semibold text-[#F0F0F0]">{t('title')}</h1>
         </div>
         
         <div className="space-y-6">
@@ -85,7 +87,7 @@ const TransactionPage: FC = () => {
             </Button>
           </Link>
           <div>
-            <h1 className="text-xl font-semibold text-[#F0F0F0]">Transaction Details</h1>
+            <h1 className="text-xl font-semibold text-[#F0F0F0]">{t('title')}</h1>
             <p className="text-sm text-[#A3A3A3]">
               {formatDistanceToNow(new Date(selectedTransaction.date), { addSuffix: true })}
             </p>
@@ -100,11 +102,11 @@ const TransactionPage: FC = () => {
           <DropdownMenuContent align="end" className="bg-[#2A2F38] border-[#353B45]">
             <DropdownMenuItem onClick={() => window.open(`https://etherscan.io/tx/${selectedTransaction.hash}`, '_blank')}>
               <ExternalLink className="w-4 h-4 mr-2" />
-              View on Etherscan
+              {t('viewOnEtherscan')}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => {}}>
               <Copy className="w-4 h-4 mr-2" />
-              Copy Transaction Hash
+              {t('copyHash')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -117,7 +119,7 @@ const TransactionPage: FC = () => {
           <CardContent className="p-6 space-y-6">
             <div className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Value</label>
+                <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('value')}</label>
                 <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                   <p className="font-mono text-sm text-[#F0F0F0]">
                     {formatStringNumber(selectedTransaction.value)} ETH
@@ -125,7 +127,7 @@ const TransactionPage: FC = () => {
                 </div>
               </div>
               <div>
-                <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Transaction Hash</label>
+                <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('hash')}</label>
                 <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                   <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.hash}</p>
                   <CopyButton text={selectedTransaction.hash} />
@@ -135,7 +137,7 @@ const TransactionPage: FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">From</label>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('from')}</label>
                     <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A] gap-2">
                       <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.from}</p>
                       <CopyButton text={selectedTransaction.from} />
@@ -143,7 +145,7 @@ const TransactionPage: FC = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">To</label>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('to')}</label>
                     <div className="flex items-center justify-between bg-[#232936] p-3 rounded-lg border border-[#2A2F3A] gap-2">
                       <p className="font-mono text-sm text-[#F0F0F0]">{selectedTransaction.to}</p>
                       <CopyButton text={selectedTransaction.to} />
@@ -153,27 +155,27 @@ const TransactionPage: FC = () => {
 
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Transaction Fee</label>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('fee')}</label>
                     <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                       <p className="font-semibold text-[#F0F0F0]">{formatStringNumber(selectedTransaction.txnFee)} ETH</p>
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Date & Time</label>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('dateTime')}</label>
                     <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                       <p className="font-semibold text-[#F0F0F0]">
                         {format(new Date(selectedTransaction.date), 'MMMM dd, yyyy')}
                       </p>
                       <p className="text-sm text-[#A3A3A3]">
-                        {format(new Date(selectedTransaction.date), 'HH:mm:ss')} UTC
+                        {format(new Date(selectedTransaction.date), 'HH:mm:ss')} {t('utc')}
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Status</label>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('status')}</label>
                     <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                       <p className="flex gap-2 font-semibold text-[#F0F0F0]">
                         {selectedTransaction.status}
@@ -181,7 +183,7 @@ const TransactionPage: FC = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">Type</label>
+                    <label className="text-sm font-medium text-[#A3A3A3] mb-2 block">{t('type')}</label>
                     <div className="bg-[#232936] p-3 rounded-lg border border-[#2A2F3A]">
                       <p className="flex gap-2 font-semibold text-[#F0F0F0]">
                       {selectedTransaction.category}

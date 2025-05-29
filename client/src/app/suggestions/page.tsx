@@ -12,8 +12,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import Link from 'next/link';
 import { AppRoute } from '@/common/enums/app-route';
+import { useTranslations } from 'next-intl';
 
 const SuggestionsPage: NextPage = () => {
+  const t = useTranslations('suggestions');
   const { diversification, getDiversification } = useSuggestionsStore();
   const { wallets, loadWallets } = useWalletStore();
   const { user } = useUserStore();
@@ -41,11 +43,11 @@ const SuggestionsPage: NextPage = () => {
     if (wallets.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center p-8 text-center bg-[#2A2F38] rounded-2xl border border-[#1A1F27] mt-4">
-          <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">No Wallets Found</h3>
-          <p className="text-[#A3A3A3] mb-4">Add some wallets to get diversification suggestions</p>
+          <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">{t('noWallets.title')}</h3>
+          <p className="text-[#A3A3A3] mb-4">{t('noWallets.description')}</p>
           <Link href={AppRoute.WALLETS}>
             <PrimaryButton>
-              Add Wallet
+              {t('noWallets.action')}
             </PrimaryButton>
           </Link>
         </div>

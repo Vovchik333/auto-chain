@@ -20,8 +20,10 @@ import { ErrorModal } from "@/components/Erorr/ErrorModal"
 import { useState } from "react"
 import { Mail, Lock, Eye, EyeOff, Loader2, User } from "lucide-react"
 import { formSchema, FormValues } from "./schemas"
+import { useTranslations } from 'next-intl';
 
 export function SignUpForm() {
+  const t = useTranslations('auth');
   const { signUp, error, resetError, isLoading } = useUserStore()
   const [showPassword, setShowPassword] = useState(false)
 
@@ -54,9 +56,9 @@ export function SignUpForm() {
     >
       <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
         <CardHeader>
-          <CardTitle className="text-2xl text-[#F0F0F0]">Create Account</CardTitle>
+          <CardTitle className="text-2xl text-[#F0F0F0]">{t('createAccount')}</CardTitle>
           <CardDescription className="text-[#A3A3A3]">
-            Enter your details to create a new account
+            {t('createAccountDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -65,13 +67,13 @@ export function SignUpForm() {
               <div className="space-y-2">
                 <Label htmlFor="username" className="text-[#F0F0F0] flex items-center gap-2">
                   <User className="w-4 h-4 text-[#00FFC6]" />
-                  Username
+                  {t('username')}
                 </Label>
                 <div className="relative">
                   <Input
                     id="username"
                     {...register("username")}
-                    placeholder="johndoe"
+                    placeholder={t('usernamePlaceholder')}
                     className={cn(
                       "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-4",
                       errors.username && "border-red-500 focus:border-red-500 focus:ring-red-500"
@@ -91,14 +93,14 @@ export function SignUpForm() {
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-[#F0F0F0] flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#00FFC6]" />
-                  Email
+                  {t('email')}
                 </Label>
                 <div className="relative">
                   <Input
                     id="email"
                     type="email"
                     {...register("email")}
-                    placeholder="m@example.com"
+                    placeholder={t('emailPlaceholder')}
                     className={cn(
                       "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-4",
                       errors.email && "border-red-500 focus:border-red-500 focus:ring-red-500"
@@ -118,7 +120,7 @@ export function SignUpForm() {
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-[#F0F0F0] flex items-center gap-2">
                   <Lock className="w-4 h-4 text-[#00FFC6]" />
-                  Password
+                  {t('password')}
                 </Label>
                 <div className="relative">
                   <Input
@@ -179,19 +181,19 @@ export function SignUpForm() {
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className={cn("text-[#A3A3A3]", passwordStrength.length && "text-green-400")}>
-                        • At least 8 characters
+                        • {t('passwordStrength.minLength')}
                       </div>
                       <div className={cn("text-[#A3A3A3]", passwordStrength.uppercase && "text-green-400")}>
-                        • One uppercase letter
+                        • {t('passwordStrength.uppercase')}
                       </div>
                       <div className={cn("text-[#A3A3A3]", passwordStrength.lowercase && "text-green-400")}>
-                        • One lowercase letter
+                        • {t('passwordStrength.lowercase')}
                       </div>
                       <div className={cn("text-[#A3A3A3]", passwordStrength.number && "text-green-400")}>
-                        • One number
+                        • {t('passwordStrength.number')}
                       </div>
                       <div className={cn("text-[#A3A3A3]", passwordStrength.special && "text-green-400")}>
-                        • One special character
+                        • {t('passwordStrength.special')}
                       </div>
                     </div>
                   </div>
@@ -208,21 +210,21 @@ export function SignUpForm() {
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Creating account...
+                    {t('signingUp')}
                   </span>
                 ) : (
-                  'Create Account'
+                  t('signUp')
                 )}
               </PrimaryButton>
             </div>
 
             <div className="text-center text-sm text-[#A3A3A3]">
-              Already have an account?{" "}
+              {t('alreadyHaveAccount')}{" "}
               <Link 
                 href={AppRoute.SIGN_IN} 
                 className="text-[#00FFC6] hover:underline underline-offset-4 transition-colors"
               >
-                Sign in
+                {t('signIn')}
               </Link>
             </div>
           </form>
@@ -230,5 +232,5 @@ export function SignUpForm() {
       </Card>
       {error && <ErrorModal error={error} onClose={resetError}/>}
     </div>
-  )
+  );
 }

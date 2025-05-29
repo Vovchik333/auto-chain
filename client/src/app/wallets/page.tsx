@@ -8,8 +8,10 @@ import { useEffect, useState } from "react";
 import WalletPreview from "./components/WalletPreview";
 import { Loader2, Plus } from "lucide-react";
 import { WalletDto } from "@/common/types/wallet/wallet.dto";
+import { useTranslations } from 'next-intl';
 
 function Wallets() {
+  const t = useTranslations('wallet');
   const { user } = useUserStore()
   const { wallets, loadWallets, isLoading } = useWalletStore();
   const [filteredWallets, setFilteredWallets] = useState<WalletDto[]>(wallets);
@@ -51,7 +53,7 @@ function Wallets() {
           >
             <div className="flex items-center gap-2 text-[#00FFC6]">
               <Loader2 className="w-6 h-6 animate-spin" />
-              <span>Loading wallets...</span>
+              <span>{t('loading')}</span>
             </div>
           </div>
         ) : filteredWallets.length === 0 ? (
@@ -75,9 +77,11 @@ function Wallets() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">No wallets found</h3>
+                <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">
+                  {t('search.noResults.title')}
+                </h3>
                 <p className="text-[#A3A3A3] max-w-sm">
-                  No wallets match your search criteria. Try a different search term.
+                  {t('search.noResults.description')}
                 </p>
               </>
             ) : (
@@ -85,9 +89,11 @@ function Wallets() {
                 <div className="w-16 h-16 rounded-full bg-[#2A2F38] flex items-center justify-center mb-4">
                   <Plus className="w-8 h-8 text-[#00FFC6]" />
                 </div>
-                <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">No wallets yet</h3>
+                <h3 className="text-xl font-semibold text-[#F0F0F0] mb-2">
+                  {t('noWallets.title')}
+                </h3>
                 <p className="text-[#A3A3A3] max-w-sm">
-                  Get started by adding your first wallet or importing from Etherscan
+                  {t('noWallets.description')}
                 </p>
               </>
             )}

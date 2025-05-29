@@ -27,14 +27,26 @@
     "signUp": "Зареєструватися",
     "email": "Електронна пошта",
     "password": "Пароль",
-    "confirmPassword": "Підтвердіть пароль",
+    "username": "Ім'я користувача",
     "forgotPassword": "Забули пароль?",
-    "alreadyHaveAccount": "Вже маєте акаунт?",
-    "dontHaveAccount": "Немає акаунту?",
+    "confirmPassword": "Підтвердіть пароль",
     "welcomeBack": "Ласкаво просимо",
-    "createAccount": "Створити акаунт",
-    "rememberMe": "Запам'ятати мене",
-    "passwordRequirements": "Пароль повинен містити щонайменше 8 символів"
+    "signInDescription": "Увійдіть у свій обліковий запис, щоб продовжити",
+    "createAccount": "Створити обліковий запис",
+    "createAccountDescription": "Введіть свої дані для створення нового облікового запису",
+    "dontHaveAccount": "Немає облікового запису?",
+    "alreadyHaveAccount": "Вже маєте обліковий запис?",
+    "signingIn": "Вхід...",
+    "signingUp": "Реєстрація...",
+    "emailPlaceholder": "m@example.com",
+    "usernamePlaceholder": "johndoe",
+    "passwordStrength": {
+      "minLength": "Мінімум 8 символів",
+      "uppercase": "Одна велика літера",
+      "lowercase": "Одна маленька літера",
+      "number": "Одна цифра",
+      "special": "Один спеціальний символ"
+    }
   },
   "wallet": {
     "balance": "Баланс",
@@ -55,7 +67,42 @@
     "confirmDelete": "Ви впевнені, що хочете видалити цей гаманець?",
     "importWallet": "Імпортувати гаманець",
     "walletNamePlaceholder": "Космонавт",
-    "invalidAddress": "Невірна Ethereum адреса"
+    "invalidAddress": "Невірна Ethereum адреса",
+    "loading": "Завантаження гаманців...",
+    "noWallets": {
+      "title": "Немає гаманців",
+      "description": "Почніть з додавання першого гаманця або імпорту з Etherscan"
+    },
+    "search": {
+      "noResults": {
+        "title": "Гаманців не знайдено",
+        "description": "Жоден гаманець не відповідає критеріям пошуку. Спробуйте інший пошуковий запит."
+      },
+      "placeholder": "Пошук за адресою або назвою..."
+    },
+    "details": {
+      "loading": "Завантаження...",
+      "overview": "Огляд",
+      "transactions": "Транзакції",
+      "settings": "Налаштування",
+      "statistics": "Статистика",
+      "actions": "Дії"
+    },
+    "header": {
+      "title": "Гаманці",
+      "description": "Керуйте та відстежуйте ваші Ethereum гаманці",
+      "search": "Пошук за адресою або назвою..."
+    },
+    "preview": {
+      "defaultName": "Гаманець {id}",
+      "transactionCount": "{count} {count, plural, one {транзакція} few {транзакції} many {транзакцій} other {транзакцій}}"
+    },
+    "actions": {
+      "edit": "Редагувати",
+      "delete": "Видалити",
+      "import": "Імпорт з Etherscan",
+      "add": "Додати гаманець"
+    }
   },
   "transaction": {
     "amount": "Сума",
@@ -72,13 +119,33 @@
     "completed": "Завершено",
     "failed": "Помилка",
     "noTransactions": "Немає транзакцій",
-    "noTransactionsDescription": "Ваші транзакції з'являться тут, коли ви почнете здійснювати перекази.",
+    "noTransactionsDescription": "Почніть з додавання першої транзакції або імпорту з CSV",
     "filterByDate": "Фільтр за датою",
     "filterByType": "Фільтр за типом",
     "filterByStatus": "Всі статуси",
     "searchTransactions": "Пошук транзакцій...",
     "searchResults": "Результати пошуку",
-    "transaction": "Транзакція"
+    "transaction": "Транзакція",
+    "loading": "Завантаження транзакцій...",
+    "pageTitle": "Транзакції",
+    "pageDescription": "Керуйте та відстежуйте ваші транзакції",
+    "allWallets": "Всі гаманці",
+    "transactionCount": "{count} транзакці{plural}",
+    "allTransactions": "Всі транзакції",
+    "details": {
+      "title": "Деталі транзакції",
+      "value": "Сума",
+      "hash": "Хеш транзакції",
+      "from": "Від",
+      "to": "До",
+      "fee": "Комісія",
+      "dateTime": "Дата та час",
+      "status": "Статус",
+      "type": "Тип",
+      "viewOnEtherscan": "Переглянути на Etherscan",
+      "copyHash": "Копіювати хеш транзакції",
+      "utc": "UTC"
+    }
   },
   "profile": {
     "personalInfo": "Особиста інформація",
@@ -110,15 +177,26 @@
     "updateError": "Не вдалося оновити профіль. Будь ласка, спробуйте ще раз."
   },
   "suggestions": {
-    "title": "Пропозиції",
-    "description": "Отримайте персоналізовані пропозиції на основі історії транзакцій",
-    "noSuggestions": "Немає доступних пропозицій",
-    "viewAll": "Переглянути все",
-    "categories": {
-      "savings": "Заощадження",
-      "investments": "Інвестиції",
-      "spending": "Витрати",
-      "security": "Безпека"
+    "title": "Пропозиції щодо диверсифікації",
+    "description": "Виберіть гаманці для отримання пропозицій щодо оптимального розподілу коштів",
+    "noWallets": {
+      "title": "Гаманці не знайдено",
+      "description": "Додайте гаманці, щоб отримати пропозиції щодо диверсифікації",
+      "action": "Додати гаманець"
+    },
+    "stats": {
+      "totalAmount": "Загальна сума",
+      "targetPerWallet": "Цільова сума на гаманець",
+      "currentBalance": "Поточний баланс"
+    },
+    "wallets": {
+      "title": "Задіяні гаманці"
+    },
+    "transfers": {
+      "title": "Рекомендовані перекази",
+      "from": "Від",
+      "to": "До",
+      "amount": "Сума"
     }
   },
   "overview": {

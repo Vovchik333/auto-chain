@@ -20,8 +20,10 @@ import { ErrorModal } from "@/components/Erorr/ErrorModal"
 import { useState } from "react"
 import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react"
 import { formSchema, FormValues } from "./schemas"
+import { useTranslations } from 'next-intl';
 
 export function SignInForm() {
+  const t = useTranslations('auth');
   const { signIn, error, resetError, isLoading } = useUserStore()
   const [showPassword, setShowPassword] = useState(false)
 
@@ -43,9 +45,9 @@ export function SignInForm() {
     >
       <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
         <CardHeader>
-          <CardTitle className="text-2xl text-[#F0F0F0]">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl text-[#F0F0F0]">{t('welcomeBack')}</CardTitle>
           <CardDescription className="text-[#A3A3A3]">
-            Sign in to your account to continue
+            {t('signInDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -54,13 +56,13 @@ export function SignInForm() {
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-[#F0F0F0] flex items-center gap-2">
                   <Mail className="w-4 h-4 text-[#00FFC6]" />
-                  Email
+                  {t('email')}
                 </Label>
                 <div className="relative">
                   <Input
                     id="email"
                     type="email"
-                    placeholder="m@example.com"
+                    placeholder={t('emailPlaceholder')}
                     {...register("email")}
                     className={cn(
                       "bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#2A2F38] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded-lg pl-4",
@@ -82,13 +84,13 @@ export function SignInForm() {
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password" className="text-[#F0F0F0] flex items-center gap-2">
                     <Lock className="w-4 h-4 text-[#00FFC6]" />
-                    Password
+                    {t('password')}
                   </Label>
                   <Link
                     href="#"
                     className="text-sm text-[#00FFC6] hover:underline underline-offset-4 transition-colors"
                   >
-                    Forgot password?
+                    {t('forgotPassword')}
                   </Link>
                 </div>
                 <div className="relative">
@@ -133,21 +135,21 @@ export function SignInForm() {
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    Signing in...
+                    {t('signingIn')}
                   </span>
                 ) : (
-                  'Sign In'
+                  t('signIn')
                 )}
               </PrimaryButton>
             </div>
 
             <div className="text-center text-sm text-[#A3A3A3]">
-              Don&apos;t have an account?{" "}
+              {t('dontHaveAccount')}{" "}
               <Link 
                 href={AppRoute.SIGN_UP} 
                 className="text-[#00FFC6] hover:underline underline-offset-4 transition-colors"
               >
-                Sign up
+                {t('signUp')}
               </Link>
             </div>
           </form>

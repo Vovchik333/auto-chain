@@ -11,8 +11,10 @@ import { PageContentTitle } from "@/components/PageContentTitle";
 import { PageContentHeader } from "@/components/PageContentHeader";
 import { useWalletStore } from "@/stores/wallet/wallet.store";
 import { ChevronDown, Wallet } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 const TransactionsHeader = () => {
+  const t = useTranslations('transaction');
   const { wallets } = useWalletStore();
 
   return (
@@ -22,9 +24,9 @@ const TransactionsHeader = () => {
       >
         <div className="flex flex-col gap-4">
           <div>
-            <PageContentTitle text="Transactions"/>
+            <PageContentTitle text={t('pageTitle')}/>
             <p className="text-sm text-[#A3A3A3] mt-1">
-              Manage and track your transactions
+              {t('pageDescription')}
             </p>
           </div>
 
@@ -32,12 +34,12 @@ const TransactionsHeader = () => {
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center gap-2 text-sm text-[#F0F0F0] bg-[#2A2F38] px-4 py-2 rounded-lg hover:bg-[#353B45] transition-colors">
                 <Wallet className="w-4 h-4 text-[#00FFC6]" />
-                <span>All wallets</span>
+                <span>{t('allWallets')}</span>
                 <ChevronDown className="w-4 h-4 ml-2" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="p-2 bg-[#2A2F38] shadow-xl rounded-lg border border-[#353B45]">
                 <DropdownMenuItem className="text-sm text-[#F0F0F0] hover:bg-[#00FFC6] hover:text-[#1A1F27] rounded-md transition-colors">
-                  All wallets
+                  {t('allWallets')}
                 </DropdownMenuItem>
                 {wallets.map((wallet) => (
                   <DropdownMenuItem 

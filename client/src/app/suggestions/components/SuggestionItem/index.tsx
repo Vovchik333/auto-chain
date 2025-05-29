@@ -1,5 +1,6 @@
 import { TruncatedText } from '@/components/TruncatedText';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   from: string;
@@ -8,13 +9,15 @@ interface Props {
 }
 
 export const SuggestionItem: React.FC<Props> = ({ from, to, amount }) => {
+  const t = useTranslations('suggestions.transfers');
+
   return (
     <div
       className="bg-[#1A1F27] p-4 rounded-xl border border-[#353B43] hover:border-[#00FFC6] transition-colors"
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center space-x-2">
-          <span className="text-[#A3A3A3] text-sm">From</span>
+          <span className="text-[#A3A3A3] text-sm">{t('from')}</span>
           <TruncatedText text={from} />
         </div>
         <svg 
@@ -31,12 +34,12 @@ export const SuggestionItem: React.FC<Props> = ({ from, to, amount }) => {
           />
         </svg>
         <div className="flex items-center space-x-2">
-          <span className="text-[#A3A3A3] text-sm">To</span>
+          <span className="text-[#A3A3A3] text-sm">{t('to')}</span>
           <TruncatedText text={to} />
         </div>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-[#A3A3A3] text-sm">Amount</span>
+        <span className="text-[#A3A3A3] text-sm">{t('amount')}</span>
         <span className="text-[#00FFC6] font-semibold">
           {amount} ETH
         </span>

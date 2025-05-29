@@ -5,6 +5,7 @@ import { WalletSelector } from '../WalletSelector';
 import { WalletDto } from '@/common/types/wallet/wallet.dto';
 import { PageContentTitle } from '@/components/PageContentTitle';
 import { PageContentHeader } from '@/components/PageContentHeader';
+import { useTranslations } from 'next-intl';
 
 interface SuggestionsHeaderProps {
   wallets: WalletDto[];
@@ -17,12 +18,14 @@ export const SuggestionsHeader: React.FC<SuggestionsHeaderProps> = ({
   onWalletSelect,
   isLoading = false,
 }) => {
+  const t = useTranslations('suggestions');
+
   return (
     <PageContentHeader className="flex justify-between items-center bg-[#1A1F27] p-6">
       <div>
-        <PageContentTitle text={'Suggestions for diversification'} />
+        <PageContentTitle text={t('title')} />
         <p className="text-[#A3A3A3] text-sm mt-1">
-          Select wallets to get suggestions for optimal fund distribution
+          {t('description')}
         </p>
       </div>
       <WalletSelector 
