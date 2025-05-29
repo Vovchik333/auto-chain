@@ -12,6 +12,7 @@ import { Mail, User, Lock, AlertCircle, CheckCircle2, Loader2 } from "lucide-rea
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { ProfileFormData, profileSchema } from "./schemas";
+import { useTranslations } from 'next-intl';
 
 const InputWrapper = ({ children, icon: Icon, label, error, success }: { 
   children: React.ReactNode; 
@@ -19,33 +20,37 @@ const InputWrapper = ({ children, icon: Icon, label, error, success }: {
   label: string;
   error?: string;
   success?: boolean;
-}) => (
-  <div className="space-y-2">
-    <Label className="text-[#A3A3A3] flex items-center gap-2">
-      <Icon className={`w-4 h-4 ${success ? 'text-green-400' : 'text-[#00FFC6]'}`} />
-      {label}
-    </Label>
-    {children}
-    {error && (
-      <div 
-        className="flex items-center gap-2 text-red-400 text-sm mt-1"
-      >
-        <AlertCircle className="w-4 h-4" />
-        {error}
-      </div>
-    )}
-    {success && (
-      <div 
-        className="flex items-center gap-2 text-green-400 text-sm mt-1"
-      >
-        <CheckCircle2 className="w-4 h-4" />
-        Saved successfully
-      </div>
-    )}
-  </div>
-);
+}) => {
+  const t = useTranslations('profile');
+  return (
+    <div className="space-y-2">
+      <Label className="text-[#A3A3A3] flex items-center gap-2">
+        <Icon className={`w-4 h-4 ${success ? 'text-green-400' : 'text-[#00FFC6]'}`} />
+        {label}
+      </Label>
+      {children}
+      {error && (
+        <div 
+          className="flex items-center gap-2 text-red-400 text-sm mt-1"
+        >
+          <AlertCircle className="w-4 h-4" />
+          {error}
+        </div>
+      )}
+      {success && (
+        <div 
+          className="flex items-center gap-2 text-green-400 text-sm mt-1"
+        >
+          <CheckCircle2 className="w-4 h-4" />
+          {t('savedSuccessfully')}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function ProfileData() {
+  const t = useTranslations('profile');
   const [editing, setEditing] = useState(false);
   const [successFields, setSuccessFields] = useState<Record<string, boolean>>({});
   const { user, updateProfile, isLoading } = useUserStore();
@@ -78,40 +83,36 @@ export default function ProfileData() {
         username: data.username !== user.username,
         password: Boolean(data.newPassword),
       });
-      toast.success("Profile updated successfully");
+      toast.success(t('updateSuccess'));
       setTimeout(() => setSuccessFields({}), 3000);
       setEditing(false);
     } catch (error) {
-      toast.error("Failed to update profile. Please try again.");
+      toast.error(t('updateError'));
       console.error("Failed to update profile:", error);
     }
   };
 
   return (
-    <div
-      className="mx-auto"
-    >
+    <div className="mx-auto">
       <Card className="bg-[#1A1F27] text-[#F0F0F0] border border-[#2A2F38]">
         <CardHeader>
-          <CardTitle className="text-[#F0F0F0] text-xl">Account Information</CardTitle>
+          <CardTitle className="text-[#F0F0F0] text-xl">{t('accountInformation')}</CardTitle>
         </CardHeader>
         <CardContent>
           {!editing ? (
-            <div 
-              className="space-y-6"
-            >
+            <div className="space-y-6">
               <div className="grid gap-4 p-4 bg-[#2A2F38] rounded-lg">
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-[#00FFC6]" />
                   <div>
-                    <p className="text-sm text-[#A3A3A3]">Email</p>
+                    <p className="text-sm text-[#A3A3A3]">{t('email')}</p>
                     <p className="text-[#F0F0F0]">{user.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <User className="w-5 h-5 text-[#00FFC6]" />
                   <div>
-                    <p className="text-sm text-[#A3A3A3]">Username</p>
+                    <p className="text-sm text-[#A3A3A3]">{t('username')}</p>
                     <p className="text-[#F0F0F0]">{user.username}</p>
                   </div>
                 </div>
@@ -120,7 +121,7 @@ export default function ProfileData() {
                 onClick={() => setEditing(true)}
                 className="w-full sm:w-auto"
               >
-                Edit Profile
+                {t('editProfile')}
               </PrimaryButton>
             </div>
           ) : (
@@ -131,7 +132,7 @@ export default function ProfileData() {
               <div className="space-y-4">
                 <InputWrapper 
                   icon={Mail} 
-                  label="Email" 
+                  label={t('email')}
                   error={errors.email?.message}
                   success={successFields.email}
                 >
@@ -144,7 +145,7 @@ export default function ProfileData() {
 
                 <InputWrapper 
                   icon={User} 
-                  label="Username" 
+                  label={t('username')}
                   error={errors.username?.message}
                   success={successFields.username}
                 >
@@ -158,26 +159,26 @@ export default function ProfileData() {
               <div className="pt-4 border-t border-[#2A2F38] space-y-4">
                 <InputWrapper 
                   icon={Lock} 
-                  label="Change Password" 
+                  label={t('changePassword')}
                   error={errors.currentPassword?.message || errors.newPassword?.message || errors.confirmPassword?.message}
                   success={successFields.password}
                 >
                   <div className="space-y-3">
                     <Input
                       type="password"
-                      placeholder="Current password"
+                      placeholder={t('currentPasswordPlaceholder')}
                       className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
                       {...register("currentPassword")}
                     />
                     <Input
                       type="password"
-                      placeholder="New password"
+                      placeholder={t('newPasswordPlaceholder')}
                       className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
                       {...register("newPassword")}
                     />
                     <Input
                       type="password"
-                      placeholder="Confirm new password"
+                      placeholder={t('confirmPasswordPlaceholder')}
                       className="bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] placeholder-[#A3A3A3]"
                       {...register("confirmPassword")}
                     />
@@ -194,22 +195,20 @@ export default function ProfileData() {
                   {isLoading ? (
                     <span className="flex items-center justify-center gap-2">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Saving...
+                      {t('saving')}
                     </span>
                   ) : (
-                    'Save Changes'
+                    t('saveChanges')
                   )}
                 </PrimaryButton>
                 <SecondaryButton
                   onClick={() => {
-                    reset();
                     setEditing(false);
+                    reset();
                   }}
-                  disabled={isLoading}
-                  className="flex-1 sm:flex-none"
-                  type="button"
+                  className="flex-1"
                 >
-                  Cancel
+                  {t('cancel')}
                 </SecondaryButton>
               </div>
             </form>

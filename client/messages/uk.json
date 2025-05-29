@@ -92,7 +92,22 @@
     "darkMode": "Темна тема",
     "notifications": "Сповіщення",
     "language": "Мова",
-    "timezone": "Часовий пояс"
+    "timezone": "Часовий пояс",
+    "title": "Налаштування профілю",
+    "subtitle": "Керуйте налаштуваннями вашого облікового запису",
+    "accountInformation": "Інформація про обліковий запис",
+    "email": "Електронна пошта",
+    "cancel": "Скасувати",
+    "username": "Ім'я користувача",
+    "editProfile": "Редагувати профіль",
+    "saveChanges": "Зберегти зміни",
+    "saving": "Збереження...",
+    "currentPasswordPlaceholder": "Поточний пароль",
+    "newPasswordPlaceholder": "Новий пароль",
+    "confirmPasswordPlaceholder": "Підтвердіть новий пароль",
+    "savedSuccessfully": "Успішно збережено",
+    "updateSuccess": "Профіль успішно оновлено",
+    "updateError": "Не вдалося оновити профіль. Будь ласка, спробуйте ще раз."
   },
   "suggestions": {
     "title": "Пропозиції",
