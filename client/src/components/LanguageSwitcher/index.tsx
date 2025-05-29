@@ -8,39 +8,57 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Languages } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 const languages = {
-  en: 'English',
-  uk: 'Українська'
+  en: {
+    label: 'English',
+    flag: '🇬🇧'
+  },
+  uk: {
+    label: 'Українська',
+    flag: '🇺🇦'
+  }
 };
 
 export function LanguageSwitcher() {
   const locale = useLocale();
-  const t = useTranslations();
 
   const switchLanguage = (newLocale: string) => {
-    // This will be handled by the TranslationsProvider
     window.localStorage.setItem('locale', newLocale);
     window.location.reload();
   };
 
+  const currentLanguage = languages[locale as keyof typeof languages];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Languages className="h-5 w-5" />
+        <Button 
+          variant="outline" 
+          size="sm"
+          className="flex items-center gap-2 bg-[#2A2F38] border-[#3A3F48] hover:bg-[#3A3F48] hover:border-[#4A4F58]"
+        >
+          <span className="text-sm font-medium text-[#F0F0F0]">
+            {currentLanguage.flag}
+          </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {Object.entries(languages).map(([key, label]) => (
+      <DropdownMenuContent 
+        align="end"
+        className="bg-[#2A2F38] border-[#3A3F48]"
+      >
+        {Object.entries(languages).map(([key, { label, flag }]) => (
           <DropdownMenuItem
             key={key}
             onClick={() => switchLanguage(key)}
-            className={locale === key ? 'bg-accent' : ''}
+            className={`flex items-center gap-2 text-[#F0F0F0] ${
+              locale === key 
+                ? 'bg-[#3A3F48] font-medium' 
+                : 'hover:bg-[#3A3F48] hover:text-[#00FFC6]'
+            }`}
           >
-            {label}
+            <span className="text-base">{flag}</span>
+            <span>{label}</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
