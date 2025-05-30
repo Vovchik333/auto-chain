@@ -265,7 +265,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
-                      {t(tx.category)}
+                      {tx.category}
                     </Badge>
                   </td>
                 </tr>

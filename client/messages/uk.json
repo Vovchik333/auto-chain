@@ -120,6 +120,8 @@
     "pending": "В обробці",
     "completed": "Завершено",
     "failed": "Помилка",
+    "success": "Транзакцію успішно виконано",
+    "imported": "Успішно імпортовано {count} {count, plural, one {транзакцію} few {транзакції} many {транзакцій} other {транзакцій}}",
     "noTransactions": "Немає транзакцій",
     "noTransactionsDescription": "Почніть з додавання першої транзакції або імпорту з CSV",
     "filterByDate": "Фільтр за датою",

@@ -120,6 +120,8 @@
     "pending": "Pending",
     "completed": "Completed",
     "failed": "Failed",
+    "success": "Transaction completed successfully",
+    "imported": "Successfully imported {count} {count, plural, one {transaction} other {transactions}}",
     "noTransactions": "No transactions yet",
     "noTransactionsDescription": "Get started by adding your first transaction or importing from CSV",
     "filterByDate": "Filter by date",

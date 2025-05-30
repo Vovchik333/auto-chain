@@ -24,7 +24,6 @@ export const Menu: React.FC = () => {
 
   return (
     <div className="relative">
-      {/* Mobile menu button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="md:hidden p-2 text-foreground hover:text-primary theme-transition rounded-box-lg hover:bg-secondary/50"

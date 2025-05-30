@@ -47,13 +47,8 @@ function Home() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-box-xl bg-background theme-transition">
-        <OverviewHeader />
-      </div>
-      <div className="bg-background theme-transition">
-        <WalletStats filter={{userId: user?.id}} />
-      </div>
-      {/* <Dashboard /> */}
+      <OverviewHeader />
+      <WalletStats filter={{userId: user?.id}} />
     </div>
   );
 }
