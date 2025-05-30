@@ -25,7 +25,7 @@ export const PrimaryButton: React.FC<Props> = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "font-medium rounded-box-lg theme-transition hover-effect focus-ring",
+        "font-medium rounded-md theme-transition hover-effect focus-ring",
         variant === 'default' && "bg-primary hover:bg-primary/90 text-primary-foreground",
         variant === 'outline' && "border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground",
         variant === 'ghost' && "text-primary hover:bg-primary/10",

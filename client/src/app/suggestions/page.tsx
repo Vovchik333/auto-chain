@@ -73,12 +73,10 @@ const SuggestionsPage: NextPage = () => {
     }
 
     return diversification && (
-      <div className="mt-4">
-        <SuggestionsSection 
-          diversification={diversification} 
-          wallets={wallets}
-        />
-      </div>
+      <SuggestionsSection 
+        diversification={diversification} 
+        wallets={wallets}
+      />
     );
   };
 

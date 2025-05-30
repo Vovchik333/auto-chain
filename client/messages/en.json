@@ -120,7 +120,7 @@
     "pending": "Pending",
     "completed": "Completed",
     "failed": "Failed",
-    "success": "Transaction completed successfully",
+    "success": "Success",
     "imported": "Successfully imported {count} {count, plural, one {transaction} other {transactions}}",
     "noTransactions": "No transactions yet",
     "noTransactionsDescription": "Get started by adding your first transaction or importing from CSV",
@@ -220,7 +220,8 @@
     "viewAll": "View All",
     "quickActions": "Quick Actions",
     "statistics": "Statistics",
-    "portfolioValue": "Portfolio Value"
+    "portfolioValue": "Portfolio Value",
+    "loading": "Loading overview..."
   },
   "stats": {
     "totalSent": "Total Sent",

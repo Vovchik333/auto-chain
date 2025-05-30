@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { WalletState, WalletStore } from "./types";
-import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
 import { walletService } from "@/services/wallet";
 import { WalletFilterDto } from "@/common/types/wallet/wallet-filter.dto";
 import { CreateWalletFromBlockchainDto } from "@/common/types/wallet/create-wallet-from-blockchain.dto";
@@ -41,9 +40,9 @@ export const useWalletStore = create<WalletStore>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      const wallets = await walletService.importFromEtherscan(payload);
+      const wallet = await walletService.importFromEtherscan(payload);
 
-      set({ wallets, isLoading: false })
+      set({ wallets: [...get().wallets, wallet], isLoading: false })
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }

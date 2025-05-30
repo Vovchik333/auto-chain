@@ -28,7 +28,7 @@ export const WalletList: React.FC<Props> = ({
       >
         <SelectTrigger 
           id="wallet-select"
-          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-box-lg w-full theme-transition"
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-md w-full theme-transition"
         >
           <SelectValue placeholder="Choose a wallet" />
         </SelectTrigger>

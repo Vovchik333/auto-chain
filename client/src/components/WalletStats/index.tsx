@@ -21,6 +21,7 @@ import { useStatsStore } from '@/stores/statistics/statistics.store';
 import { useEffect } from 'react';
 import { formatStringNumber } from '@/lib/string.utils';
 import { useTranslations } from 'next-intl';
+import { AppRoute } from '@/common/enums/app-route';
 
 type Props = {
   filter: StatsFilterDto;
@@ -93,9 +94,7 @@ export default function WalletStats({ filter }: Props) {
                 </div>
               </div>
               <a
-                href={`https://etherscan.io/tx/${stats.largestAmountTransaction.hash}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                href={`${AppRoute.TRANSACTIONS}/${stats.largestAmountTransaction.id}`}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-background text-primary hover:bg-secondary transition-colors theme-transition"
               >
                 <span className="text-sm">{t('viewOnEtherscan')}</span>

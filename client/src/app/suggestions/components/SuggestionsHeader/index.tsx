@@ -21,11 +21,11 @@ export const SuggestionsHeader: React.FC<Props> = ({
   const t = useTranslations('suggestions');
 
   return (
-    <PageContentHeader>
-      <div className="flex justify-between items-center space-y-6">
+    <PageContentHeader className="p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
           <PageContentTitle text={t('title')} />
-          <p className="text-sm text-muted-foreground mt-1 theme-transition">
+          <p className="text-sm text-muted-foreground mt-2 theme-transition">
             {t('description')}
           </p>
         </div>

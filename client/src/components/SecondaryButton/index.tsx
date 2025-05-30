@@ -33,7 +33,7 @@ export const SecondaryButton: React.FC<Props> = ({
       type={type}
       disabled={disabled}
       className={cn(
-        "font-medium rounded-box-lg theme-transition hover-effect focus-ring",
+        "font-medium rounded-md theme-transition hover-effect focus-ring",
         variant === 'default' && "bg-secondary hover:bg-secondary/90 text-secondary-foreground",
         variant === 'outline' && "border-2 border-secondary text-secondary-foreground hover:bg-secondary/10",
         variant === 'ghost' && "text-secondary-foreground hover:bg-secondary/10",

@@ -120,7 +120,7 @@
     "pending": "В обробці",
     "completed": "Завершено",
     "failed": "Помилка",
-    "success": "Транзакцію успішно виконано",
+    "success": "Успішно",
     "imported": "Успішно імпортовано {count} {count, plural, one {транзакцію} few {транзакції} many {транзакцій} other {транзакцій}}",
     "noTransactions": "Немає транзакцій",
     "noTransactionsDescription": "Почніть з додавання першої транзакції або імпорту з CSV",
@@ -146,7 +146,7 @@
       "dateTime": "Дата та час",
       "status": "Статус",
       "type": "Тип",
-      "viewOnEtherscan": "Переглянути на Etherscan",
+      "viewOnEtherscan": "Переглянути",
       "copyHash": "Копіювати хеш транзакції",
       "utc": "UTC"
     },
@@ -221,7 +221,8 @@
     "viewAll": "Переглянути все",
     "quickActions": "Швидкі дії",
     "statistics": "Статистика",
-    "portfolioValue": "Вартість портфеля"
+    "portfolioValue": "Вартість портфеля",
+    "loading": "Завантаження огляду..."
   },
   "stats": {
     "totalSent": "Всього відправлено",
@@ -235,7 +236,7 @@
     "balance": "Баланс",
     "largestTransaction": "Найбільша транзакція",
     "amount": "Сума",
-    "viewOnEtherscan": "Переглянути на Etherscan",
+    "viewOnEtherscan": "Переглянути",
     "from": "Відправник",
     "to": "Отримувач"
   },

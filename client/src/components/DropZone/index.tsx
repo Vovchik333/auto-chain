@@ -40,7 +40,7 @@ export const DropZone: React.FC<Props> = ({
       onDragLeave={() => setDragOver(false)}
       onDrop={handleFileDrop}
       className={cn(
-        "border-2 border-dashed p-6 text-center rounded-2xl cursor-pointer transition-all theme-transition",
+        "border-2 border-dashed p-6 text-center rounded-md cursor-pointer transition-all theme-transition",
         dragOver ? "border-primary bg-primary/20" : "border-border bg-secondary/50"
       )}
       onClick={() => fileInputRef.current?.click()}

@@ -24,7 +24,7 @@ export const ModalWrapper: React.FC<Props> = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="rounded-box-xl bg-background/95 backdrop-blur-sm border-border shadow-lg theme-transition">
+      <DialogContent className="rounded-md bg-background/95 backdrop-blur-sm border-border shadow-lg theme-transition">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-foreground theme-transition">
             {title}

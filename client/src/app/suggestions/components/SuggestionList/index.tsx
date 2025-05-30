@@ -12,14 +12,14 @@ export const SuggestionList: React.FC<Props> = ({ suggestions }) => {
 
   if (suggestions.length === 0) {
     return (
-      <div className="text-center p-6 bg-secondary/50 rounded-2xl border border-border theme-transition">
+      <div className="text-center p-6 bg-secondary/50 rounded-md border border-border theme-transition">
         <p className="text-muted-foreground theme-transition">{t('noSuggestions')}</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {suggestions.map((suggestion, idx) => (
         <SuggestionItem
           key={`${suggestion.from}-${suggestion.to}-${idx}`}

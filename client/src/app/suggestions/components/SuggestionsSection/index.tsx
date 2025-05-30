@@ -21,48 +21,48 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
   );
 
   return (
-    <div>
-      <div className="grid gap-4 md:grid-cols-2 mb-6">
+    <div className="space-y-6">
+      <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardContent className="p-6">
-            <span className="text-muted-foreground text-sm mb-2 block theme-transition">{t('stats.totalAmount')}</span>
-            <span className="text-primary text-2xl font-semibold theme-transition">{total} ETH</span>
+            <span className="text-muted-foreground text-sm mb-3 block theme-transition">{t('stats.totalAmount')}</span>
+            <span className="text-primary text-2xl font-medium theme-transition">{total} ETH</span>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-6">
-            <span className="text-muted-foreground text-sm mb-2 block theme-transition">{t('stats.targetPerWallet')}</span>
-            <span className="text-primary text-2xl font-semibold theme-transition">{target} ETH</span>
+            <span className="text-muted-foreground text-sm mb-3 block theme-transition">{t('stats.targetPerWallet')}</span>
+            <span className="text-primary text-2xl font-medium theme-transition">{target} ETH</span>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Wallet className="w-5 h-5 mr-2 text-primary theme-transition" />
+      <Card>
+        <CardHeader className="px-6 pt-6">
+          <CardTitle className="flex items-center gap-3 text-foreground theme-transition">
+            <Wallet className="w-5 h-5 text-primary theme-transition" />
             {t('wallets.title')}
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-3">
+        <CardContent className="px-6 pb-6">
+          <div className="grid gap-4">
             {involvedWallets.map((wallet, index) => (
               <div
                 key={wallet.id}
-                className="bg-secondary/50 p-4 rounded-box-lg border border-border flex items-center justify-between theme-transition hover:border-primary"
+                className="bg-secondary/50 p-6 rounded-md border border-border flex items-center justify-between theme-transition hover:border-primary"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center theme-transition">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-md bg-primary/10 flex items-center justify-center shrink-0 theme-transition">
                     <span className="text-primary font-medium theme-transition">{index + 1}</span>
                   </div>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-2">
                     <span className="text-foreground font-medium text-sm theme-transition">{wallet.name}</span>
-                    <TruncatedText text={wallet.address} />
+                    <TruncatedText text={wallet.address} className="text-muted-foreground" />
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-col items-end gap-3">
-                    <span className="text-muted-foreground text-xs theme-transition">{t('stats.currentBalance')}</span>
+                <div className="flex items-center gap-3">
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-muted-foreground text-sm theme-transition">{t('stats.currentBalance')}</span>
                   </div>
                 </div>
               </div>
@@ -72,10 +72,10 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
       </Card>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
+        <CardHeader className="px-6 pt-6">
+          <CardTitle className="flex items-center gap-3 text-foreground theme-transition">
             <svg 
-              className="w-5 h-5 mr-2 text-primary theme-transition" 
+              className="w-5 h-5 text-primary theme-transition" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -90,7 +90,7 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
             {t('transfers.title')}
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-6 pb-6">
           <SuggestionList suggestions={transfers} />
         </CardContent>
       </Card>

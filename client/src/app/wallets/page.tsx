@@ -30,6 +30,7 @@ function Wallets() {
       );
     }
   };
+  console.log(filteredWallets)
 
   useEffect(() => {
     if (user === null) return;
@@ -38,7 +39,9 @@ function Wallets() {
   }, [user]);
 
   useEffect(() => {
-    setFilteredWallets(wallets);
+    if (wallets !== undefined) {
+      setFilteredWallets(wallets);
+    }
   }, [wallets]);
 
   return (

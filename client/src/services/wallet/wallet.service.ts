@@ -52,8 +52,8 @@ class WalletService {
     );
   }
 
-  public async importFromEtherscan(payload: UserWalletAddressDto): Promise<WalletDto[]> {
-    return this.#httpApi.load<WalletDto[]>(
+  public async importFromEtherscan(payload: UserWalletAddressDto): Promise<WalletDto> {
+    return this.#httpApi.load<WalletDto>(
       `${this.#apiPath}${ApiPath.WALLETS}${ApiPath.IMPORT_FROM_ETHERSCAN}`,
       {
         method: HttpMethod.POST,

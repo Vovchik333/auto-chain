@@ -14,22 +14,22 @@ export const SuggestionItem: React.FC<Props> = ({ from, to, amount }) => {
 
   return (
     <div
-      className="bg-secondary/50 p-4 rounded-box-lg border border-border hover:border-primary transition-colors theme-transition"
+      className="bg-secondary/50 p-6 rounded-md border border-border hover:border-primary transition-all theme-transition"
     >
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center space-x-2">
-          <span className="text-muted-foreground text-sm theme-transition">{t('from')}</span>
-          <TruncatedText text={from} />
+      <div className="flex items-center justify-between gap-4 mb-4">
+        <div className="flex items-center gap-3">
+          <span className="text-muted-foreground text-sm theme-transition">{t('from')}:</span>
+          <TruncatedText text={from} className="text-foreground theme-transition" />
         </div>
-        <ArrowRight className="w-5 h-5 text-primary theme-transition" />
-        <div className="flex items-center space-x-2">
-          <span className="text-muted-foreground text-sm theme-transition">{t('to')}</span>
-          <TruncatedText text={to} />
+        <ArrowRight className="w-5 h-5 text-primary shrink-0 theme-transition" />
+        <div className="flex items-center gap-3">
+          <span className="text-muted-foreground text-sm theme-transition">{t('to')}:</span>
+          <TruncatedText text={to} className="text-foreground theme-transition" />
         </div>
       </div>
-      <div className="flex justify-between items-center">
-        <span className="text-muted-foreground text-sm theme-transition">{t('amount')}</span>
-        <span className="text-primary font-semibold theme-transition">
+      <div className="flex justify-between items-center gap-3">
+        <span className="text-muted-foreground text-sm theme-transition">{t('amount')}:</span>
+        <span className="text-primary font-medium theme-transition">
           {amount} ETH
         </span>
       </div>
