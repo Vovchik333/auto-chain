@@ -41,116 +41,114 @@ export function SignInForm() {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto">
-      <Card className="bg-background text-foreground border-border theme-transition">
-        <CardHeader>
-          <CardTitle className="text-2xl text-foreground theme-transition">{t('welcomeBack')}</CardTitle>
-          <CardDescription className="text-muted-foreground theme-transition">
-            {t('signInDescription')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-foreground flex items-center gap-2 theme-transition">
-                  <Mail className="w-4 h-4 text-primary theme-transition" />
-                  {t('email')}
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder={t('emailPlaceholder')}
-                    {...register("email")}
-                    className={cn(
-                      "bg-secondary text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-lg pl-4 theme-transition",
-                      errors.email && "border-destructive focus:border-destructive focus:ring-destructive"
-                    )}
-                    disabled={isLoading}
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-destructive mt-1.5 flex items-center gap-1.5">
-                      {errors.email.message}
-                    </p>
+    <Card className="bg-background text-foreground border-border shadow-lg theme-transition">
+      <CardHeader className="px-6 pt-6 pb-2">
+        <CardTitle className="text-2xl font-semibold text-foreground theme-transition">
+          {t('welcomeBack')}
+        </CardTitle>
+        <CardDescription className="text-base text-muted-foreground theme-transition">
+          {t('signInDescription')}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="px-6 pb-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-foreground flex items-center gap-2 theme-transition">
+                <Mail className="w-4 h-4 text-primary theme-transition" />
+                {t('email')}
+              </Label>
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder={t('emailPlaceholder')}
+                  {...register("email")}
+                  className={cn(
+                    "bg-secondary/50 text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-md theme-transition",
+                    errors.email && "border-destructive focus:border-destructive focus:ring-destructive"
                   )}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-foreground flex items-center gap-2 theme-transition">
-                    <Lock className="w-4 h-4 text-primary theme-transition" />
-                    {t('password')}
-                  </Label>
-                  <Link
-                    href="#"
-                    className="text-sm text-primary hover:underline underline-offset-4 transition-colors"
-                  >
-                    {t('forgotPassword')}
-                  </Link>
-                </div>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    {...register("password")}
-                    className={cn(
-                      "bg-secondary text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-lg pr-10 theme-transition",
-                      errors.password && "border-destructive focus:border-destructive focus:ring-destructive"
-                    )}
-                    disabled={isLoading}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                  {errors.password && (
-                    <p className="text-sm text-destructive mt-1.5 flex items-center gap-1.5">
-                      {errors.password.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-4">
-              <PrimaryButton 
-                type="submit" 
-                className="w-full"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    {t('signingIn')}
-                  </span>
-                ) : (
-                  t('signIn')
+                  disabled={isLoading}
+                />
+                {errors.email && (
+                  <p className="text-sm text-destructive mt-2 flex items-center gap-1.5">
+                    {errors.email.message}
+                  </p>
                 )}
-              </PrimaryButton>
+              </div>
             </div>
 
-            <div className="text-center text-sm text-muted-foreground theme-transition">
-              {t('dontHaveAccount')}{" "}
-              <Link 
-                href={AppRoute.SIGN_UP} 
-                className="text-primary hover:underline underline-offset-4 transition-colors"
-              >
-                {t('signUp')}
-              </Link>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-foreground flex items-center gap-2 theme-transition">
+                  <Lock className="w-4 h-4 text-primary theme-transition" />
+                  {t('password')}
+                </Label>
+                <Link
+                  href="#"
+                  className="text-sm text-primary hover:underline underline-offset-4 transition-colors"
+                >
+                  {t('forgotPassword')}
+                </Link>
+              </div>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  className={cn(
+                    "bg-secondary/50 text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-md theme-transition",
+                    errors.password && "border-destructive focus:border-destructive focus:ring-destructive"
+                  )}
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+                {errors.password && (
+                  <p className="text-sm text-destructive mt-2 flex items-center gap-1.5">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
+
+          <PrimaryButton 
+            type="submit" 
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {t('signingIn')}
+              </span>
+            ) : (
+              t('signIn')
+            )}
+          </PrimaryButton>
+
+          <div className="text-center text-sm text-muted-foreground theme-transition">
+            {t('dontHaveAccount')}{" "}
+            <Link 
+              href={AppRoute.SIGN_UP} 
+              className="text-primary hover:underline underline-offset-4 transition-colors"
+            >
+              {t('signUp')}
+            </Link>
+          </div>
+        </form>
+      </CardContent>
       {error && <ErrorModal error={error} onClose={resetError}/>}
-    </div>
+    </Card>
   )
 }
