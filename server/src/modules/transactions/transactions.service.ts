@@ -5,7 +5,6 @@ import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactiontDto } from './dto/update-transaction.dto';
 import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
-import { UserIdAndWalletIdDto } from '../common/dto/user-id-and-wallet-id.dto';
 import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
 import { mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
@@ -84,8 +83,8 @@ export class TransactionsService {
   }
 
   async importFromCsv(
-    files: Record<string, Storage.MultipartFile[]>, 
-    payload: UserIdAndWalletIdDto
+    files: Record<string, Storage.MultipartFile[]>,
+    payload: Pick<TransactionDto, 'walletId'>
   ): Promise<TransactionDto[]> {
     const data = files['files'][0].buffer.toString('utf-8');
     const txsList = parse(data, {
@@ -101,14 +100,22 @@ export class TransactionsService {
   }
 
   async exportToCsv(payload: TransactionFilterDto): Promise<string> {
-    const { walletId, userId } = payload;
-    const filter = walletId ? { userId, walletId } : { userId };
+    const { userId, ...rest } = payload;
+    let transactions = [];
 
-    const txsList = await this.transactionModel
-      .find(filter)
-      .exec();
+    if (userId) {
+      const wallets = await this.walletModel.find({ userId }).exec();
+      const walletsIds = wallets.map(wallet => wallet._id);
+      transactions = await this.transactionModel
+        .find({...rest, walletId: { $in: walletsIds }})
+        .exec();
+    } else {
+      transactions = await this.transactionModel
+        .find(payload)
+        .exec();
+    }
 
-    const csv = jsonToCsv(txsList.map(mapTransactionFromDb));
+    const csv = jsonToCsv(transactions.map(mapTransactionFromDb));
 
     return csv;
   }

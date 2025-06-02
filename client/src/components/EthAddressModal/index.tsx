@@ -40,7 +40,7 @@ export default function EthAddressModalContent({
   }
 
   const handleSubmit = () => {
-    if (!isValidEthAddress(payload.address)) {
+    if (!isValidEthAddress(payload.address || '')) {
       setError(t('invalidAddress'));
       return;
     }

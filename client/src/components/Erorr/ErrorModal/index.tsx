@@ -2,13 +2,15 @@ import { PrimaryButton } from "@/components/PrimaryButton";
 import { useTranslations } from 'next-intl';
 import { AlertCircle } from 'lucide-react';
 
+export interface ErrorModalProps {
+  error: string;
+  onClose: () => void;
+}
+
 export const ErrorModal = ({
   error,
   onClose
-}: {
-  error: string;
-  onClose: () => void;
-}) => {
+}: ErrorModalProps) => {
   const t = useTranslations('common');
   
   return (

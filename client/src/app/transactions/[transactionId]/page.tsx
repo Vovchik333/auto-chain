@@ -2,7 +2,7 @@
 
 import { FC, useEffect } from 'react';
 import { format, formatDistanceToNow } from 'date-fns';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { useParams } from 'next/navigation';
 import { useTransactionStore } from '@/stores/transaction/transaction.store';
 import { 
@@ -35,13 +35,6 @@ const TransactionPage: FC = () => {
     getTransactionById(transactionId as string);
   }, [transactionId, getTransactionById]);
 
-  const formatEth = (value: string) => {
-    return new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 4,
-      maximumFractionDigits: 8
-    }).format(Number(value));
-  };
-
   if (!selectedTransaction) {
     return (
       <div className="container mx-auto px-4 py-6 max-w-5xl">
@@ -55,20 +48,15 @@ const TransactionPage: FC = () => {
         </div>
         
         <div className="space-y-6">
-          <Card>
-            <CardHeader className="border-b border-border bg-secondary/50 theme-transition">
-              <div className="flex items-center space-x-2">
-                <Skeleton className="h-8 w-8 rounded-full" />
-                <Skeleton className="h-6 w-32" />
-              </div>
-            </CardHeader>
-            <CardContent className="p-6 space-y-6">
-              <Skeleton className="h-6 w-3/4" />
-              <Skeleton className="h-6 w-1/2" />
-              <Skeleton className="h-6 w-2/3" />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Skeleton className="h-24" />
-                <Skeleton className="h-24" />
+          <Card className="border-border shadow-lg theme-transition">
+            <CardContent className="p-6">
+              <div className="space-y-6">
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-6 w-1/2" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Skeleton className="h-24" />
+                  <Skeleton className="h-24" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -113,63 +101,85 @@ const TransactionPage: FC = () => {
       </div>
 
       <div className="space-y-6">
-        <Card>
-          <CardHeader className="border-b border-border bg-secondary/50 theme-transition">
-            <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center theme-transition">
-                <span className="text-primary theme-transition">TX</span>
-              </div>
-              <h2 className="text-lg font-semibold text-foreground theme-transition">
-                {t('transactionDetails')}
-              </h2>
-            </div>
-          </CardHeader>
+        <Card className="border-border shadow-lg theme-transition">
           <CardContent className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('from')}</label>
-                  <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-box-lg border border-border gap-2 theme-transition">
-                    <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.from}</p>
-                    <CopyButton text={selectedTransaction.from} />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('to')}</label>
-                  <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-box-lg border border-border gap-2 theme-transition">
-                    <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.to}</p>
-                    <CopyButton text={selectedTransaction.to} />
-                  </div>
+              <div className="col-span-full">
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('hash')}</label>
+                <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-md border border-border gap-2 theme-transition">
+                  <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.hash}</p>
+                  <CopyButton text={selectedTransaction.hash} />
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('value')}</label>
-                  <div className="bg-secondary/50 p-3 rounded-box-lg border border-border theme-transition">
-                    <p className="text-foreground font-medium theme-transition">
-                      {formatEth(selectedTransaction.value)} ETH
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('date')}</label>
-                  <div className="bg-secondary/50 p-3 rounded-box-lg border border-border theme-transition">
-                    <p className="text-foreground theme-transition">
-                      {format(new Date(selectedTransaction.date), 'PPpp')}
-                    </p>
-                  </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('from')}</label>
+                <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-md border border-border gap-2 theme-transition">
+                  <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.from}</p>
+                  <CopyButton text={selectedTransaction.from} />
                 </div>
               </div>
-            </div>
 
-            <div>
-              <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('hash')}</label>
-              <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-box-lg border border-border gap-2 theme-transition">
-                <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.hash}</p>
-                <CopyButton text={selectedTransaction.hash} />
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('to')}</label>
+                <div className="flex items-center justify-between bg-secondary/50 p-3 rounded-md border border-border gap-2 theme-transition">
+                  <p className="font-mono text-sm text-foreground theme-transition">{selectedTransaction.to}</p>
+                  <CopyButton text={selectedTransaction.to} />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('value')}</label>
+                <div className="bg-secondary/50 p-3 rounded-md border border-border theme-transition">
+                  <p className="text-foreground font-medium theme-transition">
+                    {formatStringNumber(selectedTransaction.value)} ETH
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('fee')}</label>
+                <div className="bg-secondary/50 p-3 rounded-md border border-border theme-transition">
+                  <p className="text-foreground font-medium theme-transition">
+                    {formatStringNumber(selectedTransaction.txnFee)} ETH
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('status')}</label>
+                <div className="bg-secondary/50 p-3 rounded-md border border-border theme-transition">
+                  <p className="text-foreground font-medium theme-transition capitalize">
+                    {selectedTransaction.status}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('date')}</label>
+                <div className="bg-secondary/50 p-3 rounded-md border border-border theme-transition">
+                  <p className="text-foreground theme-transition">
+                    {format(new Date(selectedTransaction.date), 'PPpp')}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('type')}</label>
+                <div className="bg-secondary/50 p-3 rounded-md border border-border theme-transition">
+                  <p className="text-foreground font-medium theme-transition capitalize">
+                    {selectedTransaction.type}
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block theme-transition">{t('category')}</label>
+                <div className="bg-secondary/50 p-3 rounded-md border border-border theme-transition">
+                  <p className="text-foreground font-medium theme-transition capitalize">
+                    {selectedTransaction.category}
+                  </p>
+                </div>
               </div>
             </div>
           </CardContent>

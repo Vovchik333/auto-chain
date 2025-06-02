@@ -17,37 +17,67 @@ import {
 } from "@/components/ui/dropdown-menu";
 import ExportToCSVButton from "./components/ExportToCSVButton";
 import { formatStringNumber } from "@/lib/string.utils";
+import { ActionsMenu } from "@/components/ActionsMenu";
+import { useTransactionStore } from "@/stores/transaction/transaction.store";
+import UpdateTransactionModal from "@/app/transactions/components/UpdateTransactionModal";
+import { useWalletStore } from "@/stores/wallet/wallet.store";
+import { WalletDto } from "@/common/types/wallet/wallet.dto";
 
 type Props = {
   transactions: TransactionDto[];
-  walletId: string;
+  walletId?: string;
 };
 
 type SortField = 'date' | 'value' | 'status';
 type SortOrder = 'asc' | 'desc';
 type FilterStatus = 'all' | 'Success' | 'Pending' | 'Failed';
-
-const formatEth = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 4,
-    maximumFractionDigits: 8
-  }).format(value);
-}
+type FilterType = 'all' | 'deposit' | 'withdraw';
+type FilterCategory = string;
 
 const truncateAddress = (address: string) => {
   if (!address) return '';
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 };
 
+const hasAddress = (wallet: WalletDto): wallet is WalletDto & { address: string } => {
+  return typeof wallet.address === 'string' && wallet.address.length > 0;
+};
+
+type TranslationFunction = {
+  (key: string): string | undefined;
+  (key: string, params: Record<string, any>): string | undefined;
+};
+
+const getWalletDisplayName = (walletId: string, wallets: WalletDto[], t: TranslationFunction): string => {
+  const wallet = wallets.find(w => w.id === walletId);
+  if (!wallet) return walletId;
+  const displayName = wallet.name || t('preview.defaultName', { id: wallet.id }) || walletId;
+  return displayName;
+};
+
 const ITEMS_PER_PAGE = 10;
 
 export default function TransactionTable({ transactions, walletId }: Props) {
-  const t = useTranslations('transaction');
+  const t = useTranslations('transaction') as TranslationFunction;
+  const walletT = useTranslations('wallet') as TranslationFunction;
+  const { wallets } = useWalletStore();
+  const { updateTx, deleteTx } = useTransactionStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<FilterStatus>('all');
+  const [typeFilter, setTypeFilter] = useState<FilterType>('all');
+  const [categoryFilter, setCategoryFilter] = useState<FilterCategory>('all');
+  const [walletFilter, setWalletFilter] = useState<string>(walletId || 'all');
+  const [selectedTx, setSelectedTx] = useState<TransactionDto | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+  // Get unique categories from transactions
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set(transactions.map(tx => tx.category));
+    return ['all', ...Array.from(uniqueCategories)];
+  }, [transactions]);
 
   const filteredAndSortedTransactions = useMemo(() => {
     let filtered = [...transactions];
@@ -64,6 +94,21 @@ export default function TransactionTable({ transactions, walletId }: Props) {
     // Apply status filter
     if (statusFilter !== 'all') {
       filtered = filtered.filter(tx => tx.status === statusFilter);
+    }
+
+    // Apply type filter
+    if (typeFilter !== 'all') {
+      filtered = filtered.filter(tx => tx.type === typeFilter);
+    }
+
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(tx => tx.category === categoryFilter);
+    }
+
+    // Apply wallet filter
+    if (walletFilter !== 'all') {
+      filtered = filtered.filter(tx => tx.walletId === walletFilter);
     }
 
     // Apply sorting
@@ -83,7 +128,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
       }
       return 0;
     });
-  }, [transactions, searchTerm, sortField, sortOrder, statusFilter]);
+  }, [transactions, searchTerm, sortField, sortOrder, statusFilter, typeFilter, categoryFilter, walletFilter]);
 
   const totalPages = Math.ceil(filteredAndSortedTransactions.length / ITEMS_PER_PAGE);
   const currentTransactions = filteredAndSortedTransactions.slice(
@@ -136,25 +181,82 @@ export default function TransactionTable({ transactions, walletId }: Props) {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="bg-secondary/50 border-border text-foreground hover:bg-secondary theme-transition">
                 <Filter className="w-4 h-4 mr-2" />
-                {statusFilter === 'all' ? t('filterByStatus') : t(statusFilter.toLowerCase())}
+                {t('filters')}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-secondary/50 border-border text-foreground theme-transition">
-              <DropdownMenuItem onClick={() => setStatusFilter('all')}>{t('filterByStatus')}</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter('Success')}>{t('completed')}</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter('Pending')}>{t('pending')}</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter('Failed')}>{t('failed')}</DropdownMenuItem>
+            <DropdownMenuContent className="bg-secondary/50 border-border text-foreground theme-transition w-56">
+              <div className="p-2 border-b border-border">
+                <p className="text-sm font-medium mb-2">{t('filterByStatus')}</p>
+                <div className="space-y-1">
+                  <DropdownMenuItem onClick={() => setStatusFilter('all')}>{t('all')}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setStatusFilter('Success')}>{t('completed')}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setStatusFilter('Pending')}>{t('pending')}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setStatusFilter('Failed')}>{t('failed')}</DropdownMenuItem>
+                </div>
+              </div>
+              <div className="p-2 border-b border-border">
+                <p className="text-sm font-medium mb-2">{t('filterByType')}</p>
+                <div className="space-y-1">
+                  <DropdownMenuItem onClick={() => setTypeFilter('all')}>{t('all')}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTypeFilter('deposit')}>{t('deposit')}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTypeFilter('withdraw')}>{t('withdraw')}</DropdownMenuItem>
+                </div>
+              </div>
+              <div className="p-2 border-b border-border">
+                <p className="text-sm font-medium mb-2">{t('filterByCategory')}</p>
+                <div className="space-y-1">
+                  <DropdownMenuItem onClick={() => setCategoryFilter('all')}>{t('all')}</DropdownMenuItem>
+                  {categories.filter(cat => cat !== 'all').map(category => (
+                    <DropdownMenuItem key={category} onClick={() => setCategoryFilter(category)}>
+                      {category}
+                    </DropdownMenuItem>
+                  ))}
+                </div>
+              </div>
+              {!walletId && (
+                <div className="p-2">
+                  <p className="text-sm font-medium mb-2">{t('filterByWallet')}</p>
+                  <div className="space-y-1">
+                    <DropdownMenuItem onClick={() => setWalletFilter('all')}>{t('allWallets')}</DropdownMenuItem>
+                    {wallets.filter(hasAddress).map(wallet => (
+                      <DropdownMenuItem key={wallet.id} onClick={() => setWalletFilter(wallet.id)}>
+                        {wallet.name || walletT('preview.defaultName', { id: wallet.id }) || wallet.id}
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+                </div>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
-
-        <div className="flex items-center gap-2 text-sm text-muted-foreground theme-transition">
-          <ExportToCSVButton walletId={walletId} />
-          {searchTerm && (
-            <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
-              {t('searchResults')}
-            </Badge>
-          )}
+          
+          <div className="flex items-center gap-2 text-sm text-muted-foreground theme-transition">
+            <ExportToCSVButton walletId={walletId || ''} />
+            {searchTerm && (
+              <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
+                {t('searchResults')}
+              </Badge>
+            )}
+            {statusFilter !== 'all' && (
+              <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
+                {t(statusFilter.toLowerCase())}
+              </Badge>
+            )}
+            {typeFilter !== 'all' && (
+              <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
+                {t(typeFilter)}
+              </Badge>
+            )}
+            {categoryFilter !== 'all' && (
+              <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
+                {categoryFilter}
+              </Badge>
+            )}
+            {walletFilter !== 'all' && !walletId && (
+              <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
+                {getWalletDisplayName(walletFilter, wallets, t)}
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
 
@@ -202,6 +304,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                 </th>
                 <th className="px-4 py-3">{t('type')}</th>
                 <th className="px-4 py-3">{t('category')}</th>
+                <th className="px-4 py-3">{t('actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -268,6 +371,19 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                       {tx.category}
                     </Badge>
                   </td>
+                  <td className="px-4 py-3">
+                    <ActionsMenu
+                      onEdit={() => {
+                        setSelectedTx(tx);
+                        setIsUpdateModalOpen(true);
+                      }}
+                      onDelete={() => {
+                        if (window.confirm(t('confirmDelete'))) {
+                          deleteTx(tx.id);
+                        }
+                      }}
+                    />
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -316,6 +432,16 @@ export default function TransactionTable({ transactions, walletId }: Props) {
             </Button>
           </div>
         </div>
+      )}
+      {selectedTx && isUpdateModalOpen && (
+        <UpdateTransactionModal
+          transaction={selectedTx}
+          isOpen={isUpdateModalOpen}
+          onClose={() => {
+            setSelectedTx(null);
+            setIsUpdateModalOpen(false);
+          }}
+        />
       )}
     </div>
   );

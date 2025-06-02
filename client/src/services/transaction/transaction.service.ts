@@ -36,9 +36,7 @@ class TransactionService {
       `${this.#apiPath}${ApiPath.TRANSACTIONS}`,
       {
         hasAuth: true,
-        query: {
-          ...filter
-        }
+        query: filter
       }
     );
   }
@@ -64,14 +62,34 @@ class TransactionService {
     );
   }
 
-  public async exportToCsv(payload: UserWalletAddressDto): Promise<FileResponse> {
+  public async exportToCsv(filter: TransactionFilterDto): Promise<FileResponse> {
     return this.#httpApi.load<FileResponse>(
       `${this.#apiPath}${ApiPath.TRANSACTIONS}${ApiPath.EXPORT_TO_CSV}`,
       {
-        method: HttpMethod.POST,
-        payload: JSON.stringify(payload),
+        query: filter,
         hasAuth: true,
         expectsBlob: true
+      }
+    );
+  }
+
+  public async update(id: string, payload: Partial<CreateTxDto>): Promise<TransactionDto> {
+    return this.#httpApi.load<TransactionDto>(
+      `${this.#apiPath}${ApiPath.TRANSACTIONS}/${id}`,
+      {
+        method: HttpMethod.PATCH,
+        payload: JSON.stringify(payload),
+        hasAuth: true,
+      }
+    );
+  }
+
+  public async delete(id: string): Promise<void> {
+    return this.#httpApi.load<void>(
+      `${this.#apiPath}${ApiPath.TRANSACTIONS}/${id}`,
+      {
+        method: HttpMethod.DELETE,
+        hasAuth: true,
       }
     );
   }

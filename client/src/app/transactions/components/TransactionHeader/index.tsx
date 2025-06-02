@@ -29,29 +29,6 @@ const TransactionsHeader = () => {
               {t('pageDescription')}
             </p>
           </div>
-
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-2 text-sm text-foreground bg-secondary/50 px-4 py-2 rounded-box-lg hover:bg-secondary transition-colors theme-transition">
-                <Wallet className="w-4 h-4 text-primary theme-transition" />
-                <span>{t('allWallets')}</span>
-                <ChevronDown className="w-4 h-4 ml-2" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="p-2 bg-background shadow-xl rounded-box-lg border border-border theme-transition">
-                <DropdownMenuItem className="text-sm text-foreground hover:bg-primary hover:text-background rounded-md transition-colors theme-transition">
-                  {t('allWallets')}
-                </DropdownMenuItem>
-                {wallets.map((wallet) => (
-                  <DropdownMenuItem 
-                    key={wallet.id}
-                    className="text-sm text-foreground hover:bg-primary hover:text-background rounded-md transition-colors theme-transition"
-                  >
-                    {wallet.name || wallet.address.slice(0, 8)}...
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
         </div>
 
         <div 

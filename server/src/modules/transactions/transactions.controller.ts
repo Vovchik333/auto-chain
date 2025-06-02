@@ -20,7 +20,6 @@ import { UpdateTransactiontDto } from './dto/update-transaction.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Files } from 'src/decorators/files.decorator';
 import { MultipartInterceptor } from 'src/interceptors/files.interceptor';
-import { UserIdAndWalletIdDto } from '../common/dto/user-id-and-wallet-id.dto';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
 
 @Controller(ApiPath.TRANSACTIONS)
@@ -80,23 +79,23 @@ export class TransactionsController {
   @UseInterceptors(MultipartInterceptor({fileType: 'csv' }))
   async importTransactionsFromCsvFile(
     @Files() files: Record<string, Storage.MultipartFile[]>, 
-    @Body() payload: UserIdAndWalletIdDto
+    @Body() payload: Pick<TransactionDto, 'walletId'>
   ) {
     const txs = await this.txService.importFromCsv(files, payload);
 
     return txs;
   }
 
-  @Post(ApiPath.EXPORT_TO_CSV)
+  @Get(ApiPath.EXPORT_TO_CSV)
   async exportTransactionsToCsv(
-    @Body() payload: TransactionFilterDto,
+    @Query() filter: TransactionFilterDto,
     @Res({ passthrough: true }) res: App.Response
   ) {
-    const csv = await this.txService.exportToCsv(payload);
+    const csv = await this.txService.exportToCsv(filter);
 
     res.header('Content-Type', 'text/csv');
     res.header("Access-Control-Expose-Headers", "Content-Disposition");
-    res.header('Content-Disposition', `attachment; filename="${payload.walletId ?? 'all-transactions'}.csv"`);
+    res.header('Content-Disposition', `attachment; filename="${filter.walletId ?? 'all-transactions'}.csv"`);
 
     return csv;
   }

@@ -9,6 +9,8 @@ import { WalletModule } from './modules/wallets/wallet.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { StatsModule } from './modules/stats/stats.module';
+import { CategorySeeder } from './modules/categories/categories.seed';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -41,6 +43,7 @@ import { StatsModule } from './modules/stats/stats.module';
     AuthModule, 
     TransactionsModule,
     WalletModule,
+    CategoriesModule,
     StatsModule,
     SharedModule,
   ],

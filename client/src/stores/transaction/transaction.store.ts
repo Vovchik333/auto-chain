@@ -40,6 +40,40 @@ export const useTransactionStore = create<TransactionStore>((set, get) => ({
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }
   },
+  updateTx: async (id: string, payload: Partial<CreateTxDto>) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const updatedTx = await transactionService.update(id, payload);
+      const transactions = get().transactions.map(tx => 
+        tx.id === id ? updatedTx : tx
+      );
+
+      set({ 
+        transactions,
+        selectedTransaction: updatedTx,
+        isLoading: false 
+      });
+    } catch (err: any) {
+      set({ error: err.message ?? 'Unknown error', isLoading: false });
+    }
+  },
+  deleteTx: async (id: string) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      await transactionService.delete(id);
+      const transactions = get().transactions.filter(tx => tx.id !== id);
+
+      set({ 
+        transactions,
+        selectedTransaction: null,
+        isLoading: false 
+      });
+    } catch (err: any) {
+      set({ error: err.message ?? 'Unknown error', isLoading: false });
+    }
+  },
   getTransactionById: async (id: string) => {
     set({ isLoading: true, error: null });
 

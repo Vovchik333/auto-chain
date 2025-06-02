@@ -24,7 +24,7 @@ function Wallets() {
     } else {
       setFilteredWallets(
         wallets.filter((wallet) =>
-          wallet.address.toLowerCase().includes(query.toLowerCase()) ||
+          wallet?.address?.toLowerCase().includes(query.toLowerCase()) ||
           (wallet.name && wallet.name.toLowerCase().includes(query.toLowerCase()))
         )
       );
