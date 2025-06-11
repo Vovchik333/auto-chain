@@ -184,7 +184,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                 {t('filters')}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-secondary/50 border-border text-foreground theme-transition w-56">
+            <DropdownMenuContent className="bg-popover border-border text-foreground theme-transition w-56">
               <div className="p-2 border-b border-border">
                 <p className="text-sm font-medium mb-2">{t('filterByStatus')}</p>
                 <div className="space-y-1">

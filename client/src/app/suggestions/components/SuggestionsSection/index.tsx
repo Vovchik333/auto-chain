@@ -14,7 +14,7 @@ interface Props {
 
 export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }) => {
   const t = useTranslations('suggestions');
-  const { transfers, total, target } = diversification;
+  const { transfers, total, target, wallets: walletsWithBalances } = diversification;
 
   const involvedWallets = wallets.filter(wallet => 
     transfers.some(t => t.from === wallet.address || t.to === wallet.address)
@@ -63,6 +63,7 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
                 <div className="flex items-center gap-3">
                   <div className="flex flex-col items-end gap-2">
                     <span className="text-muted-foreground text-sm theme-transition">{t('stats.currentBalance')}</span>
+                    <span className="text-primary text-sm font-medium theme-transition">{walletsWithBalances.find(w => w.address === wallet.address)?.balance} ETH</span>
                   </div>
                 </div>
               </div>

@@ -88,6 +88,10 @@ export class WalletService {
     return {
       total: ethers.formatUnits(total, "ether"),
       target: ethers.formatUnits(target, "ether"),
+      wallets: walletsWithBalances.map(wallet => ({
+        address: wallet.address,
+        balance: ethers.formatUnits(wallet.balance, "ether")
+      })),
       transfers
     };
   }

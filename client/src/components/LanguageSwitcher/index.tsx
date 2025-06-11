@@ -45,7 +45,7 @@ export function LanguageSwitcher() {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end"
-        className="rounded-box-lg bg-background border-border shadow-lg backdrop-blur-sm theme-transition"
+        className="rounded-box-lg bg-background border-border shadow-lg backdrop-blur-sm theme-transition z-[999]"
       >
         {Object.entries(languages).map(([key, { label, flag }]) => (
           <DropdownMenuItem

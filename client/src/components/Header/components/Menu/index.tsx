@@ -36,7 +36,7 @@ export const Menu: React.FC = () => {
           <Link
             key={link.href}
             href={link.href}
-            className={`theme-transition hover-effect ${
+            className={`${
               pathname === link.href
                 ? "text-primary font-semibold"
                 : "text-muted-foreground hover:text-primary"
@@ -51,7 +51,7 @@ export const Menu: React.FC = () => {
               signOut();
               window.location.reload();
             }}
-            className="flex items-center gap-2 text-muted-foreground hover:text-primary theme-transition hover-effect"
+            className="flex items-center gap-2 text-muted-foreground hover:text-primary theme-transition cursor-pointer"
           >
             <User className="w-4 h-4" />
             <span>{t('signOut')}</span>
@@ -59,7 +59,7 @@ export const Menu: React.FC = () => {
         )}
       </nav>
       {isOpen && (
-        <div className="absolute top-full right-0 mt-4 p-4 rounded-box-lg bg-background border-border shadow-lg backdrop-blur-sm md:hidden theme-transition">
+        <div className="absolute top-full right-0 mt-4 p-4 rounded-box-lg bg-background border-border shadow-lg backdrop-blur-sm md:hidden theme-transition z-[999]">
           <div className="flex flex-col space-y-4">
             <div className="flex justify-end">
               <button

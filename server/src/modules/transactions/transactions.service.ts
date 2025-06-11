@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
@@ -15,7 +15,7 @@ import { Wallet, WalletDocument } from 'src/schemas/wallet.schema';
 export class TransactionsService {
   constructor(
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
-    @InjectModel(Wallet.name) private readonly walletModel: Model<WalletDocument>, // Replace 'any' with the actual WalletDocument type if available
+    @InjectModel(Wallet.name) private readonly walletModel: Model<WalletDocument>,
   ) {}
 
   async getByFilter(filter: TransactionFilterDto) {
@@ -91,6 +91,14 @@ export class TransactionsService {
       columns: true,
       skip_empty_lines: true,
     }) as TransactionDto[];
+
+    const requiredFields = ['hash', 'from', 'to', 'value', 'date', 'txnFee', 'category', 'type'];
+    const keys = Object.keys(txsList[0] || {});
+    for (const field of requiredFields) {
+      if (!keys.includes(field)) {
+        throw new BadRequestException(`Missing required field: ${field}`);
+      }
+    }
 
     const savedTxs = await this
       .transactionModel

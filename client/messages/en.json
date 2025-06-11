@@ -73,7 +73,7 @@
     "loading": "Loading wallets...",
     "noWallets": {
       "title": "No wallets yet",
-      "description": "Get started by adding your first wallet or importing from Etherscan"
+      "description": "Get started by adding your first wallet or importing from Blockchain"
     },
     "search": {
       "noResults": {
@@ -150,7 +150,7 @@
       "status": "Status",
       "type": "Type",
       "category": "Category",
-      "viewOnEtherscan": "View on Etherscan",
+      "viewOnEtherscan": "View",
       "copyHash": "Copy Transaction Hash",
       "utc": "UTC"
     },
@@ -246,7 +246,7 @@
     "balance": "Balance",
     "largestTransaction": "Largest Transaction",
     "amount": "Amount",
-    "viewOnEtherscan": "View on Etherscan",
+    "viewOnEtherscan": "View",
     "from": "From",
     "to": "To"
   },

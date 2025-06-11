@@ -30,7 +30,6 @@ function Wallets() {
       );
     }
   };
-  console.log(filteredWallets)
 
   useEffect(() => {
     if (user === null) return;
