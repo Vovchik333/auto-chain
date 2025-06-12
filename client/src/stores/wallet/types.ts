@@ -14,9 +14,11 @@ export type WalletState = {
 
 export type WalletActions = {
   loadWallets: (filter: WalletFilterDto) => Promise<void>;
-  createWallet: (payload: CreateWalletDto) => Promise<void>
+  createWallet: (payload: CreateWalletDto) => Promise<void>;
   importFromEtherscan: (payload: CreateWalletFromBlockchainDto) => Promise<void>;
   getGlobalStats: (userId: string) => Promise<void>;
+  updateWallet: (id: string, payload: Partial<WalletDto>) => Promise<void>;
+  deleteWallet: (id: string) => Promise<void>;
 }
 
 export type WalletStore = WalletState & WalletActions;

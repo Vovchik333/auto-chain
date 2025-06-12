@@ -62,6 +62,27 @@ class WalletService {
       }
     );
   }
+
+  public async update(id: string, payload: Partial<WalletDto>): Promise<WalletDto> {
+    return this.#httpApi.load<WalletDto>(
+      `${this.#apiPath}${ApiPath.WALLETS}/${id}`,
+      {
+        method: HttpMethod.PATCH,
+        payload: JSON.stringify(payload),
+        hasAuth: true
+      }
+    );
+  }
+
+  public async delete(id: string): Promise<void> {
+    return this.#httpApi.load<void>(
+      `${this.#apiPath}${ApiPath.WALLETS}/${id}`,
+      {
+        method: HttpMethod.DELETE,
+        hasAuth: true
+      }
+    );
+  }
 }
 
 export default WalletService;

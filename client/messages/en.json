@@ -103,7 +103,10 @@
       "edit": "Edit",
       "delete": "Delete",
       "import": "Import from Blockchain",
-      "add": "Add Wallet"
+      "add": "Add Wallet",
+      "updateWallet": "Update Wallet",
+      "cancel": "Cancel",
+      "save": "Save"
     }
   },
   "transaction": {
