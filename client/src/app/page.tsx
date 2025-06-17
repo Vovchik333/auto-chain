@@ -9,11 +9,12 @@ import { OverviewHeader } from "./(overview)/components/OverviewHeader";
 import { Loader2 } from "lucide-react";
 import WalletStats from "@/components/WalletStats";
 import { useTranslations } from 'next-intl';
+import TransactionCharts from "@/components/TransactionCharts";
 
 function Home() {
   const t = useTranslations('overview');
   const { user } = useUserStore();
-  const { loadTransactions, isLoading: isLoadingTransactions } = useTransactionStore();
+  const { loadTransactions, isLoading: isLoadingTransactions, transactions } = useTransactionStore();
   const { 
     loadWallets,
     isLoading: isLoadingWallets 
@@ -49,6 +50,7 @@ function Home() {
     <div className="space-y-6">
       <OverviewHeader />
       <WalletStats filter={{userId: user?.id}} />
+      <TransactionCharts transactions={transactions} />
     </div>
   );
 }

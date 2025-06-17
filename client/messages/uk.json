@@ -251,8 +251,18 @@
     "largestTransaction": "Найбільша транзакція",
     "amount": "Сума",
     "viewOnEtherscan": "Переглянути",
-    "from": "Відправник",
-    "to": "Отримувач"
+    "from": "Від",
+    "to": "До",
+    "categories": "Категорії транзакцій",
+    "uncategorized": "Без категорії",
+    "chart": {
+      "categories": "Розподіл за категоріями",
+      "monthlyVolume": "Обсяг руху коштів за місяцями",
+      "balance": "Історія балансу",
+      "noData": "Немає доступних даних",
+      "eth": "ETH",
+      "transactionDistribution": "Розподіл сум транзакцій"
+    }
   },
   "errors": {
     "somethingWentWrong": "Щось пішло не так",

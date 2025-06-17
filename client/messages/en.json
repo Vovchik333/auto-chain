@@ -251,7 +251,17 @@
     "amount": "Amount",
     "viewOnEtherscan": "View",
     "from": "From",
-    "to": "To"
+    "to": "To",
+    "categories": "Transaction Categories",
+    "uncategorized": "Uncategorized",
+    "chart": {
+      "categories": "Categories Distribution",
+      "monthlyVolume": "Monthly Transactions",
+      "balance": "Balance History",
+      "noData": "No data available",
+      "eth": "ETH",
+      "transactionDistribution": "Transaction Amount Distribution"
+    }
   },
   "errors": {
     "somethingWentWrong": "Something went wrong",
