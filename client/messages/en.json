@@ -261,6 +261,20 @@
       "noData": "No data available",
       "eth": "ETH",
       "transactionDistribution": "Transaction Amount Distribution"
+    },
+    "categoriesList": {
+      "salary": "Salary",
+      "investment": "Investment",
+      "shopping": "Shopping",
+      "food": "Food",
+      "entertainment": "Entertainment",
+      "transport": "Transport",
+      "travel": "Travel",
+      "health": "Health",
+      "utilities": "Utilities",
+      "education": "Education",
+      "gift": "Gift",
+      "imported": "Other"
     }
   },
   "errors": {

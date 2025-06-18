@@ -262,6 +262,20 @@
       "noData": "Немає доступних даних",
       "eth": "ETH",
       "transactionDistribution": "Розподіл сум транзакцій"
+    },
+    "categoriesList": {
+      "salary": "Зарплата",
+      "investment": "Інвестиції",
+      "shopping": "Покупки",
+      "food": "Їжа",
+      "entertainment": "Розваги",
+      "transport": "Транспорт",
+      "travel": "Подорожі",
+      "health": "Здоров'я",
+      "utilities": "Комунальні послуги",
+      "education": "Освіта",
+      "gift": "Подарунок",
+      "imported": "Інше"
     }
   },
   "errors": {

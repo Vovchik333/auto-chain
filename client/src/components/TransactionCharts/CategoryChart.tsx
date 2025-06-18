@@ -44,6 +44,10 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ transactions }) => {
     return acc;
   }, {} as Record<string, number>);
 
+  // Helper to get translated category label
+  const getCategoryLabel = (key: string) =>
+    t(`categoriesList.${key}`) || key || t('uncategorized');
+
   // Theme-aware color palettes
   const lightThemeColors = [
     'rgba(54, 162, 235, 0.8)',  // Blue
@@ -108,7 +112,7 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ transactions }) => {
   };
 
   const pieData = {
-    labels: Object.keys(formattedCategoryData),
+    labels: Object.keys(formattedCategoryData).map(getCategoryLabel),
     datasets: [
       {
         data: Object.values(formattedCategoryData),

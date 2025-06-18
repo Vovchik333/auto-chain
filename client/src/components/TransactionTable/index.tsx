@@ -57,9 +57,14 @@ const getWalletDisplayName = (walletId: string, wallets: WalletDto[], t: Transla
 
 const ITEMS_PER_PAGE = 10;
 
+// Helper to get translated category label
+const getCategoryLabel = (key: string, t: TranslationFunction) =>
+  t(`categoriesList.${key}`) || t('uncategorized');
+
 export default function TransactionTable({ transactions, walletId }: Props) {
   const t = useTranslations('transaction') as TranslationFunction;
   const walletT = useTranslations('wallet') as TranslationFunction;
+  const statsT = useTranslations('stats') as TranslationFunction;
   const { wallets } = useWalletStore();
   const { updateTx, deleteTx } = useTransactionStore();
   const [searchTerm, setSearchTerm] = useState('');
@@ -208,7 +213,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                   <DropdownMenuItem onClick={() => setCategoryFilter('all')}>{t('all')}</DropdownMenuItem>
                   {categories.filter(cat => cat !== 'all').map(category => (
                     <DropdownMenuItem key={category} onClick={() => setCategoryFilter(category)}>
-                      {category}
+                      {getCategoryLabel(category, statsT)}
                     </DropdownMenuItem>
                   ))}
                 </div>
@@ -248,7 +253,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
             )}
             {categoryFilter !== 'all' && (
               <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
-                {categoryFilter}
+                {getCategoryLabel(categoryFilter, statsT)}
               </Badge>
             )}
             {walletFilter !== 'all' && !walletId && (
@@ -368,7 +373,7 @@ export default function TransactionTable({ transactions, walletId }: Props) {
                   </td>
                   <td className="px-4 py-3">
                     <Badge variant="outline" className="bg-secondary/50 text-foreground theme-transition">
-                      {tx.category}
+                      {getCategoryLabel(tx.category, statsT)}
                     </Badge>
                   </td>
                   <td className="px-4 py-3">
