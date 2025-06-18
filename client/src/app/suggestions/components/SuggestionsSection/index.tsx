@@ -6,11 +6,13 @@ import { WalletDto } from '@/common/types/wallet/wallet.dto';
 import { TruncatedText } from '@/components/TruncatedText';
 import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatStringNumber } from '@/lib/string.utils';
 
 interface Props {
   diversification: DiversificationDto;
   wallets: WalletDto[];
 }
+
 
 export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }) => {
   const t = useTranslations('suggestions');
@@ -26,13 +28,13 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
         <Card>
           <CardContent className="p-6">
             <span className="text-muted-foreground text-sm mb-3 block theme-transition">{t('stats.totalAmount')}</span>
-            <span className="text-primary text-2xl font-medium theme-transition">{total} ETH</span>
+            <span className="text-primary text-2xl font-medium theme-transition">{formatStringNumber(total)} ETH</span>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-6">
             <span className="text-muted-foreground text-sm mb-3 block theme-transition">{t('stats.targetPerWallet')}</span>
-            <span className="text-primary text-2xl font-medium theme-transition">{target} ETH</span>
+            <span className="text-primary text-2xl font-medium theme-transition">{formatStringNumber(target)} ETH</span>
           </CardContent>
         </Card>
       </div>
@@ -63,7 +65,7 @@ export const SuggestionsSection: React.FC<Props> = ({ diversification, wallets }
                 <div className="flex items-center gap-3">
                   <div className="flex flex-col items-end gap-2">
                     <span className="text-muted-foreground text-sm theme-transition">{t('stats.currentBalance')}</span>
-                    <span className="text-primary text-sm font-medium theme-transition">{walletsWithBalances.find(w => w.address === wallet.address)?.balance} ETH</span>
+                    <span className="text-primary text-sm font-medium theme-transition">{formatStringNumber(walletsWithBalances.find(w => w.address === wallet.address)?.balance || '0')} ETH</span>
                   </div>
                 </div>
               </div>

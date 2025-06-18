@@ -2,6 +2,7 @@ import React from 'react';
 import { TransferDto } from '@/common/types/transfer-instruction.dto';
 import { SuggestionItem } from '../SuggestionItem';
 import { useTranslations } from 'next-intl';
+import { formatStringNumber } from '@/lib/string.utils';
 
 interface Props {
   suggestions: TransferDto[];
@@ -25,7 +26,7 @@ export const SuggestionList: React.FC<Props> = ({ suggestions }) => {
           key={`${suggestion.from}-${suggestion.to}-${idx}`}
           from={suggestion.from}
           to={suggestion.to}
-          amount={suggestion.amount}
+          amount={formatStringNumber(suggestion.amount)}
         />
       ))}
     </div>

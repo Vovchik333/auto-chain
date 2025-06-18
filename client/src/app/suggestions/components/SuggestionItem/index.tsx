@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 interface Props {
   from: string;
   to: string;
-  amount: number;
+  amount: string;
 }
 
 export const SuggestionItem: React.FC<Props> = ({ from, to, amount }) => {
