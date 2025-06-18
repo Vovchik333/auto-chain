@@ -260,7 +260,9 @@
       "balance": "Balance History",
       "noData": "No data available",
       "eth": "ETH",
-      "transactionDistribution": "Transaction Amount Distribution"
+      "transactionDistribution": "Transaction Amount Distribution",
+      "transactionDistributionXAxis": "Transaction Amount Range",
+      "transactionDistributionYAxis": "Number of Transactions"
     },
     "categoriesList": {
       "salary": "Salary",
@@ -273,6 +275,7 @@
       "health": "Health",
       "utilities": "Utilities",
       "education": "Education",
+      "business": "Business",
       "gift": "Gift",
       "imported": "Other"
     }

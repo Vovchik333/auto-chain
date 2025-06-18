@@ -261,7 +261,9 @@
       "balance": "Історія балансу",
       "noData": "Немає доступних даних",
       "eth": "ETH",
-      "transactionDistribution": "Розподіл сум транзакцій"
+      "transactionDistribution": "Розподіл сум транзакцій",
+      "transactionDistributionXAxis": "Діапазон сум транзакцій",
+      "transactionDistributionYAxis": "Кількість транзакцій"
     },
     "categoriesList": {
       "salary": "Зарплата",
@@ -275,6 +277,7 @@
       "utilities": "Комунальні послуги",
       "education": "Освіта",
       "gift": "Подарунок",
+      "business": "Бізнес",
       "imported": "Інше"
     }
   },

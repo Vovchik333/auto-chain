@@ -79,7 +79,7 @@ const TransactionDistributionChart: React.FC<TransactionDistributionChartProps> 
         displayColors: false,
         callbacks: {
           label: (context: any) => {
-            return `${context.parsed.y} transactions`;
+            return `${context.parsed.y} ${t('chart.transactionDistributionYAxis')}`;
           }
         }
       },
@@ -99,7 +99,7 @@ const TransactionDistributionChart: React.FC<TransactionDistributionChartProps> 
         },
         title: {
           display: true,
-          text: 'Number of Transactions',
+          text: t('chart.transactionDistributionYAxis'),
           color: theme === 'dark' ? '#F0F0F0' : '#1A1F27',
           font: {
             size: 12,
@@ -120,7 +120,7 @@ const TransactionDistributionChart: React.FC<TransactionDistributionChartProps> 
         },
         title: {
           display: true,
-          text: 'Transaction Amount Range',
+          text: t('chart.transactionDistributionXAxis'),
           color: theme === 'dark' ? '#F0F0F0' : '#1A1F27',
           font: {
             size: 12,
@@ -145,7 +145,7 @@ const TransactionDistributionChart: React.FC<TransactionDistributionChartProps> 
 
   return (
     <Card className="bg-background/50 backdrop-blur-sm border-border theme-transition h-full">
-      <CardHeader className="pb-2">
+      <CardHeader className="p-2">
         <CardTitle className="text-foreground theme-transition text-lg sm:text-xl">
           {t('chart.transactionDistribution')}
         </CardTitle>

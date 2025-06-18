@@ -128,7 +128,7 @@ const CategoryChart: React.FC<CategoryChartProps> = ({ transactions }) => {
 
   return (
     <Card className="bg-background/50 backdrop-blur-sm border-border theme-transition h-full">
-      <CardHeader className="pb-2">
+      <CardHeader className="p-2">
         <CardTitle className="text-foreground theme-transition text-lg sm:text-xl">{t('chart.categories')}</CardTitle>
       </CardHeader>
       <CardContent>
