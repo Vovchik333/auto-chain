@@ -1,16 +1,14 @@
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiPath } from 'src/common/enums/api/api-path.enum';
 import { WalletService } from './wallet.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { WalletDto } from '../common/dto/wallet.dto';
 import { WalletFilterDto } from './dto/wallet-filter.dto';
 import { DiversificationDto } from './dto/diversification.dto';
-import { StatisticsDto } from 'src/common/types/statistics.dto';
-import { Types } from 'mongoose';
-import { ObjectIdPipe } from 'src/pipes/object-id.pipe';
 import { CreateWalletDto } from './dto/create-wallet.dto';
-import { UserIdAndWalletAddressDto } from '../common/dto/user-id-and-wallet-address.dto';
 import { CreateWalletFromBlockchainDto } from './dto/create-wallet-from-blockchain.dto';
+import { ObjectIdPipe } from 'src/pipes/object-id.pipe';
+import { UpdateWalletDto } from './dto/update-wallet.dto';
 
 @Controller(ApiPath.WALLETS)
 @UseGuards(AuthGuard)
@@ -35,15 +33,6 @@ export class WalletController {
     return wallets;
   }
 
-  @Get('/user-stats/:id')
-  async getUserStats(
-    @Param('id', ObjectIdPipe) id: string
-  ): Promise<StatisticsDto> {
-    const stats = await this.walletService.getUserStats(id);
-
-    return stats;
-  }
-
   @Post(ApiPath.DIVERSIFICATION)
   async getSuggestionsForDiversification(
     @Body() payload: string[]
@@ -53,12 +42,31 @@ export class WalletController {
     return suggestions;
   }
 
-  @Post('/import-from-etherscan')
-  async importTransactionsFromEtherscan(
+  @Post(ApiPath.IMPORT_FROM_ETHERSCAN)
+  async importFromEtherscan(
     @Body() payload: CreateWalletFromBlockchainDto
-  ): Promise<WalletDto[]> {
-    const wallets = await this.walletService.importTransactionsFromEtherscan(payload);
+  ): Promise<WalletDto> {
+    const wallet = await this.walletService.importTransactionsFromEtherscan(payload);
 
-    return wallets;
+    return wallet;
+  }
+
+  @Patch(ApiPath.ID)
+  async updateById(
+    @Param('id', ObjectIdPipe) id: string,
+    @Body() payload: UpdateWalletDto
+  ) {
+    const wallet = await this.walletService.updateById(id, payload);
+
+    return wallet;
+  }
+
+  @Delete(ApiPath.ID)
+  async deleteById(
+    @Param('id', ObjectIdPipe) id: string
+  ) {
+    await this.walletService.deleteById(id);
+
+    return { message: 'Wallet deleted successfully' };
   }
 }

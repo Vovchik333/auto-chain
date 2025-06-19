@@ -11,7 +11,11 @@ export const PageContentHeader: React.FC<Props> = ({
   children
 }) => {
   return (
-    <div className={cn("pb-4 border-b border-[#525256] mb-4", className)}>
+    <div className={cn(
+      "p-6 border-b border-border theme-transition",
+      "bg-background/50 backdrop-blur-sm",
+      className
+    )}>
       {children}
     </div>
   );

@@ -6,6 +6,7 @@ import { DropZone } from "../DropZone";
 import { CreateTxsDto } from "@/common/types/transaction/create-txs.dto";
 import { FilesList } from "../FilesList";
 import { useUserStore } from "@/stores/user/user.store";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   isOpen: boolean;
@@ -18,6 +19,7 @@ export default function EthAddressAndFilesModalContent({
   onOpenChange,
   onSubmit
 }: Props) {
+  const t = useTranslations('importModal');
   const { user } = useUserStore();
   const [payload, setPayload] = useState<Omit<CreateTxsDto, 'userId'>>({
     files: [],
@@ -48,17 +50,22 @@ export default function EthAddressAndFilesModalContent({
     <ModalWrapper 
       isOpen={isOpen}
       onOpenChange={onOpenChange}
-      title="Import Ethereum Address"
+      title={t('title')}
       modalContent={
-        <div className="grid gap-4 py-2">
-          <WalletList onSetWalletId={handleSetWalletId} walletId={payload.walletId} />
-          <FilesList files={payload.files} />
-          <DropZone onSetFiles={handleSetFiles}/>
+        <div className="space-y-6 py-2">
+          <div className="space-y-4">
+            <WalletList onSetWalletId={handleSetWalletId} walletId={payload.walletId} />
+            <FilesList files={payload.files} />
+            <DropZone onSetFiles={handleSetFiles}/>
+          </div>
         </div>
       }
       footerButtons={
-        <PrimaryButton onClick={handleSubmit}>
-          Import
+        <PrimaryButton 
+          onClick={handleSubmit}
+          disabled={!payload.walletId || payload.files.length === 0}
+        >
+          {t('import')}
         </PrimaryButton>
       }
     />

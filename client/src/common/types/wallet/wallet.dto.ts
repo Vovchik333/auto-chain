@@ -1,4 +1,4 @@
-import { StatisticsDto } from "../statistics.dto";
+import { StatisticsDto } from "../stats/statistics.dto";
 import { TransactionDto } from "../transaction/transaction.dto";
 
 export type WalletDto = {

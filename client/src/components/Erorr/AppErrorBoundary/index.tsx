@@ -8,7 +8,6 @@ export const AppErrorBoundary = ({ children }: {
   children: React.ReactNode;
 }) => {
   const [error, setError] = useState<Error | null>(null);
-  console.log(error);
 
   return (
     <>

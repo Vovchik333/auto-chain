@@ -1,4 +1,4 @@
 export type UserWalletAddressDto = {
   userId: string;
-  address?: string;
+  walletId?: string;
 }

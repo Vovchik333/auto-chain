@@ -7,10 +7,14 @@ const ApiPath = {
     SIGN_IN: '/sign-in',
     SIGN_UP: '/sign-up',
     USER: '/user',
+    STATS: '/stats',
     WALLETS: '/wallets',
-    FRAUD_REPORTS: '/fraud-reports',
-    AUTH_CODE: '/auth-code',
-    DIVERSIFICATION: '/diversification'
+    TRANSACTIONS: '/transactions',
+    CATEGORIES: '/categories',
+    DIVERSIFICATION: '/diversification',
+    IMPORT_FROM_ETHERSCAN: '/import-from-etherscan',
+    EXPORT_TO_CSV: '/export-to-csv',
+    IMPORT_FROM_CSV: '/import-from-csv'
 } as const;
 
 export { ApiPath };

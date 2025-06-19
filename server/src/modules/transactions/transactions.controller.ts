@@ -1,6 +1,7 @@
 import { 
   Body, 
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -19,10 +20,9 @@ import { UpdateTransactiontDto } from './dto/update-transaction.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Files } from 'src/decorators/files.decorator';
 import { MultipartInterceptor } from 'src/interceptors/files.interceptor';
-import { UserIdAndWalletIdDto } from '../common/dto/user-id-and-wallet-id.dto';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
 
-@Controller('transactions')
+@Controller(ApiPath.TRANSACTIONS)
 @UseGuards(AuthGuard)
 export class TransactionsController {
   constructor(
@@ -66,27 +66,36 @@ export class TransactionsController {
     return tx;
   }
 
-  @Post('/import-from-csv')
+  @Delete(ApiPath.ID)
+  async deleteById(
+    @Param('id', ObjectIdPipe) id: string
+  ): Promise<{ message: string }> {
+    await this.txService.deleteById(id);
+
+    return { message: 'Transaction deleted successfully' };
+  }
+
+  @Post(ApiPath.IMPORT_FROM_CSV)
   @UseInterceptors(MultipartInterceptor({fileType: 'csv' }))
   async importTransactionsFromCsvFile(
     @Files() files: Record<string, Storage.MultipartFile[]>, 
-    @Body() payload: UserIdAndWalletIdDto
+    @Body() payload: Pick<TransactionDto, 'walletId'>
   ) {
-    const txs = await this.txService.importTransactionsFromCsv(files, payload);
+    const txs = await this.txService.importFromCsv(files, payload);
 
     return txs;
   }
 
-  @Post('/export-to-csv')
+  @Get(ApiPath.EXPORT_TO_CSV)
   async exportTransactionsToCsv(
-    @Body() payload: UserIdAndWalletIdDto,
+    @Query() filter: TransactionFilterDto,
     @Res({ passthrough: true }) res: App.Response
   ) {
-    const csv = await this.txService.exportTransactionsToCsv(payload);
+    const csv = await this.txService.exportToCsv(filter);
 
     res.header('Content-Type', 'text/csv');
     res.header("Access-Control-Expose-Headers", "Content-Disposition");
-    res.header('Content-Disposition', `attachment; filename="${payload.walletId ?? 'all-transactions'}.csv"`);
+    res.header('Content-Disposition', `attachment; filename="${filter.walletId ?? 'all-transactions'}.csv"`);
 
     return csv;
   }

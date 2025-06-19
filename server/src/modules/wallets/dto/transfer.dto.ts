@@ -1,4 +1,4 @@
-export type TransferInstruction = {
+export type TransferDto = {
   from: string,
   to: string,
   amount: string,

@@ -1,7 +1,6 @@
 'use client'
 
 import { ChangeEvent, useState } from "react";
-import { useUserStore } from "@/stores/user/user.store";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { SecondaryButton } from "@/components/SecondaryButton";
@@ -10,76 +9,198 @@ import { PrimaryButton } from "@/components/PrimaryButton";
 import { WalletList } from "../WalletList";
 import { useTransactionStore } from "@/stores/transaction/transaction.store";
 import { ErrorModal } from "@/components/Erorr/ErrorModal";
+import { CreateTxDto } from "@/common/types/transaction/create-tx.dto";
+import { RadioGroup } from "@/components/ui/radio-group";
+import { CategorySelect } from "@/components/ui/category-select";
+import { DEFAULT_CATEGORIES } from "@/common/types/category";
+import { TransactionTypeCard } from "../TransactionTypeCard";
+import { useTranslations } from 'next-intl';
+
+type TransactionType = 'deposit' | 'withdraw';
 
 export default function AddTransactionButton() {
-  const { user } = useUserStore();
+  const t = useTranslations('transaction');
   const { createTx, error: txError, resetError } = useTransactionStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [payload, setPayload] = useState({
-    hash: '',
+  const [payload, setPayload] = useState<CreateTxDto>({
+    from: '',
+    type: 'deposit',
+    to: '',
+    value: '0',
+    date: new Date().toISOString(),
+    txnFee: '0',
+    category: DEFAULT_CATEGORIES[0].id,
     walletId: ''
   });
-  const [error, setError] = useState("");
 
   const handleImportClick = () => {
     setIsModalOpen(true);
   };
 
-  const handleSetHash = (e: ChangeEvent<HTMLInputElement>) => {
-    const hash = e.target.value;
-    setPayload(prev => ({...prev, hash}));
+  const handleTransactionTypeChange = (value: string) => {
+    const type = value as TransactionType;
+    setPayload(prev => ({
+      ...prev,
+      type
+    }));
+  };
+
+  const handleSetFrom = (e: ChangeEvent<HTMLInputElement>) => {
+    const from = e.target.value;
+    setPayload(prev => ({...prev, from}));
+  }
+
+  const handleSetTo = (e: ChangeEvent<HTMLInputElement>) => {
+    const to = e.target.value;
+    setPayload(prev => ({...prev, to}));
+  }
+
+  const handleSetValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPayload(prev => ({...prev, value}));
+  }
+
+  const handleSetFee = (e: ChangeEvent<HTMLInputElement>) => {
+    const txnFee = e.target.value;
+    setPayload(prev => ({...prev, txnFee}));
   }
 
   const handleSetWalletId = (walletId: string) => {
     setPayload(prev => ({...prev, walletId}));
   }
 
-  const handleSubmit = () => {
-    if (user === null) {
-      return;
-    }
+  const handleSetCategory = (category: string) => {
+    setPayload(prev => ({...prev, category}));
+  }
 
-    const { id: userId } = user;
-    createTx({...payload, userId});
+  const handleSubmit = () => {
+    createTx(payload);
     setPayload({
-      hash: '',
-      walletId: ''
+      from: '',
+      to: '',
+      value: '0',
+      date: new Date().toISOString(),
+      txnFee: '0',
+      walletId: '',
+      type: 'deposit',
+      category: DEFAULT_CATEGORIES[0].id
     });
     setIsModalOpen(false);
   };
 
+  const modalContent = (
+    <div className="space-y-6">
+      <RadioGroup
+        defaultValue="deposit"
+        value={payload.type}
+        onValueChange={handleTransactionTypeChange}
+        className="grid grid-cols-2 gap-4"
+      >
+        <TransactionTypeCard 
+          type="deposit" 
+          label={t('deposit')} 
+          isSelected={payload.type === 'deposit'} 
+        />
+        <TransactionTypeCard 
+          type="withdraw" 
+          label={t('withdraw')} 
+          isSelected={payload.type === 'withdraw'} 
+        />
+      </RadioGroup>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2.5">
+          <Label className="text-foreground theme-transition">{t('amount')} (ETH)</Label>
+          <Input
+            type="number"
+            placeholder="0.0"
+            value={payload.value}
+            onChange={handleSetValue}
+            className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
+          />
+        </div>
+        <div className="space-y-2.5">
+          <Label className="text-foreground theme-transition">{t('fee')} (ETH)</Label>
+          <Input
+            type="number"
+            placeholder="0.0"
+            value={payload.txnFee}
+            onChange={handleSetFee}
+            className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2.5">
+        <Label className="text-foreground theme-transition">{t('from')}</Label>
+        <Input
+          placeholder="0x..."
+          value={payload.from}
+          onChange={handleSetFrom}
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
+        />
+      </div>
+
+      <div className="space-y-2.5">
+        <Label className="text-foreground theme-transition">{t('to')}</Label>
+        <Input
+          placeholder="0x..."
+          value={payload.to}
+          onChange={handleSetTo}
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl placeholder-muted-foreground theme-transition"
+        />
+      </div>
+
+      <div className="space-y-2.5">
+        <Label className="text-foreground theme-transition">{t('category')}</Label>
+        <CategorySelect
+          categories={DEFAULT_CATEGORIES}
+          value={payload.category}
+          onValueChange={handleSetCategory}
+          className="bg-secondary/50 text-foreground border-border focus:ring-primary focus:border-primary rounded-xl theme-transition"
+        />
+      </div>
+
+      <div className="space-y-2.5">
+        <WalletList 
+          walletId={payload.walletId} 
+          onSetWalletId={handleSetWalletId} 
+        />
+      </div>
+    </div>
+  );
+
   return (
     <>
       <SecondaryButton onClick={handleImportClick}>
-        Add Transaction
+        {t('addTransaction')}
       </SecondaryButton>
-      <ModalWrapper 
+
+      <ModalWrapper
+        title={t('addTransaction')}
         isOpen={isModalOpen}
-        title="Add Transaction"
-        onOpenChange={setIsModalOpen}
-        modalContent={
-          <div className="grid gap-4 py-2">
-            <div className="grid gap-2">
-              <Label htmlFor="tx-hash" className="text-[#F0F0F0]">Enter Transaction Hash:</Label>
-              <Input
-                id="tx-hash"
-                value={payload.hash}
-                onChange={handleSetHash}
-                placeholder="0x..."
-                className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
-              />
-              {error && <p className="text-sm text-red-600">{error}</p>}
-            </div>
-            <WalletList walletId={payload.walletId} onSetWalletId={handleSetWalletId} />
-          </div>
-        }
+        modalContent={modalContent}
         footerButtons={
-          <PrimaryButton onClick={handleSubmit}>
-            Add
-          </PrimaryButton>
+          <>
+            <SecondaryButton onClick={() => setIsModalOpen(false)}>
+              {t('cancel')}
+            </SecondaryButton>
+            <PrimaryButton 
+              onClick={handleSubmit}
+              disabled={!payload.walletId || !payload.from || !payload.to || payload.value === '0'}
+            >
+              {t('add')}
+            </PrimaryButton>
+          </>
         }
+        onOpenChange={setIsModalOpen}
       />
-      {txError && <ErrorModal error={txError} onClose={() => resetError() }/>}
+      {txError && (
+        <ErrorModal
+          error={txError}
+          onClose={resetError}
+        />
+      )}
     </>
   );
 }

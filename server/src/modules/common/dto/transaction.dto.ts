@@ -8,6 +8,6 @@ export type TransactionDto = {
   status: string;
   txnFee: string;
   category: string;
-  userId: string;
   walletId: string;
+  type: 'deposit' | 'withdraw';
 };

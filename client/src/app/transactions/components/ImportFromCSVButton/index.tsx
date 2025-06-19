@@ -5,8 +5,10 @@ import { useTransactionStore } from "@/stores/transaction/transaction.store";
 import { useUserStore } from "@/stores/user/user.store";
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { CreateTxsDto } from "@/common/types/transaction/create-txs.dto";
+import { useTranslations } from 'next-intl';
 
 export default function ImportFromCSVButton() {
+  const t = useTranslations('transaction');
   const { user } = useUserStore(); 
   const { importFromCsv } = useTransactionStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,7 +38,7 @@ export default function ImportFromCSVButton() {
     <>
       <PrimaryButton onClick={handleImportClick}>
         <Upload className="w-4 h-4 mr-2" />
-        Import from CSV
+        {t('importFromCSV')}
       </PrimaryButton>
       <EthAddressAndFilesModalContent
         isOpen={isModalOpen}

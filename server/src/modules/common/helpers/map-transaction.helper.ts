@@ -9,30 +9,21 @@ const calculateFee = (gasUsed: string, gasPrice: string): string => {
   return ethers.formatUnits(feeWei, "ether");
 };
 
-export const mapTx = (
-  transaction: any,
-  userWallet: UserIdAndWalletIdDto
-): Omit<TransactionDto, 'id' | 'status' | 'date' | 'txnFee'> => {
-  const { userId, walletId } = userWallet;
-  console.log(transaction);
+const getTransactionType = (address: string, transaction: EtherscanNormalTransactionDto): "deposit" | "withdraw" => {
+  if (address.toLowerCase() === transaction.to.toLowerCase() && address.toLowerCase() === transaction.from.toLowerCase()) {
+    return "withdraw";
+  }
 
-  return {
-    hash: transaction.hash,
-    from: transaction.from,
-    to: transaction.to,
-    value: ethers.formatUnits(transaction.value, "ether"),
-    // txnFee: calculateFee(transaction.gasUsed, transaction.gasPrice),
-    category: "imported",
-    userId,
-    walletId,
-  };
+  return address.toLowerCase() === transaction.to.toLowerCase() ? "deposit" : "withdraw";
 };
 
-export const mapTransactionFromList = (
+export const mapTransactionFromEtherscan = (
   transaction: EtherscanNormalTransactionDto,
-  userWallet: UserIdAndWalletIdDto
+  userWallet: UserIdAndWalletIdDto,
+  address: string,
+  isInternal: boolean = false
 ): Omit<TransactionDto, 'id'> => {
-  const { userId, walletId } = userWallet;
+  const { walletId } = userWallet;
 
   return {
     hash: transaction.hash,
@@ -41,10 +32,10 @@ export const mapTransactionFromList = (
     value: ethers.formatUnits(transaction.value, "ether"),
     date: new Date(Number(transaction.timeStamp) * 1000).toISOString(),
     status: transaction.isError === "0" ? "Success" : "Failed",
-    txnFee: calculateFee(transaction.gasUsed, transaction.gasPrice),
+    txnFee: isInternal ? '0' : calculateFee(transaction.gasUsed, transaction.gasPrice),
     category: "imported",
-    userId,
     walletId,
+    type: address.toLowerCase() === transaction.to.toLowerCase() ? "deposit" : "withdraw"
   };
 };
 
@@ -63,7 +54,7 @@ export const mapTransactionFromDb = (tx: Transaction): TransactionDto => {
     status: tx.status,
     txnFee: tx.txnFee,
     category: tx.category,
-    userId: tx.userId,
-    walletId: tx.walletId
+    walletId: tx.walletId,
+    type: tx.type
   }
 };

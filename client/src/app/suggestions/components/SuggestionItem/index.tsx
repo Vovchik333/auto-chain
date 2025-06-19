@@ -1,26 +1,37 @@
+import { TruncatedText } from '@/components/TruncatedText';
 import React from 'react';
+import { useTranslations } from 'next-intl';
+import { ArrowRight } from 'lucide-react';
 
 interface Props {
   from: string;
   to: string;
-  amount: number;
+  amount: string;
 }
 
 export const SuggestionItem: React.FC<Props> = ({ from, to, amount }) => {
+  const t = useTranslations('suggestions.transfers');
+
   return (
-    <div className="p-4 bg-[#1A1F27] rounded-xl border border-[#2A2F38] flex flex-col sm:flex-row justify-between items-start sm:items-center">
-      <div className="text-sm break-all text-[#F0F0F0]">
-        <div>
-          <strong className="text-[#A3A3A3]">From:</strong>{' '}
-          <span>{from}</span>
+    <div
+      className="bg-secondary/50 p-6 rounded-md border border-border hover:border-primary transition-all theme-transition"
+    >
+      <div className="flex items-center justify-between gap-4 mb-4">
+        <div className="flex items-center gap-3">
+          <span className="text-muted-foreground text-sm theme-transition">{t('from')}:</span>
+          <TruncatedText text={from} className="text-foreground theme-transition" />
         </div>
-        <div>
-          <strong className="text-[#A3A3A3]">To:</strong>{' '}
-          <span>{to}</span>
+        <ArrowRight className="w-5 h-5 text-primary shrink-0 theme-transition" />
+        <div className="flex items-center gap-3">
+          <span className="text-muted-foreground text-sm theme-transition">{t('to')}:</span>
+          <TruncatedText text={to} className="text-foreground theme-transition" />
         </div>
       </div>
-      <div className="mt-2 sm:mt-0 sm:text-right font-mono text-sm text-[#00FFC6]">
-        {amount} ETH
+      <div className="flex justify-between items-center gap-3">
+        <span className="text-muted-foreground text-sm theme-transition">{t('amount')}:</span>
+        <span className="text-primary font-medium theme-transition">
+          {amount} ETH
+        </span>
       </div>
     </div>
   );

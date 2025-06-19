@@ -4,6 +4,7 @@ import { TransactionDto } from '@/common/types/transaction/transaction.dto';
 import { FileResponse } from '@/common/types/file-response.type';
 import { UserWalletAddressDto } from "@/common/types/user-wallet-address.dto";
 import { TransactionFilterDto } from "@/common/types/transaction/transaction-filter.dto";
+import { CreateTxDto } from "@/common/types/transaction/create-tx.dto";
 
 type Constructor = {
   apiPath: string;
@@ -19,7 +20,7 @@ class TransactionService {
     this.#httpApi = httpApi;
   }
 
-  public async create(payload: TransactionFilterDto): Promise<TransactionDto> {
+  public async create(payload: CreateTxDto): Promise<TransactionDto> {
     return this.#httpApi.load<TransactionDto>(
       `${this.#apiPath}${ApiPath.TRANSACTIONS}`,
       {
@@ -35,9 +36,7 @@ class TransactionService {
       `${this.#apiPath}${ApiPath.TRANSACTIONS}`,
       {
         hasAuth: true,
-        query: {
-          ...filter
-        }
+        query: filter
       }
     );
   }
@@ -63,14 +62,34 @@ class TransactionService {
     );
   }
 
-  public async exportToCsv(payload: UserWalletAddressDto): Promise<FileResponse> {
+  public async exportToCsv(filter: TransactionFilterDto): Promise<FileResponse> {
     return this.#httpApi.load<FileResponse>(
       `${this.#apiPath}${ApiPath.TRANSACTIONS}${ApiPath.EXPORT_TO_CSV}`,
       {
-        method: HttpMethod.POST,
-        payload: JSON.stringify(payload),
+        query: filter,
         hasAuth: true,
         expectsBlob: true
+      }
+    );
+  }
+
+  public async update(id: string, payload: Partial<CreateTxDto>): Promise<TransactionDto> {
+    return this.#httpApi.load<TransactionDto>(
+      `${this.#apiPath}${ApiPath.TRANSACTIONS}/${id}`,
+      {
+        method: HttpMethod.PATCH,
+        payload: JSON.stringify(payload),
+        hasAuth: true,
+      }
+    );
+  }
+
+  public async delete(id: string): Promise<void> {
+    return this.#httpApi.load<void>(
+      `${this.#apiPath}${ApiPath.TRANSACTIONS}/${id}`,
+      {
+        method: HttpMethod.DELETE,
+        hasAuth: true,
       }
     );
   }

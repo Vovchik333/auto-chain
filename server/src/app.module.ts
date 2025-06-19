@@ -8,6 +8,9 @@ import { readFileSync } from 'fs';
 import { WalletModule } from './modules/wallets/wallet.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { StatsModule } from './modules/stats/stats.module';
+import { CategorySeeder } from './modules/categories/categories.seed';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -40,6 +43,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     AuthModule, 
     TransactionsModule,
     WalletModule,
+    CategoriesModule,
+    StatsModule,
     SharedModule,
   ],
   controllers: [],

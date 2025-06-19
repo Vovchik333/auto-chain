@@ -3,7 +3,7 @@ import { RegisteredUserRequestBody } from "@/common/types/user/registered-user-r
 import { UnregisteredUserRequestBody } from "@/common/types/user/unregistered-user-request-body.type";
 import { authService } from "@/services/auth";
 import { create } from "zustand";
-import { UserState, UserStore } from "./types";
+import { UserState, UserStore, UpdateProfileData } from "./types";
 
 const initState: UserState = {
   user: null,
@@ -13,6 +13,7 @@ const initState: UserState = {
 
 export const useUserStore = create<UserStore>((set) => ({
   ...initState,
+  resetError: () => set({ error: null }),
   loadCurrentUser: async () => {
     set({ isLoading: true, error: null });
 
@@ -59,5 +60,15 @@ export const useUserStore = create<UserStore>((set) => ({
     } catch (err: any) {
       set({ error: err.message ?? 'Unknown error', isLoading: false })
     }
+  },
+  updateProfile: async (data: UpdateProfileData) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const user = await authService.updateProfile(data);
+      set({ user, isLoading: false });
+    } catch (err: any) {
+      set({ error: err.message ?? 'Unknown error', isLoading: false });
+    }
   }
-}))
+}));

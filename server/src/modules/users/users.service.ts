@@ -1,14 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
 import { User, UserDocument } from 'src/schemas/user.schema';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
-    @InjectModel(Statistics.name) private readonly statisticsModel: Model<StatisticsDocument>,
   ) {}
 
   async getById(id: string): Promise<User> {

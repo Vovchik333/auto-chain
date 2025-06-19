@@ -1,31 +1,33 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument, Schema as MongooseSchema } from "mongoose";
-import { Transaction } from "./transaction.schema";
-import { Statistics } from "./statistics.schema";
+import { HydratedDocument } from "mongoose";
 
 export type WalletDocument = HydratedDocument<Wallet>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Wallet {
   readonly _id: string;
 
   @Prop({ required: true })
   userId: string;
 
-  @Prop({ required: true })
+  @Prop({ 
+    required: true,
+    trim: true,
+    minlength: 1,
+    maxlength: 100 
+  })
   name: string;
 
-  @Prop()
+  @Prop({
+    trim: true,
+  })
   address?: string;
-
-  @Prop({type: MongooseSchema.Types.ObjectId, ref: 'Statistics'})
-  statistics: Statistics;
 
   @Prop({default: false})
   isSyncWithBlockchain: boolean;
 
-  @Prop({ type: [MongooseSchema.Types.ObjectId], ref: 'Transaction' })
-  transactions: Transaction[]
+  // @Prop({ type: Number })
+  // lastSyncedBlock: number;
 }
 
 export const WalletSchema = SchemaFactory.createForClass(Wallet);

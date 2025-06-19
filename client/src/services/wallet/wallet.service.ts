@@ -1,10 +1,9 @@
 import { HttpApi, HttpMethod } from "../http";
 import { ApiPath } from "@/common/enums/api/api-path.enum";
 import { UserWalletAddressDto } from '@/common/types/user-wallet-address.dto';
-import { TransactionDto } from '@/common/types/transaction/transaction.dto';
 import { WalletDto } from "@/common/types/wallet/wallet.dto";
 import { WalletFilterDto } from "@/common/types/wallet/wallet-filter.dto";
-import { StatisticsDto } from "@/common/types/statistics.dto";
+import { StatisticsDto } from "@/common/types/stats/statistics.dto";
 import { CreateWalletDto } from "@/common/types/wallet/create-wallet.dto";
 
 type Constructor = {
@@ -53,12 +52,33 @@ class WalletService {
     );
   }
 
-  public async importFromEtherscan(payload: UserWalletAddressDto): Promise<WalletDto[]> {
-    return this.#httpApi.load<WalletDto[]>(
+  public async importFromEtherscan(payload: UserWalletAddressDto): Promise<WalletDto> {
+    return this.#httpApi.load<WalletDto>(
       `${this.#apiPath}${ApiPath.WALLETS}${ApiPath.IMPORT_FROM_ETHERSCAN}`,
       {
         method: HttpMethod.POST,
         payload: JSON.stringify(payload),
+        hasAuth: true
+      }
+    );
+  }
+
+  public async update(id: string, payload: Partial<WalletDto>): Promise<WalletDto> {
+    return this.#httpApi.load<WalletDto>(
+      `${this.#apiPath}${ApiPath.WALLETS}/${id}`,
+      {
+        method: HttpMethod.PATCH,
+        payload: JSON.stringify(payload),
+        hasAuth: true
+      }
+    );
+  }
+
+  public async delete(id: string): Promise<void> {
+    return this.#httpApi.load<void>(
+      `${this.#apiPath}${ApiPath.WALLETS}/${id}`,
+      {
+        method: HttpMethod.DELETE,
         hasAuth: true
       }
     );

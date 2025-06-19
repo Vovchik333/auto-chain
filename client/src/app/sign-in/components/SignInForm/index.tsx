@@ -1,5 +1,6 @@
+'use client'
+
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,65 +13,142 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { AppRoute } from "@/common/enums/app-route"
 import { PrimaryButton } from "@/components/PrimaryButton"
+import { useUserStore } from "@/stores/user/user.store"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { ErrorModal } from "@/components/Erorr/ErrorModal"
+import { useState } from "react"
+import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react"
+import { formSchema } from "./schemas"
+import { useTranslations } from 'next-intl';
+import type { FormValues } from "./schemas"
 
-export function SignInForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export function SignInForm() {
+  const t = useTranslations('auth');
+  const { signIn, error, resetError, isLoading } = useUserStore()
+  const [showPassword, setShowPassword] = useState(false)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+  })
+
+  const onSubmit = async (data: FormValues) => {
+    await signIn(data);
+  }
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="bg-[#2A2F38] text-[#F0F0F0]">
-        <CardHeader>
-          <CardTitle className="text-2xl text-[#F0F0F0]">Sign In</CardTitle>
-          <CardDescription className="text-[#A3A3A3]">
-            Enter your email and password to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email" className="text-[#F0F0F0]">Email</Label>
+    <Card className="bg-background text-foreground border-border shadow-lg theme-transition">
+      <CardHeader className="px-6 pt-6 pb-2">
+        <CardTitle className="text-2xl font-semibold text-foreground theme-transition">
+          {t('welcomeBack')}
+        </CardTitle>
+        <CardDescription className="text-base text-muted-foreground theme-transition">
+          {t('signInDescription')}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="px-6 pb-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-foreground flex items-center gap-2 theme-transition">
+                <Mail className="w-4 h-4 text-primary theme-transition" />
+                {t('email')}
+              </Label>
+              <div className="relative">
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
-                  required
-                  className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
+                  placeholder={t('emailPlaceholder')}
+                  {...register("email")}
+                  className={cn(
+                    "bg-secondary/50 text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-md theme-transition",
+                    errors.email && "border-destructive focus:border-destructive focus:ring-destructive"
+                  )}
+                  disabled={isLoading}
                 />
+                {errors.email && (
+                  <p className="text-sm text-destructive mt-2 flex items-center gap-1.5">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
+            </div>
 
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password" className="text-[#F0F0F0]">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline text-[#00FFC6]"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-foreground flex items-center gap-2 theme-transition">
+                  <Lock className="w-4 h-4 text-primary theme-transition" />
+                  {t('password')}
+                </Label>
+                <Link
+                  href="#"
+                  className="text-sm text-primary hover:underline underline-offset-4 transition-colors"
+                >
+                  {t('forgotPassword')}
+                </Link>
+              </div>
+              <div className="relative">
                 <Input
                   id="password"
-                  type="password"
-                  required
-                  className="bg-[#2A2F38] text-[#F0F0F0] placeholder-[#A3A3A3] border-[#A3A3A3] focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  className={cn(
+                    "bg-secondary/50 text-foreground placeholder-muted-foreground border-border focus:ring-primary focus:border-primary rounded-md theme-transition",
+                    errors.password && "border-destructive focus:border-destructive focus:ring-destructive"
+                  )}
+                  disabled={isLoading}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+                {errors.password && (
+                  <p className="text-sm text-destructive mt-2 flex items-center gap-1.5">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
-              <PrimaryButton type="submit">
-                Sign In
-              </PrimaryButton>
             </div>
+          </div>
 
-            <div className="mt-4 text-center text-sm text-[#A3A3A3]">
-              Don&apos;t have an account?{" "}
-              <Link href={AppRoute.SIGN_UP} className="underline underline-offset-4 text-[#00FFC6]">
-                Sign up
-              </Link>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          <PrimaryButton 
+            type="submit" 
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {t('signingIn')}
+              </span>
+            ) : (
+              t('signIn')
+            )}
+          </PrimaryButton>
+
+          <div className="text-center text-sm text-muted-foreground theme-transition">
+            {t('dontHaveAccount')}{" "}
+            <Link 
+              href={AppRoute.SIGN_UP} 
+              className="text-primary hover:underline underline-offset-4 transition-colors"
+            >
+              {t('signUp')}
+            </Link>
+          </div>
+        </form>
+      </CardContent>
+      {error && <ErrorModal error={error} onClose={resetError}/>}
+    </Card>
   )
 }

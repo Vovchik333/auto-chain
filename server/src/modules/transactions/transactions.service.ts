@@ -1,64 +1,44 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Transaction, TransactionDocument } from 'src/schemas/transaction.schema';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactiontDto } from './dto/update-transaction.dto';
 import { jsonToCsv } from 'src/utils/csv/json-to-csv.util';
-import { UserIdAndWalletIdDto } from '../common/dto/user-id-and-wallet-id.dto';
 import { TransactionDto } from '../common/dto/transaction.dto';
 import { parse } from 'csv-parse/sync';
-import { mapTransactionFromDb, mapTx } from '../common/helpers/map-transaction.helper';
+import { mapTransactionFromDb } from '../common/helpers/map-transaction.helper';
 import { TransactionFilterDto } from './dto/transaction-filter.dto';
-import { Statistics, StatisticsDocument } from 'src/schemas/statistics.schema';
-import { ConfigService } from '@nestjs/config';
-import { HttpStatusCode } from 'src/common/enums/http/http-status-code.enum';
-import { EtherscanResponseDto } from '../common/dto/etherscan-response.dto';
+import { Wallet, WalletDocument } from 'src/schemas/wallet.schema';
 
 @Injectable()
 export class TransactionsService {
-  private etherscanApiUrl: string;
-  private etherscanApiKey: string;
-
   constructor(
     @InjectModel(Transaction.name) private readonly transactionModel: Model<TransactionDocument>,
-    @InjectModel(Statistics.name) private readonly statisticsModel: Model<StatisticsDocument>,
-    private readonly configService: ConfigService
-  ) {
-    this.etherscanApiUrl = this.configService.get<string>('ETHERSCAN_API_URL');
-    this.etherscanApiKey = this.configService.get<string>('ETHERSCAN_API_KEY');
-  }
+    @InjectModel(Wallet.name) private readonly walletModel: Model<WalletDocument>,
+  ) {}
 
   async getByFilter(filter: TransactionFilterDto) {
-    const txs = await this.transactionModel
-      .find({ ...filter })
-      .exec();
+    const { userId, ...rest } = filter;
+    let transactions = [];
 
-    return txs.map(mapTransactionFromDb);
+    if (userId) {
+      const wallets = await this.walletModel.find({ userId }).exec();
+      const walletsIds = wallets.map(wallet => wallet._id);
+      transactions = await this.transactionModel
+        .find({...rest, walletId: { $in: walletsIds }})
+        .exec();
+    } else {
+      transactions = await this.transactionModel
+        .find(filter)
+        .exec();
+    }
+
+    return transactions.map(mapTransactionFromDb);
   }
 
   async create(payload: CreateTransactionDto) {
-    const { hash, ...rest } = payload; 
-    const response = await fetch(
-      `${this.etherscanApiUrl}?chainid=1&module=proxy&action=eth_getTransactionByHash&txhash=${hash}&apikey=${this.etherscanApiKey}`,
-    );
-
-    const data = await response.json() as EtherscanResponseDto;
-
-    if (data.status === '0' && !Array.isArray(data.result)) {
-      throw new HttpException(data.result, HttpStatusCode.BAD_REQUEST);
-    }
-
-    const txFromEtherscan = mapTx(data.result, rest);
-    const tx = await this.transactionModel.create(txFromEtherscan);
-    // await this.statisticsModel.updateOne(
-    //   {id: payload.statisticsId},
-      // {
-      //   $inc: {
-      //     totalReceived: payload.amount,
-      //   }
-      // }
-    // )
+    const tx = await this.transactionModel.create(payload);
 
     return mapTransactionFromDb(tx);
   }
@@ -92,15 +72,33 @@ export class TransactionsService {
     return mapTransactionFromDb(tx);
   }
 
-  async importTransactionsFromCsv(
-    files: Record<string, Storage.MultipartFile[]>, 
-    payload: UserIdAndWalletIdDto
+  async deleteById(id: string) {
+    const tx = await this.transactionModel.findByIdAndDelete(id);
+
+    if (!tx) {
+      throw new NotFoundException('Transaction not found');
+    }
+
+    return mapTransactionFromDb(tx);
+  }
+
+  async importFromCsv(
+    files: Record<string, Storage.MultipartFile[]>,
+    payload: Pick<TransactionDto, 'walletId'>
   ): Promise<TransactionDto[]> {
     const data = files['files'][0].buffer.toString('utf-8');
     const txsList = parse(data, {
       columns: true,
       skip_empty_lines: true,
     }) as TransactionDto[];
+
+    const requiredFields = ['hash', 'from', 'to', 'value', 'date', 'txnFee', 'category', 'type'];
+    const keys = Object.keys(txsList[0] || {});
+    for (const field of requiredFields) {
+      if (!keys.includes(field)) {
+        throw new BadRequestException(`Missing required field: ${field}`);
+      }
+    }
 
     const savedTxs = await this
       .transactionModel
@@ -109,15 +107,23 @@ export class TransactionsService {
     return savedTxs.map(mapTransactionFromDb);
   }
 
-  async exportTransactionsToCsv(payload: UserIdAndWalletIdDto): Promise<string> {
-    const { walletId, userId } = payload;
-    const filter = walletId ? { userId, walletId } : { userId };
+  async exportToCsv(payload: TransactionFilterDto): Promise<string> {
+    const { userId, ...rest } = payload;
+    let transactions = [];
 
-    const txsList = await this.transactionModel
-      .find(filter)
-      .exec();
+    if (userId) {
+      const wallets = await this.walletModel.find({ userId }).exec();
+      const walletsIds = wallets.map(wallet => wallet._id);
+      transactions = await this.transactionModel
+        .find({...rest, walletId: { $in: walletsIds }})
+        .exec();
+    } else {
+      transactions = await this.transactionModel
+        .find(payload)
+        .exec();
+    }
 
-    const csv = jsonToCsv(txsList.map(mapTransactionFromDb));
+    const csv = jsonToCsv(transactions.map(mapTransactionFromDb));
 
     return csv;
   }

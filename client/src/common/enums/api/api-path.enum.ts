@@ -1,20 +1,17 @@
-const ApiPath = {
+export const ApiPath = {
     API: '/api',
     ROOT: '/',
-    ID: '/:id',
-    USERS: '/users',
     AUTH: '/auth',
     SIGN_IN: '/sign-in',
     SIGN_UP: '/sign-up',
     USER: '/user',
+    USERS: '/users',
     WALLETS: '/wallets',
-    FRAUD_REPORTS: '/fraud-reports',
-    AUTH_CODE: '/auth-code',
-    IMPORT_FROM_ETHERSCAN: '/import-from-etherscan',
+    TRANSACTIONS: '/transactions',
+    CATEGORIES: '/categories',
+    STATISTICS: '/stats',
     IMPORT_FROM_CSV: '/import-from-csv',
     EXPORT_TO_CSV: '/export-to-csv',
-    TRANSACTIONS: '/transactions',
-    DIVERSIFICATION: '/diversification'
+    DIVERSIFICATION: '/diversification',
+    IMPORT_FROM_ETHERSCAN: '/import-from-etherscan',
 } as const;
-
-export { ApiPath };

@@ -7,10 +7,9 @@ export type TransactionDocument = HydratedDocument<Transaction>;
 export class Transaction {
   readonly _id: string;
 
-  @Prop()
-  userId: string;
-
-  @Prop()
+  @Prop({
+    required: true,
+  })
   walletId: string;
 
   @Prop()
@@ -28,7 +27,7 @@ export class Transaction {
   @Prop()
   date: string;
 
-  @Prop()
+  @Prop({default: 'Success'})
   status: string;
 
   @Prop()
@@ -36,6 +35,9 @@ export class Transaction {
 
   @Prop()
   category: string;
+
+  @Prop()
+  type: 'deposit' | 'withdraw';
 }
 
 export const TransactionSchema = SchemaFactory.createForClass(Transaction);

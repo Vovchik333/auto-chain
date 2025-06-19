@@ -6,6 +6,8 @@ import ImportFromEtherscanButton from "@/app/wallets/components/ImportFromEthers
 import AddWalletButton from "../AddWalletButton";
 import { PageContentTitle } from "@/components/PageContentTitle";
 import { PageContentHeader } from "@/components/PageContentHeader";
+import { Search } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   onSearch: (query: string) => void
@@ -14,6 +16,7 @@ type Props = {
 const WalletsHeader: React.FC<Props> = ({
   onSearch
 }) => {
+  const t = useTranslations('wallet');
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,20 +25,31 @@ const WalletsHeader: React.FC<Props> = ({
   };
 
   return (
-    <PageContentHeader className="flex justify-between bg-[#1A1F27]">
-      <div className="flex gap-4 flex-col">
-        <PageContentTitle text="Wallets" />
-        <Input
-          type="text"
-          placeholder="Find wallet..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="w-64 bg-[#2A2F38] text-[#F0F0F0] border-none focus:ring-[#00FFC6] focus:border-[#00FFC6] rounded"
-        />
-      </div>
-      <div className="flex gap-4 flex-col">
-        <ImportFromEtherscanButton />
-        <AddWalletButton />
+    <PageContentHeader className="flex flex-col space-y-6 bg-background rounded-lg border border-border p-6 theme-transition">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-6">
+        <div className="flex flex-col gap-4">
+          <div>
+            <PageContentTitle text={t('header.title')} />
+            <p className="text-sm text-muted-foreground mt-1 theme-transition">
+              {t('header.description')}
+            </p>
+          </div>
+
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground theme-transition" />
+            <Input
+              type="text"
+              placeholder={t('header.search')}
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="w-full md:w-80 bg-secondary text-foreground border-border focus:ring-primary focus:border-primary rounded-lg pl-10 theme-transition"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <ImportFromEtherscanButton />
+          <AddWalletButton />
+        </div>
       </div>
     </PageContentHeader>
   );
